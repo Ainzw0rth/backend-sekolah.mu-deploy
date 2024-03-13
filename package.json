@@ -1,0 +1,24 @@
+{
+  "name": "backend-cf-guru-sekolah.mu",
+  "version": "1.0.0",
+  "description": "backend for CF Guru Sekolah.mu",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.informatika.org/the-fellowship-of-the-sprint/backend-cf-guru-sekolah.mu.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.7.2",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^4.18.3",
+    "morgan": "~1.9.1",
+    "vercel": "^33.5.5"
+  }
+}
