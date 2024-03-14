@@ -34,6 +34,10 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.send('Hello World');
 });
 
+app.get('/konten/', (req: Request, res: Response, next: NextFunction) => { 
+    res.send('Hello World 2');
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 }); 
