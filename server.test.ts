@@ -1,9 +1,9 @@
-import request from 'supertest';
 const baseURL = 'https://backend-sekolah-mu-development.vercel.app?_vercel_share=OKwwAtmieiLCz43JiqcpJCwUrO9WReIA'
 
-describe('test konten endpoint', () => {
-    it("harusnya return isi dari konten", async () => {
-        const response = await request(baseURL).get("/");
-        expect(response.statusCode).toBe(200);
-    });
+test('fetches data from API', async () => {
+    const response = await fetch(baseURL);
+    const data = await response.json();
+    console.log(data)
+    // Assertion
+    expect(data).toEqual({ key: 'value' });
 });

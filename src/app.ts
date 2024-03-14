@@ -30,12 +30,18 @@ const port: number = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req: Request, res: Response, next: NextFunction) => { 
-    res.send('Hello World');
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
+    const jsonData = {
+        message: 'Hello World'
+    };
+    res.json(jsonData);
 });
 
-app.get('/konten/', (req: Request, res: Response, next: NextFunction) => { 
-    res.send('Hello World 2');
+app.get('/konten', (req: Request, res: Response, next: NextFunction) => { 
+    const jsonData = {
+        message: 'Hello World 2'
+    };
+    res.json(jsonData);
 });
 
 app.listen(port, () => {
