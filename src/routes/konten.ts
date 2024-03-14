@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+import express, { Request, Response, Router } from 'express';
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+const router: Router = express.Router();
+
+router.get('/', (req: Request, res: Response, next) => {
   res.json({
     data: [
       {
@@ -20,4 +20,4 @@ router.get('/', function(req, res, next) {
   });
 });
 
-module.exports = router;
+export default router;
