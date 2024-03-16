@@ -21,31 +21,25 @@
 
 // module.exports = app;
 
-import { Application, Request, Response, NextFunction } from 'express';
-const express = require('express');
+import express, { Application, Request, Response, NextFunction } from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+
+// Available routes
+import indexRouter from './routes/index';
+import kontenRouter from './routes/konten';
 
 const app: Application = express();
-const port: number = 3000;
 
+app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    const jsonData = {
-        message: 'Hello World'
-    };
-    res.json(jsonData);
-});
+// Explicitly stating the routes
+app.use('/', indexRouter);
+app.use('/konten', kontenRouter);
 
-app.get('/konten', (req: Request, res: Response, next: NextFunction) => { 
-    const jsonData = {
-        message: 'Hello World 2'
-    };
-    res.json(jsonData);
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-}); 
-
-module.exports = app;
+export default app;
