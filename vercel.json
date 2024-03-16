@@ -3,24 +3,13 @@
     "builds":[
         {
             "src":"./src/app.ts",
-            "use":"@vercel/node"
+            "use":"@now/node"
         }
     ],
-    "rewrites": [
-        { "source": "/(.*)", "destination": "./src/app.ts" }
-    ],
-    "headers": [
+    "routes":[
         {
-          "source": "/(.*)",
-          "headers": [
-            { "key": "Access-Control-Allow-Origin", "value": "*" }
-          ]
-        },
-        {
-          "source": "/https://backend-sekolah-mu-development.vercel.app/(.*)",
-          "headers": [
-            { "key": "Access-Control-Allow-Origin", "value": "*" }
-          ]
-        }  
+            "src":"/(.*)",
+            "dest":"/src/app.ts"
+        }
     ]
 }

@@ -40,6 +40,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Explicitly stating the routes
 app.use('/', indexRouter);
-app.use('/konten', kontenRouter);
+app.use('/content', kontenRouter);
 
 export default app;
