@@ -1,20 +1,15 @@
 {
-  "version": 2,
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/api/(.*)"
-    },
-    {
-        "src": "/api/(.*)",
-        "methods": [
-            "POST",
-            "GET"
-        ],
-        "dest": "/api/(.*)",
-        "headers": {
-            "Access-Control-Allow-Origin": "*"
+    "version":2,
+    "builds":[
+        {
+            "src":"./src/app.ts",
+            "use":"@now/node"
         }
-    }
-  ]
+    ],
+    "routes":[
+        {
+            "src":"/(.*)",
+            "dest":"src/app.ts"
+        }
+    ]
 }
