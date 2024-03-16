@@ -1,25 +1,17 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "src": "/",
-        "dest": "/api/(.*)",
-        "headers": {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-        }
-      },
-      {
+  "version": 2,
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/api/(.*)"
+    },
+    {
         "src": "/api/(.*)",
-        "methods": ["POST", "GET"],
-        "dest": "/api/(.*)",
-        "headers": {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST",
-          "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-        }
-      }
-    ]
-  }
-  
+        "methods": [
+            "POST",
+            "GET"
+        ],
+        "dest": "/api/(.*)"
+    }
+  ]
+}
