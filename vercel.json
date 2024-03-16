@@ -6,14 +6,21 @@
             "use":"@vercel/node"
         }
     ],
-    "routes":[
+    "rewrites": [
+        { "source": "/(.*)", "destination": "./src/app.ts" }
+    ],
+    "headers": [
         {
-            "src":"/(.*)",
-            "dest":"src/app.ts",
-            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-            "headers": {
-              "Access-Control-Allow-Origin": "*"
-            }
-        }
+          "source": "/(.*)",
+          "headers": [
+            { "key": "Access-Control-Allow-Origin", "value": "*" }
+          ]
+        },
+        {
+          "source": "/https://backend-sekolah-mu-development.vercel.app/(.*)",
+          "headers": [
+            { "key": "Access-Control-Allow-Origin", "value": "*" }
+          ]
+        }  
     ]
 }
