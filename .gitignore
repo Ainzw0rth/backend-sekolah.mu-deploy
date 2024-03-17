@@ -63,6 +63,3 @@ typings/
 .next
 
 .vercel
-
-# the github workflow
-.github
