@@ -1,4 +1,5 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+var express = require('express');
+import { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';

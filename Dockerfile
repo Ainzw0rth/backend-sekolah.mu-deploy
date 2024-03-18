@@ -1,0 +1,4 @@
+FROM alpine:3.7
+WORKDIR /db
+
+EXPOSE 5432
