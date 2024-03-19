@@ -1,5 +1,5 @@
 import { Pool, PoolConfig } from 'pg';
-var db_dev_url : string = "postgres://halodek:postgres@localhost:5432/development"; 
+var db_dev_url : string = "postgres://postgres:postgres@postgres-ppl-dev:5432/development";
 
 const dbConfig: PoolConfig = {
   connectionString: process.env.POSTGRES_URL + "?sslmode=require",
@@ -9,10 +9,14 @@ const dbConfigDev: PoolConfig = {
   connectionString: db_dev_url,
 }
 
+// Change the variable to connect to different database
+// 1. dbConfig for production
+// 2. dbConfigDev for development
+
 const pool = new Pool(dbConfigDev);
 
 pool.connect((err) => {
-  console.log('Connecting to PostgreSQL...');
+  console.log('Connecting to PostgreSQL...', dbConfigDev);
   if (err) {
     console.error('Error connecting to PostgreSQL:', err);
   } else {

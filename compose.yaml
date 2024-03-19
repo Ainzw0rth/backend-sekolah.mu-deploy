@@ -3,7 +3,7 @@ services:
     container_name: postgres-ppl-dev
     image: postgres
     environment:
-      POSTGRES_USER: halodek
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: development
     ports:
@@ -21,6 +21,20 @@ services:
       - 8080:8080
     restart: unless-stopped
 
+  node:
+      build: .
+      container_name: node-ppl-dev
+      image: node:14
+      working_dir: /app
+      volumes:
+        - .:/app
+        - /app/node_modules
+      ports:
+        - 3000:3000
+      command: npm run startdev
+      depends_on:
+        - postgres
+      restart: unless-stopped
+
 volumes:
   postgres:
-         

@@ -12,6 +12,7 @@ import programRouter from './routes/program';
 import topikRouter from './routes/konten';
 
 const app: Application = express();
+const port: number = 3000;
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,4 +27,8 @@ app.use('/konten', kontenRouter);
 app.use('/program', programRouter);
 app.use('/topik', topikRouter);
 
-export default app;
+app.listen(port, '0.0.0.0', function() {
+    console.log('Listening on port 3000');
+  });
+
+// export default app;

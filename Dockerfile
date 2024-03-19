@@ -1,4 +1,11 @@
-FROM alpine:3.7
-WORKDIR /db
+FROM node
+WORKDIR /app
 
-EXPOSE 5432
+COPY . /app
+
+RUN npm install
+RUN npm install -g nodemon
+
+EXPOSE 3000
+
+CMD npm run startdev
