@@ -17,16 +17,20 @@ const createSchema = async () => {
             nama_kegiatan VARCHAR(255) NOT NULL,
             nomor_urut INTEGER,
             deskripsi TEXT,
-            id_program INTEGER REFERENCES program(id_program),
+            id_topik INTEGER REFERENCES topik(id_topik),
+            id_guru INTEGER REFERENCES guru(id_guru),
+            id_kelas INTEGER REFERENCES kelas(id_kelas),
             tanggal DATE,
             waktu TIMESTAMP,
-            lokasi VARCHAR(255)
+            lokasi VARCHAR(255),
+            instruksi_guru TEXT,
+            instruksi_murid TEXT
           );
           
         CREATE TABLE topik (
             id_topik INTEGER PRIMARY KEY,
             nama_topik VARCHAR(255) NOT NULL,
-            FK_id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan)
+            id_program INTEGER REFERENCES program(id_program)
         );
         
         CREATE TABLE kompetensi (
@@ -49,12 +53,43 @@ const createSchema = async () => {
             path_foto_profil VARCHAR(255)
         );
 
+        CREATE TABLE badge_guru (
+            id_badge INTEGER REFERENCES badge(id_badge),
+            id_guru INTEGER REFERENCES guru(id_guru),
+            PRIMARY KEY (id_badge, id_guru)
+        );
+
+        CREATE TABLE badge (
+            id_badge INTEGER PRIMARY KEY,
+            nama_badge VARCHAR(255) NOT NULL,
+            deskripsi TEXT,
+            path_badge VARCHAR(255)
+        );
+        )
+
         CREATE TABLE kelas (
             id_kelas INTEGER PRIMARY KEY,
             nama_kelas VARCHAR(255) NOT NULL,
             jenjang VARCHAR(100),
-            FK_id_guru INTEGER REFERENCES guru(id_guru)
         );
+
+        CREATE TABLE murid_kelas(
+            id_murid INTEGER REFERENCES murid(id_murid),
+            id_kelas INTEGER REFERENCES kelas(id_kelas),
+            PRIMARY KEY (id_murid, id_kelas)
+        )
+
+        CREATE TABLE kelas_program (
+            id_kelas INTEGER REFERENCES kelas(id_kelas),
+            id_program INTEGER REFERENCES program(id_program),
+            PRIMARY KEY (id_kelas, id_program)
+        )
+
+        CREATE TABLE guru_kelas (
+            id_guru INTEGER REFERENCES guru(id_guru),
+            id_kelas INTEGER REFERENCES kelas(id_kelas),
+            PRIMARY KEY (id_guru, id_kelas)
+        )
         
         CREATE TABLE murid (
             id_murid INTEGER PRIMARY KEY,
@@ -63,7 +98,6 @@ const createSchema = async () => {
             tanggal_lahir DATE,
             nisn CHAR(10) NOT NULL,
             path_foto_profil VARCHAR(255),
-            FK_id_kelas INTEGER REFERENCES kelas(id_kelas)
         );
 
         CREATE TABLE kegiatan_program (
@@ -85,19 +119,37 @@ const createSchema = async () => {
         CREATE TABLE karya (
           id_karya SERIAL PRIMARY KEY,
           nama_karya VARCHAR(255) NOT NULL,
-          FK_id_murid INTEGER REFERENCES murid(id_murid),
+          id_murid INTEGER REFERENCES murid(id_murid),
           tipe_file VARCHAR(5) NOT NULL,
           file_path VARCHAR(255)
         );
+
+        CREATE TYPE kehadiran_enum AS ENUM ('Hadir', 'Izin', 'Sakit', 'Alpa');
   
         CREATE TABLE evaluasi (
           id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan),
           id_murid INTEGER REFERENCES murid(id_murid),
-          penilaian VARCHAR(3),
+          catatan_kehadiran kehadiran_enum,
+          penilaian INTEGER,
           catatan TEXT,
-          FK_id_karya INTEGER REFERENCES karya(id_karya),
+          feedback TEXT,
+          id_karya INTEGER REFERENCES karya(id_karya),
           PRIMARY KEY (id_kegiatan, id_murid)
         );
+
+        CREATE TYPE action_enum AS ENUM ('Create', 'Update', 'Delete');
+
+        CREATE TABLE evaluasi_log(
+          id_log SERIAL PRIMARY KEY,
+          id_murid INTEGER REFERENCES murid(id_murid),
+          id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan),
+          timestamp TIMESTAMP,
+          editor INTEGER REFERENCES guru(id_guru),
+          action action_enum,
+          field VARCHAR(255),
+          old_value TEXT,
+        )
+        
       `);
       console.log('Schema created!');
     } catch (err) {
