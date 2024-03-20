@@ -354,7 +354,7 @@ const createSchema = async () => {
         await seedData();
         console.log('Database initialized');
       } else {
-        console.log('Database is not empty');
+        console.log('Database is not empty, seed function stopped.');
       }
     } catch (err) {
       for(let i = 0; i < tables.length; i++){
@@ -364,6 +364,10 @@ const createSchema = async () => {
         await postgre.query(`DROP TYPE IF EXISTS ${enum_names[i]} CASCADE`);
       }
       console.error('Error initializing database:\n', err);
+    } finally {
+      postgre.end();      
+      process.exit();
+
     }
   };
 
