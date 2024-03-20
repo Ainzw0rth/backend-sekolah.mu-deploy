@@ -7,7 +7,7 @@ If you want to deploy:
 
 If you want to develop:
 - Change the database url in database.ts accordingly
-- docker compose up in the terminal
+- docker compose up in the terminal (the seeder file is run automatically)
 - access the app through localhost:3000 on local machine
 
 ## What is it
