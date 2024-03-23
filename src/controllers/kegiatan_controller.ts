@@ -76,11 +76,11 @@ const kegiatanController: KegiatanController = {
                 WHERE 1 = 1`;
 
             if (idGuru !== null) {
-                query += ` AND id_guru = $1`;
+                query += ` AND id_guru = $1`, [idGuru];
             }
 
             if (date !== null) {
-                query += ` AND tanggal = $2`;
+                query += ` AND tanggal = $2`, [date];
             }
 
             const { rows } = await postgre.query(query, [idGuru, date]);
