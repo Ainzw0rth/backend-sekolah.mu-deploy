@@ -57,7 +57,7 @@ const kegiatanController: KegiatanController = {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
             const date = req.query.date ? parseInt(req.query.date.toString()) : null;
         
-            if (!idGuru || !date) {
+            if (!idGuru && !date) {
                 res.json({msg: "ID and/or Date is required"});
                 return;
             } else if (idGuru && (typeof idGuru !== 'number' || isNaN(idGuru))) {
@@ -69,7 +69,7 @@ const kegiatanController: KegiatanController = {
             }
         
             const { rows } = await postgre.query(`
-                SELECT id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
+                SELECT kegiatan.id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
                 FROM kegiatan JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
                 WHERE (${idGuru ? 'id_guru = $1' : '1=1'}) AND (${date ? 'tanggal = $2' : '1=1'})`, [idGuru, date]);
         
