@@ -72,7 +72,7 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE id_guru = ? AND tanggal = ?`;
+                WHERE id_guru = $1 AND tanggal = $2`;
 
             const rows = await postgre.query(query, [idGuru, tanggal]);
         
