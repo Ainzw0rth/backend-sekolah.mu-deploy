@@ -5,6 +5,7 @@ interface KegiatanController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
     getInstruksi: (req: Request, res: Response) => Promise<void>;
+    getInstruksiGuru: (req: Request, res: Response) => Promise<void>;
 }
 
 const kegiatanController: KegiatanController = {
@@ -26,6 +27,9 @@ const kegiatanController: KegiatanController = {
     },
     getInstruksi: async (req, res) => {
         try {
+            console.log('Nilai req.query.id:', req.query.id);
+            console.log('Nilai req.query.type:', req.query.type);
+
             if (!req.query.id) {
                 res.json({msg: "ID is required"});
                 return;
@@ -45,10 +49,18 @@ const kegiatanController: KegiatanController = {
             }
     
             const { rows } = await postgre.query(`SELECT ${instruksiField} FROM kegiatan WHERE id_kegiatan = $1`, [req.query.id.toString()]);
-            res.json({msg: "OK", data: rows[0][instruksiField]});
+            res.json({msg: "OK", data: rows});
         } catch (error) {
             res.json({msg: error.msg});
         }
-    }    
+    },
+    getInstruksiGuru: async (req, res) => {
+        try {
+            const { rows } = await postgre.query("SELECT instruksi_guru from kegiatan WHERE id_kegiatan = $1", [req.params.id]);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            res.json({msg: error.msg})
+        }
+    },    
 }
 export default kegiatanController;
