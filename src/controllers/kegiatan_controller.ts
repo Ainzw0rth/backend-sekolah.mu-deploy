@@ -64,7 +64,7 @@ const kegiatanController: KegiatanController = {
             if (!idGuru) {
                 res.json({msg: "ID Guru is required"});
                 return;
-            } else if (idGuru && (typeof idGuru !== 'number' || isNaN(parseInt(idGuru)))) {
+            } else if (isNaN(parseInt(idGuru))) {
                 res.json({msg: "ID must be a number"});
                 return;
             }
