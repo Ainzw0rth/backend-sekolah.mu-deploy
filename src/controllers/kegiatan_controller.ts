@@ -76,7 +76,8 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE id_guru = $1 AND (($2 IS NULL) OR tanggal = $2);`, [idGuru, dateString]);
+                WHERE id_guru = $1 AND ( $2 IS NULL OR tanggal = CAST($2 AS DATE) );
+            `, [idGuru, dateString]);
         
             res.json({msg: "OK", data: rows});
         
