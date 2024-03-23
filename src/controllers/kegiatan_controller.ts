@@ -56,6 +56,9 @@ const kegiatanController: KegiatanController = {
         try {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
             const date = req.query.date ? new Date(req.query.date.toString()) : null;
+
+            console.log("idGuru: ", idGuru);
+            console.log("date: ", date);
     
             // Pengecekan parameter
             if (!idGuru && !date) {
