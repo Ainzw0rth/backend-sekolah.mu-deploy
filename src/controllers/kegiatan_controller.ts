@@ -26,6 +26,7 @@ const kegiatanController: KegiatanController = {
     },
     getInstruksi: async (req, res) => {
         try {    
+            
             if (!req.query.id) {
                 res.json({msg: "ID is required"});
                 return;

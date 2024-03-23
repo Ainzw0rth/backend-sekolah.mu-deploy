@@ -6,4 +6,5 @@ router.get('/', kegiatanController.getAll);
 router.get('/instruksi', kegiatanController.getInstruksi);
 router.get('/:id', kegiatanController.getById);
 
+
 export default router;
