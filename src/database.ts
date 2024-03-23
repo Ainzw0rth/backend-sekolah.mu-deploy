@@ -13,10 +13,10 @@ const dbConfigDev: PoolConfig = {
 // 1. dbConfig for production
 // 2. dbConfigDev for development
 
-const pool = new Pool(dbConfigDev);
+const pool = new Pool(dbConfig);
 
 pool.connect((err) => {
-  console.log('Connecting to PostgreSQL...', dbConfigDev);
+  console.log('Connecting to PostgreSQL...', dbConfig);
   if (err) {
     console.error('Error connecting to PostgreSQL:', err);
   } else {
