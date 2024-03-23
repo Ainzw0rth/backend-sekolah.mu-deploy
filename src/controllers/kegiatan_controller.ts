@@ -55,7 +55,7 @@ const kegiatanController: KegiatanController = {
     getByGuru: async (req, res) => {
         try {
             const idGuru = req.query.id ? req.query.id.toString() : null;
-            const dateString = req.query.date ? req.query.date.toString() : null;
+            const dateString = typeof req.query.date === 'string' ? new Date(req.query.date) : null;
             
             console.log('Received input parameters:');
             console.log('idGuru:', idGuru);
