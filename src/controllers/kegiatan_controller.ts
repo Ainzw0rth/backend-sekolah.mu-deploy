@@ -82,7 +82,8 @@ const kegiatanController: KegiatanController = {
             }
 
             const { rows } = await postgre.query(query, params);
-        
+
+            res.json({msg: "OK", data: rows});
         } catch (error) {
             res.json({msg: error.message});
         }
