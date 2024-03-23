@@ -54,7 +54,7 @@ const kegiatanController: KegiatanController = {
     },
     getByGuru: async (req, res) => {
         try {
-            const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
+            const idGuru = req.query.id ? req.query.id.toString() : null;
             const dateString = req.query.date ? req.query.date.toString() : null;
             
             console.log('Received input parameters:');
@@ -69,17 +69,19 @@ const kegiatanController: KegiatanController = {
                 return;
             }
             
-            const { rows } = await postgre.query(`
-                SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
-                FROM kegiatan 
-                LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
-                LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
-                LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE id_guru = $1 AND ( $2 IS NULL OR tanggal = CAST($2 AS DATE) );
-            `, [idGuru, dateString]);
-        
-            res.json({msg: "OK", data: rows});
+            let query = `
+                SELECT kegiatan.id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
+                FROM kegiatan JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
+                WHERE id_guru = $1`;
+
+            const params = [idGuru];
+
+            if (dateString) {
+                query += ` AND tanggal = $2;`;
+                params.push(dateString);
+            }
+
+            const { rows } = await postgre.query(query, params);
         
         } catch (error) {
             res.json({msg: error.message});
