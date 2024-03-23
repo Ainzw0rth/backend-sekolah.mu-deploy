@@ -53,32 +53,33 @@ const kegiatanController: KegiatanController = {
         }
     },
     getByGuru: async (req, res) => {
-        try {    
+        try {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
-            const date = req.query.date ? parseInt(req.query.date.toString()) : null;
-        
+            const date = req.query.date ? new Date(req.query.date.toString()) : null;
+    
+            // Pengecekan parameter
             if (!idGuru && !date) {
                 res.json({msg: "ID and/or Date is required"});
                 return;
             } else if (idGuru && (typeof idGuru !== 'number' || isNaN(idGuru))) {
                 res.json({msg: "ID must be a number"});
                 return;
-            } else if (date && (typeof date !== 'number' || isNaN(date))) {
-                res.json({msg: "Date must be a number"});
+            } else if (date && isNaN(date.getTime())) {
+                res.json({msg: "Invalid Date"});
                 return;
             }
-        
+    
+            // Query SQL
             const { rows } = await postgre.query(`
                 SELECT kegiatan.id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
                 FROM kegiatan JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                WHERE ($1 IS NULL OR id_guru = $1) AND ($2 IS NULL OR tanggal = $2)
-            `, [idGuru, date]);
-        
+                WHERE ($1 IS NULL OR id_guru = $1) AND ($2 IS NULL OR tanggal = $2)`, [idGuru, date]);
+    
             res.json({msg: "OK", data: rows});
-        
+    
         } catch (error) {
-            res.json({msg: error.msg});
-        }        
+            res.json({msg: error.message});
+        }
     },    
 }
 export default kegiatanController;
