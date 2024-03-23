@@ -71,7 +71,8 @@ const kegiatanController: KegiatanController = {
             const { rows } = await postgre.query(`
                 SELECT kegiatan.id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
                 FROM kegiatan JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                WHERE (${idGuru ? 'id_guru = $1' : '1=1'}) AND (${date ? 'tanggal = $2' : '1=1'})`, [idGuru, date]);
+                WHERE ($1 IS NULL OR id_guru = $1) AND ($2 IS NULL OR tanggal = $2)
+            `, [idGuru, date]);
         
             res.json({msg: "OK", data: rows});
         
