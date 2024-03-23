@@ -54,30 +54,27 @@ const kegiatanController: KegiatanController = {
     },
     getByGuru: async (req, res) => {
         try {
-            const idGuru = req.query.id ? req.query.id.toString() : null;
-            const dateString = typeof req.query.date === 'string' ? new Date(req.query.date) : null;
-            
-            console.log('Received input parameters:');
-            console.log('idGuru:', idGuru);
-            console.log('dateString:', dateString);
-            
+            const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
+            const tanggal = req.query.date ? req.query.date.toString() : null;
+
             if (!idGuru) {
                 res.json({msg: "ID Guru is required"});
                 return;
-            } else if (isNaN(parseInt(idGuru))) {
+            } else if (isNaN(idGuru)) {
                 res.json({msg: "ID must be a number"});
                 return;
             }
-            
-            const { rows } = await postgre.query(`
+
+            const query = `
                 SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
                 FROM kegiatan 
                 LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE id_guru = $1 AND ($2 IS NULL OR tanggal = $2);`, 
-                [parseInt(idGuru), dateString]);
+                WHERE id_guru = ? AND tanggal = ?`;
+
+            const rows = await postgre.query(query, [idGuru, tanggal]);
         
             res.json({msg: "OK", data: rows});
         
