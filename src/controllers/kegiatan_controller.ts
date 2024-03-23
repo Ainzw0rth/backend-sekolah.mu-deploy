@@ -29,7 +29,7 @@ const kegiatanController: KegiatanController = {
         try {
             console.log('Nilai req.query.id:', req.query.id);
             console.log('Nilai req.query.type:', req.query.type);
-
+    
             if (!req.query.id) {
                 res.json({msg: "ID is required"});
                 return;
