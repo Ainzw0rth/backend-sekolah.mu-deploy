@@ -25,18 +25,15 @@ const kegiatanController: KegiatanController = {
         }
     },
     getInstruksi: async (req, res) => {
-        try {
-            console.log('Nilai req.query.id:', req.query.id);
-            console.log('Nilai req.query.type:', req.query.type);
-    
+        try {    
             if (!req.query.id) {
                 res.json({msg: "ID is required"});
                 return;
             } else if (typeof req.query.id !== 'string' || isNaN(parseInt(req.query.id.toString()))) {
                 res.json({msg: "ID must be a number"});
                 return;
-            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "siswa")) {
-                res.json({msg: "Type must be either 'guru' or 'siswa'"});
+            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "murid")) {
+                res.json({msg: "Type must be either 'guru' or 'murid'"});
                 return;
             }
     
