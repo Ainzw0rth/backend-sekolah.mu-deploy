@@ -29,7 +29,7 @@ const kegiatanController: KegiatanController = {
             if (!req.query.id) {
                 res.json({msg: "ID is required"});
                 return;
-            } else if (typeof req.query.id !== 'string' || isNaN(parseInt(req.query.id))) {
+            } else if (typeof req.query.id !== 'string' || isNaN(parseInt(req.query.id.toString()))) {
                 res.json({msg: "ID must be a number"});
                 return;
             } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "siswa")) {
@@ -49,6 +49,6 @@ const kegiatanController: KegiatanController = {
         } catch (error) {
             res.json({msg: error.msg});
         }
-    }
+    }    
 }
 export default kegiatanController;
