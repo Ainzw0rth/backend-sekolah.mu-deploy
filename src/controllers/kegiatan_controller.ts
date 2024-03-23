@@ -55,7 +55,7 @@ const kegiatanController: KegiatanController = {
     getByGuru: async (req, res) => {
         try {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
-            const dateString = req.query.date ? new Date(req.query.date.toString()) : null;
+            const dateString = req.query.date ? new Date(req.query.date.toString()).toISOString().split('T')[0] : null;
             
             console.log('Received input parameters:');
             console.log('idGuru:', idGuru);
@@ -76,7 +76,7 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE id_guru = $1 AND (($2 IS NULL) OR tanggal = $2);`, [idGuru, dateString]);
+                WHERE id_guru = $1 AND (($2 IS NULL) OR tanggal = $2::date);`, [idGuru, dateString]);
         
             res.json({msg: "OK", data: rows});
         
