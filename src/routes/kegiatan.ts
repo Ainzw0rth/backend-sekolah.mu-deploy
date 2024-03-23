@@ -4,6 +4,7 @@ const router: Router = express.Router();
 
 router.get('/', kegiatanController.getAll);
 router.get('/instruksi', kegiatanController.getInstruksi);
+router.get('/guru/:id', kegiatanController.getByIdGuru);
 router.get('/:id', kegiatanController.getById);
 
 

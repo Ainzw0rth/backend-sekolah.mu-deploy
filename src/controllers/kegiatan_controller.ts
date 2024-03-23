@@ -5,6 +5,7 @@ interface KegiatanController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
     getInstruksi: (req: Request, res: Response) => Promise<void>;
+    getByIdGuru: (req: Request, res: Response) => Promise<void>;
 }
 
 const kegiatanController: KegiatanController = {
@@ -49,6 +50,14 @@ const kegiatanController: KegiatanController = {
             res.json({msg: "OK", data: rows});
         } catch (error) {
             res.json({msg: error.msg});
+        }
+    },
+    getByIdGuru: async (req, res) => {
+        try{
+            const { rows } = await postgre.query("SELECT * from kegiatan WHERE id_guru = $1", [req.params.id]);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            res.json({msg: error.msg})
         }
     },
 }
