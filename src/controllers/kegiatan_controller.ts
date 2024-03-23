@@ -58,7 +58,7 @@ const kegiatanController: KegiatanController = {
             const date = req.query.date ? parseInt(req.query.date.toString()) : null;
         
             if (!idGuru || !date) {
-                res.json({msg: "At least ID or Date is required"});
+                res.json({msg: "ID and/or Date is required"});
                 return;
             } else if (idGuru && (typeof idGuru !== 'number' || isNaN(idGuru))) {
                 res.json({msg: "ID must be a number"});
