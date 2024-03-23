@@ -54,28 +54,29 @@ const kegiatanController: KegiatanController = {
     },
     getByGuru: async (req, res) => {
         try {
-            const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
+            const idGuru = req.query.id ? parseInt(req.query.id.toString());
             const dateString = req.query.date ? new Date(req.query.date.toString()) : null;
             
             console.log('Received input parameters:');
             console.log('idGuru:', idGuru);
             console.log('dateString:', dateString);
             
-            if (!idGuru && !dateString) {
-                res.json({msg: "ID and/or Date is required"});
+            if (!idGuru) {
+                res.json({msg: "ID Guru is required"});
                 return;
             } else if (idGuru && (typeof idGuru !== 'number' || isNaN(idGuru))) {
                 res.json({msg: "ID must be a number"});
                 return;
-            } else if (dateString && isNaN(dateString.getTime())) {
-                res.json({msg: "Date must be a valid date"});
-                return;
             }
             
             const { rows } = await postgre.query(`
-                SELECT kegiatan.id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
-                FROM kegiatan JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                WHERE ($1 IS NULL OR id_guru = $1) AND ($2 IS NULL OR tanggal = $2)`, [idGuru, dateString]);
+                SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
+                FROM kegiatan 
+                LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
+                LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
+                LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
+                LEFT JOIN programON topik.id_program = program.id_program
+                WHERE id_guru = $1 AND (($2 IS NULL) OR tanggal = $2);`, [idGuru, dateString]);
         
             res.json({msg: "OK", data: rows});
         
