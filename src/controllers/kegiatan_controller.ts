@@ -55,7 +55,8 @@ const kegiatanController: KegiatanController = {
     getByGuru: async (req, res) => {
         try {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
-            const date = req.query.date ? new Date(req.query.date.toString()) : null;
+            const dateString = req.query.date ? req.query.date.toString() : null;
+            const date = dateString ? new Date(dateString) : null;
 
             console.log("idGuru: ", idGuru);
             console.log("date: ", date);
@@ -72,11 +73,12 @@ const kegiatanController: KegiatanController = {
                 return;
             }
     
-            // Query SQL
             const { rows } = await postgre.query(`
                 SELECT kegiatan.id_kegiatan, nama_kegiatan, id_guru, id_jadwal, tanggal, waktu, lokasi, id_topik, id_kelas
+                
                 FROM kegiatan JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                WHERE ($1 IS NULL OR id_guru = $1) AND ($2 IS NULL OR tanggal = $2)`, [idGuru, date]);
+            
+                WHERE ($1 IS NULL OR id_guru = $1) AND ($2 IS NULL OR tanggal = $2)`, [idGuru, dateString]);
     
             res.json({msg: "OK", data: rows});
     
