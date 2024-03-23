@@ -4,8 +4,7 @@ import postgre from '../database';
 interface KegiatanController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
-    getInstruksiGuru: (req: Request, res: Response) => Promise<void>;
-    getInstruksiMurid: (req: Request, res: Response) => Promise<void>; 
+    getInstruksi: (req: Request, res: Response) => Promise<void>;
 }
 
 const kegiatanController: KegiatanController = {
@@ -25,22 +24,31 @@ const kegiatanController: KegiatanController = {
             res.json({msg: error.msg})
         }
     },
-    getInstruksiGuru: async (req, res) => {
+    getInstruksi: async (req, res) => {
         try {
-            const { rows } = await postgre.query("SELECT instruksi_guru from kegiatan WHERE id_kegiatan = $1", [req.params.id]);
-            res.json({msg: "OK", data: rows})
+            if (!req.query.id) {
+                res.json({msg: "ID is required"});
+                return;
+            } else if (typeof req.query.id !== 'string' || isNaN(parseInt(req.query.id))) {
+                res.json({msg: "ID must be a number"});
+                return;
+            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "siswa")) {
+                res.json({msg: "Type must be either 'guru' or 'siswa'"});
+                return;
+            }
+    
+            let instruksiField;
+            if (req.query.type === "guru") {
+                instruksiField = "instruksi_guru";
+            } else {
+                instruksiField = "instruksi_murid";
+            }
+    
+            const { rows } = await postgre.query(`SELECT ${instruksiField} FROM kegiatan WHERE id_kegiatan = $1`, [req.query.id.toString()]);
+            res.json({msg: "OK", data: rows[0][instruksiField]});
         } catch (error) {
-            res.json({msg: error.msg})
-        }
-    },
-    getInstruksiMurid: async (req, res) => {
-        try {
-            const { rows } = await postgre.query("SELECT instruksi_murid from kegiatan WHERE id_kegiatan = $1", [req.params.id]);
-            res.json({msg: "OK", data: rows})
-        } catch (error) {
-            res.json({msg: error.msg})
+            res.json({msg: error.msg});
         }
     }
-} 
-
+}
 export default kegiatanController;
