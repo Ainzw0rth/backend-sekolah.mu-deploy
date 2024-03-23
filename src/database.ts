@@ -2,7 +2,7 @@ import { Pool, PoolConfig } from 'pg';
 var db_dev_url : string = "postgres://postgres:postgres@postgres-ppl-dev:5432/development";
 
 const dbConfig: PoolConfig = {
-  connectionString: process.env.POSTGRES_URL + "?sslmode=require",
+  connectionString: process.env.POSTGRES_URL + "?sslmode=require"
 };
 
 const dbConfigDev: PoolConfig = {
