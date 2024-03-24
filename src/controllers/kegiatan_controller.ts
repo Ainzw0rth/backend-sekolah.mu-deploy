@@ -55,7 +55,7 @@ const kegiatanController: KegiatanController = {
     getByGuru: async (req, res) => {
         try {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
-            const tanggal = req.query.date ? req.query.date.toString() : null;
+            // const tanggal = req.query.date ? req.query.date.toString() : null;
 
             if (!idGuru) {
                 res.json({msg: "ID Guru is required"});
@@ -72,9 +72,9 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE id_guru = $1 AND tanggal = $2`;
+                WHERE id_guru = $1`;
 
-            const rows = await postgre.query(query, [idGuru, tanggal]);
+            const rows = await postgre.query(query, [idGuru]);
         
             res.json({msg: "OK", data: rows});
         
