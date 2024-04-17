@@ -58,16 +58,16 @@ const kegiatanController: KegiatanController = {
             // TODO : filter by date
             // const tanggal = req.query.date ? req.query.date.toString() : null;
 
-            if (!idGuru) {
-                res.json({msg: "ID Guru is required"});
-                return;
-            } else if (isNaN(idGuru)) {
-                res.json({msg: "ID must be a number"});
-                return;
-            }
+            // if (!idGuru) {
+            //     res.json({msg: "ID Guru is required"});
+            //     return;
+            // } else if (isNaN(idGuru)) {
+            //     res.json({msg: "ID must be a number"});
+            //     return;
+            // }
 
             const query = `
-                SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
+                SELECT kegiatan.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
                 FROM kegiatan 
                 LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
