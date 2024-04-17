@@ -6,7 +6,7 @@ router.get('/', kegiatanController.getAll);
 router.get('/instruksi', kegiatanController.getInstruksi);
 router.get('/guru', kegiatanController.getByGuru);
 router.get('/:id', kegiatanController.getById);
-router.get('/tanggal/:date', kegiatanController.getByTanggal);
+router.get('/tanggal/:id', kegiatanController.getByTanggal);
 
 
 export default router;

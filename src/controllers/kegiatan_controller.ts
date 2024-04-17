@@ -28,15 +28,15 @@ const kegiatanController: KegiatanController = {
     },
     getByTanggal: async (req, res) => {
         try {
-            const date = req.query.date ? parseInt(req.query.date.toString()) : null;
+            const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
             // TODO : filter by date
             // const tanggal = req.query.date ? req.query.date.toString() : null;
 
-            if (!date) {
-                res.json({msg: "Date is required"});
+            if (!idGuru) {
+                res.json({msg: "ID Guru is required"});
                 return;
-            } else if (isNaN(date)) {
-                res.json({msg: "Date must be a number"});
+            } else if (isNaN(idGuru)) {
+                res.json({msg: "ID must be a number"});
                 return;
             }
 
@@ -47,9 +47,9 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE tanggal = $1`;
+                WHERE id_guru = $1`;
 
-            const rows = await postgre.query(query, [date]);
+            const rows = await postgre.query(query, [idGuru]);
         
             res.json({msg: "OK", data: rows});
         
