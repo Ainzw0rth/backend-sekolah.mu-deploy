@@ -54,7 +54,7 @@ const kegiatanController: KegiatanController = {
     },
     getByGuru: async (req, res) => {
         try {
-            const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
+            const idGuru = req.params.id ? parseInt(req.params.id) : null;
             // TODO : filter by date
             // const tanggal = req.query.date ? req.query.date.toString() : null;
 
