@@ -75,7 +75,7 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN program ON topik.id_program = program.id_program
                 WHERE id_guru = 1`;
 
-            const rows = await postgre.query(query, [idGuru]);
+            const { rows } = await postgre.query(query, [idGuru]);
         
             res.json({msg: "OK", data: rows});
         
