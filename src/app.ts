@@ -15,12 +15,13 @@ const cors = require('cors');
 const corsConfig = {
   origin: "*",
   credential: true,
-  methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
 }
 
 const app: Application = express();
 const port: number = 3000;
 
+app.options("", cors(corsConfig))
 app.use(cors(corsConfig))
 app.use(logger('dev'));
 app.use(express.json());
