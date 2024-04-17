@@ -12,11 +12,16 @@ import programRouter from './routes/program';
 import topikRouter from './routes/konten';
 
 const cors = require('cors');
+const corsConfig = {
+  origin: "*",
+  credential: true,
+  methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
+}
 
 const app: Application = express();
 const port: number = 3000;
 
-app.use(cors)
+app.use(cors(corsConfig))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
