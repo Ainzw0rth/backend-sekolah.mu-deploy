@@ -11,9 +11,12 @@ import kontenRouter from './routes/konten';
 import programRouter from './routes/program';
 import topikRouter from './routes/konten';
 
+const cors = require('cors');
+
 const app: Application = express();
 const port: number = 3000;
 
+app.use(cors)
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
