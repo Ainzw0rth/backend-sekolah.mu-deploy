@@ -12,7 +12,7 @@ interface KegiatanController {
 const kegiatanController: KegiatanController = {
     getAll: async (req, res) => {
         try {
-            const { rows } = await postgre.query("SELECT * from jadwal WHERE tanggal = '2024-01-08'");
+            const { rows } = await postgre.query("SELECT * from kegiatan");
             res.json({msg: "OK", data: rows})
         } catch (error) {
             res.json({msg: error.msg})
@@ -76,7 +76,7 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN program ON topik.id_program = program.id_program
                 WHERE id_guru = $1`;
 
-            const rows = await postgre.query(query, [idGuru]);
+            const { rows } = await postgre.query(query, [idGuru]);
         
             res.json({msg: "OK", data: rows});
         
@@ -86,14 +86,21 @@ const kegiatanController: KegiatanController = {
     },    
     getByTanggal: async (req, res) => {
         try {
-            // const tanggal = req.query.tanggal ? req.query.tanggal.toString() : null;
+            const tanggal = req.query.tanggal ? req.query.tanggal.toString() : null;
             
-            // console.log ("tanggal: ", req.query.tanggal)
+            console.log ("tanggal: ", tanggal)
 
-            // if (!tanggal) {
-            //     res.json({msg: "ID Guru is required"});
-            //     return;
-            // }
+            if (!tanggal) {
+                res.json({msg: "Tanggal is required"});
+                return;
+            }
+
+            const tanggalRegex = /^'\d{4}-\d{2}-\d{2}'$/;
+
+            if (!tanggalRegex.test(tanggal)) {
+                res.json({ msg: "Format tanggal tidak valid. Format seharusnya: YYYY-MM-DD" });
+                return;
+            }
 
             const query = `
                 SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
@@ -102,9 +109,9 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE jadwal.tanggal = '2024-01-08'`;
+                WHERE jadwal.tanggal = $1`;
 
-            const rows = await postgre.query(query);
+            const { rows } = await postgre.query(query, [tanggal]);
         
             res.json({msg: "OK", data: rows});
         

@@ -1,13 +1,11 @@
 import { Pool, PoolConfig } from 'pg';
-var db_dev_url : string = "postgres://postgres:postgres@postgres-ppl-dev:5432/development";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const dbConfig: PoolConfig = {
-  connectionString: process.env.POSTGRES_URL + "?sslmode=require"
+  connectionString: "postgres://default:sDMed2HluBV5@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
 };
-
-const dbConfigDev: PoolConfig = {
-  connectionString: db_dev_url,
-}
 
 // Change the variable to connect to different database
 // 1. dbConfig for production
