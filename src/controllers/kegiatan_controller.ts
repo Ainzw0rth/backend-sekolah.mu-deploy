@@ -86,14 +86,14 @@ const kegiatanController: KegiatanController = {
     },    
     getByTanggal: async (req, res) => {
         try {
-            const tanggal = req.query.tanggal ? req.query.tanggal.toString() : null;
+            // const tanggal = req.query.tanggal ? req.query.tanggal.toString() : null;
             
-            console.log ("tanggal: ", tanggal)
-            
-            if (!tanggal) {
-                res.json({msg: "ID Guru is required"});
-                return;
-            }
+            console.log ("tanggal: ", req.query.tanggal)
+
+            // if (!tanggal) {
+            //     res.json({msg: "ID Guru is required"});
+            //     return;
+            // }
 
             const query = `
                 SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
@@ -102,9 +102,9 @@ const kegiatanController: KegiatanController = {
                 LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
                 LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
                 LEFT JOIN program ON topik.id_program = program.id_program
-                WHERE jadwal.tanggal = $1`;
+                WHERE jadwal.tanggal = '2024-01-08'`;
 
-            const rows = await postgre.query(query, [tanggal]);
+            const rows = await postgre.query(query);
         
             res.json({msg: "OK", data: rows});
         
