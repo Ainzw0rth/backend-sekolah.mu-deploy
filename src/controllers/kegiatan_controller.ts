@@ -12,7 +12,7 @@ interface KegiatanController {
 const kegiatanController: KegiatanController = {
     getAll: async (req, res) => {
         try {
-            const { rows } = await postgre.query("SELECT * from kegiatan");
+            const { rows } = await postgre.query("SELECT * from jadwal WHERE tanggal = '2024-01-08'");
             res.json({msg: "OK", data: rows})
         } catch (error) {
             res.json({msg: error.msg})

@@ -7,6 +7,7 @@
     "type": "git",
     "url": "https://gitlab.informatika.org/the-fellowship-of-the-sprint/backend-cf-guru-sekolah.mu.git"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "private": true,
@@ -23,7 +24,6 @@
     "debug": "~2.6.9",
     "express": "^4.18.3",
     "helmet": "^7.1.0",
-    "launcher": "^0.0.1",
     "morgan": "~1.9.1",
     "nano": "^10.1.3",
     "pg": "^8.11.3",
