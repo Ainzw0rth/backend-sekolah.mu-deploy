@@ -40,4 +40,4 @@ app.listen(port, '0.0.0.0', function() {
     console.log('Listening on port 3000');
   });
 
-// export default app;
+export default app;
