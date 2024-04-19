@@ -88,7 +88,7 @@ const kegiatanController: KegiatanController = {
         try {
             // const tanggal = req.query.tanggal ? req.query.tanggal.toString() : null;
             
-            console.log ("tanggal: ", req.query.tanggal)
+            // console.log ("tanggal: ", req.query.tanggal)
 
             // if (!tanggal) {
             //     res.json({msg: "ID Guru is required"});
