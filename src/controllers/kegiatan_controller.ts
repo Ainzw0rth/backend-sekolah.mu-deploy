@@ -86,8 +86,10 @@ const kegiatanController: KegiatanController = {
     },    
     getByTanggal: async (req, res) => {
         try {
-            const tanggal = req.query.tanggal ? parseInt(req.query.tanggal.toString()) : null;
-
+            const tanggal = req.query.tanggal ? req.query.tanggal.toString() : null;
+            
+            console.log ("tanggal: ", tanggal)
+            
             if (!tanggal) {
                 res.json({msg: "ID Guru is required"});
                 return;
