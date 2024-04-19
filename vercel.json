@@ -12,7 +12,8 @@
         "dest": "/src/app.ts",
         "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         "headers": {
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "Permissions-Policy": "attribution-reporting=(), run-ad-auction=(), join-ad-interest-group=(), browsing-topics=()"
         }
       }
     ]

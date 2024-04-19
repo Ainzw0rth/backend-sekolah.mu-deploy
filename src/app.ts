@@ -17,6 +17,7 @@ const corsConfig = {
   credential: true,
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
 }
+const helmet = require('helmet');
 
 const app: Application = express();
 const port: number = 3000;
@@ -24,6 +25,18 @@ const port: number = 3000;
 app.options("", cors(corsConfig))
 app.use(cors(corsConfig))
 app.use(logger('dev'));
+app.use(helmet({
+  contentSecurityPolicy: false,  // disable CSP
+  permissionsPolicy: {
+    features: {
+      // disable specific features
+      "attribution-reporting": ["'none'"],
+      "run-ad-auction": ["'none'"],
+      "join-ad-interest-group": ["'none'"],
+      "browsing-topics": ["'none'"],
+    }
+  }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
