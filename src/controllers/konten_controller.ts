@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import postgre from '../database';
 
 interface KontenController {
-    getAll: (req: Request, res: Response) => Promise<void>;
+    getAll: (req: Request, res: Response) => Promise<void>; 
     getById: (req: Request, res: Response) => Promise<void>;
 }
 

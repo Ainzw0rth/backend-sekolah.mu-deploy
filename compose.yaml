@@ -22,19 +22,15 @@ services:
     restart: unless-stopped
 
   node:
-      build: .
-      container_name: node-ppl-dev
-      image: node:14
-      working_dir: /app
-      volumes:
-        - .:/app
-        - /app/node_modules
-      ports:
-        - 3000:3000
-      command: npm run startdev
-      depends_on:
-        - postgres
-      restart: unless-stopped
+    build: .
+    volumes:
+      - ./src:/src
+    command: npm run startdev
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    restart: unless-stopped
 
 volumes:
   postgres:
