@@ -1,0 +1,36 @@
+services:   
+  postgres:
+    container_name: postgres-ppl-dev
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: development
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+  
+  adminer:
+    image: adminer
+    container_name: adminer-ppl-dev
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
+  node:
+    build: .
+    volumes:
+      - ./src:/src
+    command: npm run startdev
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres:

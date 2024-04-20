@@ -1,6 +1,14 @@
 # Backend CF Guru Sekolah.mu
 
+# Production and Development Run
+If you want to deploy:
+- Change the database url in database.ts accordingly
+- pull then push the repo
 
+If you want to develop:
+- Change the database url in database.ts accordingly
+- docker compose up in the terminal (the seeder file is run automatically)
+- access the app through localhost:3000 on local machine
 
 ## What is it
 
