@@ -63,3 +63,4 @@ typings/
 .next
 
 .vercel
+.env*.local
