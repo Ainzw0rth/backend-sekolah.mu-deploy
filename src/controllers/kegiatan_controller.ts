@@ -8,6 +8,7 @@ interface KegiatanController {
     getByGuru: (req: Request, res: Response) => Promise<void>;
     getByTanggal: (req: Request, res: Response) => Promise<void>;
     getPercentage: (req: Request, res: Response) => Promise<void>;
+    getMurid: (req: Request, res: Response) => Promise<void>;
 }
 
 const kegiatanController: KegiatanController = {
@@ -151,5 +152,25 @@ const kegiatanController: KegiatanController = {
             res.json({msg: error.message});
         }
     }, 
+    getMurid: async (req, res) => {
+        try {
+            const idKegiatan = req.params.id;
+            
+            const query = `
+                SELECT kegiatan.id_kegiatan, murid_kelas.id_kelas, murid.id_murid, murid.nama_murid, kegiatan.id_guru
+                FROM kegiatan 
+                LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
+                LEFT JOIN murid_kelas ON jadwal.id_kelas = murid_kelas.id_kelas
+                LEFT JOIN murid ON murid_kelas.id_murid = murid.id_murid
+                WHERE kegiatan.id_kegiatan = $1`;
+
+            const { rows } = await postgre.query(query, [idKegiatan]);
+        
+            res.json({msg: "OK", data: rows});
+        
+        } catch (error) {
+            res.json({msg: error.message});
+        }
+    },   
 }
 export default kegiatanController;
