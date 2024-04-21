@@ -63,9 +63,11 @@ const evaluasiController: EvaluasiController = {
     },
     update: async (req, res) => {
         try {
-            const { id_kegiatan, id_murid, presensi, nilai, catatan, feedback, id_karya, id_guru } = req.body;
-            if (!id_kegiatan || !id_murid || !id_guru) {
-                res.json({ msg: "ID kegiatan, ID murid, and ID guru are required" });
+            const id_kegiatan = req.query.kegiatan;
+            const id_murid = req.query.murid;
+            const { presensi, nilai, catatan, feedback, id_karya, id_guru } = req.body;
+            if (!id_guru) {
+                res.json({ msg: "ID guru is required" });
                 return;
             }
     
