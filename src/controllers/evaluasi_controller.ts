@@ -75,6 +75,7 @@ const evaluasiController: EvaluasiController = {
 
             let field = [];
             if (presensi) field.push("catatan_kehadiran");
+            if (nilai) field.push("penilaian");
             if (catatan) field.push("catatan");
             if (feedback) field.push("feedback");
             if (id_karya) field.push("id_karya");
