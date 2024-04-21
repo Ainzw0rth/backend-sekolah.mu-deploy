@@ -1,10 +1,10 @@
 import { Pool, PoolConfig } from 'pg';
 
 
-var db_dev_url : string = "postgres://postgres:postgres@postgres-ppl-dev:5432/development";
+var db_dev_url : string = "postgres://default:V1I4PZwRnBQM@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require";
 
 const dbConfig: PoolConfig = {
-  connectionString: "postgres://default:sDMed2HluBV5@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
+  connectionString: "postgres://default:V1I4PZwRnBQM@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
 };
 
 const dbConfigDev: PoolConfig = {
