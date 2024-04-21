@@ -134,7 +134,7 @@ const createSchema = async () => {
       CREATE TYPE action_enum AS ENUM ('Create', 'Update', 'Delete');
 
       CREATE TABLE evaluasi_log(
-        id_log INTEGER PRIMARY KEY,
+        id_log SERIAL PRIMARY KEY,
         id_murid INTEGER REFERENCES murid(id_murid),
         id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan),
         timestamp TIMESTAMP,
