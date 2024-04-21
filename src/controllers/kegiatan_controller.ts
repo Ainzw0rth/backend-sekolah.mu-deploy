@@ -7,6 +7,7 @@ interface KegiatanController {
     getInstruksi: (req: Request, res: Response) => Promise<void>;
     getByGuru: (req: Request, res: Response) => Promise<void>;
     getByTanggal: (req: Request, res: Response) => Promise<void>;
+    getPercentage: (req: Request, res: Response) => Promise<void>;
 }
 
 const kegiatanController: KegiatanController = {
@@ -118,6 +119,37 @@ const kegiatanController: KegiatanController = {
         } catch (error) {
             res.json({msg: error.message});
         }
-    },     
+    },        
+    getPercentage: async (req, res) => {
+        try {
+            const idKegiatan = req.query.id ? parseInt(req.query.id.toString()) : null;
+
+            if (!idKegiatan) {
+                res.json({msg: "ID Kegiatan is required"});
+                return;
+            } else if (isNaN(idKegiatan)) {
+                res.json({msg: "ID must be a number"});
+                return;
+            }
+
+            const query = `
+                SELECT 
+                    COUNT(*) AS total_rows,
+                    COUNT(CASE WHEN catatan_kehadiran IS NULL THEN 1 END) AS null_catatan_kehadiran,
+                    COUNT(CASE WHEN penilaian IS NULL THEN 1 END) AS null_penilaian,
+                    COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
+                    COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
+                    COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
+                    FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
+                    WHERE kegiatan.id_kegiatan = $1;`;
+
+            const { rows } = await postgre.query(query, [idKegiatan]);
+        
+            res.json({msg: "OK", data: rows});
+        
+        } catch (error) {
+            res.json({msg: error.message});
+        }
+    }, 
 }
 export default kegiatanController;
