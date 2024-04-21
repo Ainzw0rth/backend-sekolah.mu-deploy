@@ -1,9 +1,10 @@
 import express, { Router } from 'express';
-// import programController from '../controllers/evaluasi_controller';
+import evaluasiController from '../controllers/evaluasi_controller';
 const router: Router = express.Router();
 
-// TODO: Implement the routes
-// router.get('/', programController.);
-
+router.get('/all', evaluasiController.getAll);
+router.get('/', evaluasiController.getById);
+router.post('/', evaluasiController.create);
+router.patch('/', evaluasiController.update);
 
 export default router;
