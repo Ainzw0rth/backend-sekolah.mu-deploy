@@ -88,7 +88,9 @@ const muridController: MuridController = {
                 catatan_kehadiran, 
                 COUNT(*) AS jumlah_kehadiran
             FROM evaluasi
-            WHERE id_murid = $1
+            WHERE 
+                id_murid = $1 
+                AND catatan_kehadiran IS NOT NULL
             GROUP BY catatan_kehadiran
             `;
             const { rows } = await postgre.query(rawQuery, [idMurid]);
