@@ -258,7 +258,8 @@ const createSchema = async () => {
           '7', '4', E'- Jelaskan filosofi politik\n- Praktikan teknik propaganda dan penggiringan opini',E'- Buat kelompok partai sesuai ideologi masing-masing\n- Simulasikan sidang perwakilan rakyat dengan tidur siang');
 
         INSERT INTO konten (id_konten, nama_konten, tipe_konten, nama_file, tipe_file, file_path, id_kegiatan) VALUES
-        ('1', 'Buku Pengenalan Bahasa Indonesia', 'Buku', 'Buku Pengenalan Bahasa Indonesia.pdf', 'pdf', 'path/to/file', '1'),
+        ('1', '[PDF] Modul Pembelajaran Baris Berbaris', 'Modul', 'Modul Pembelajaran Baris Berbaris.pdf', 'pdf', 'https://publik.akademik.itb.ac.id/info/2023/Kalender_Pendidikan_ITB_2023-2024_revisi.pdf', '1'),
+        ('13', 'Video Pembelajaran Baris Berbaris', 'Video', 'Video Pembelajaran Baris Berbaris', 'embed', 'https://www.youtube.com/embed/9QH4FGy6_HY', '1'),
         ('2', 'Presentasi Pengenalan Binatang', 'Buku', 'Presentasi Pengenalan Binatang.pdf', 'pdf', 'path/to/file', '2'),
         ('3', 'Lembar Kerja Siswa bindo', 'Lembar Kerja', 'Lembar Kerja Siswa bindo.pdf', 'pdf', 'path/to/file', '3'),
         ('4', 'Soal Ulangan', 'Lembar Kerja', 'Ulangan Bindo.pdf', 'pdf', 'path/to/file', '4'),
@@ -323,6 +324,10 @@ const createSchema = async () => {
         ('1', '1'), ('2', '1'), ('3', '1'), ('4', '1'), ('5', '1'), ('6', '1'), ('7', '1'),
         ('3', '2'), ('7', '2');
 
+        INSERT INTO evaluasi (id_kegiatan, id_murid) VALUES
+        ('1', '1'), ('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('1', '6'), ('1', '7'), ('1', '8'), ('1', '9'), ('1', '10'),
+        ('1', '11'), ('1', '12'), ('1', '13'), ('1', '14'), ('1', '15'), ('1', '16'), ('1', '17'), ('1', '18'), ('1', '19'), ('1', '20'),
+        ('1', '21'), ('1', '22'), ('1', '23'), ('1', '24'), ('1', '25'), ('1', '26');
       `);
   };
 
