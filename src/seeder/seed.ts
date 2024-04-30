@@ -121,14 +121,14 @@ const createSchema = async () => {
         CREATE TYPE kehadiran_enum AS ENUM ('Hadir', 'Izin', 'Sakit', 'Alpa');
 
         CREATE TABLE evaluasi (
-          id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan),
+          id_jadwal INTEGER REFERENCES jadwal(id_jadwal),
           id_murid INTEGER REFERENCES murid(id_murid),
           catatan_kehadiran kehadiran_enum,
           penilaian INTEGER,
           catatan TEXT,
           feedback TEXT,
           id_karya INTEGER REFERENCES karya(id_karya),
-          PRIMARY KEY (id_kegiatan, id_murid)
+          PRIMARY KEY (id_jadwal, id_murid)
         );
 
         CREATE TYPE action_enum AS ENUM ('Create', 'Update', 'Delete');
@@ -136,7 +136,7 @@ const createSchema = async () => {
         CREATE TABLE evaluasi_log(
           id_log SERIAL PRIMARY KEY,
           id_murid INTEGER REFERENCES murid(id_murid),
-          id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan),
+          id_jadwal INTEGER REFERENCES jadwal(id_jadwal),
           timestamp TIMESTAMP,
           editor INTEGER REFERENCES guru(id_guru),
           action action_enum,
@@ -324,10 +324,11 @@ const createSchema = async () => {
         ('1', '1'), ('2', '1'), ('3', '1'), ('4', '1'), ('5', '1'), ('6', '1'), ('7', '1'),
         ('3', '2'), ('7', '2');
 
-        INSERT INTO evaluasi (id_kegiatan, id_murid) VALUES
-        ('1', '1'), ('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('1', '6'), ('1', '7'), ('1', '8'), ('1', '9'), ('1', '10'),
-        ('1', '11'), ('1', '12'), ('1', '13'), ('1', '14'), ('1', '15'), ('1', '16'), ('1', '17'), ('1', '18'), ('1', '19'), ('1', '20'),
-        ('1', '21'), ('1', '22'), ('1', '23'), ('1', '24'), ('1', '25'), ('1', '26');
+        INSERT INTO evaluasi (id_murid, id_jadwal)
+        SELECT m.id_murid, j.id_jadwal
+        FROM murid m
+        INNER JOIN murid_kelas mk ON m.id_murid = mk.id_murid
+        INNER JOIN jadwal j ON j.id_kelas = mk.id_kelas;
       `);
   };
 
