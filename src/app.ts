@@ -14,6 +14,8 @@ import evaluasiRouter from './routes/evaluasi';
 import hasilKaryaRouter from './routes/hasil_karya';
 import evaluasiLogRouter from './routes/evaluasi_log';
 import presensiRouter from './routes/presensi';
+import muridRouter from './routes/murid';
+import kelasRouter from './routes/kelas';
 
 const cors = require('cors');
 const corsConfig = {
@@ -43,6 +45,8 @@ app.use('/evaluasi', evaluasiRouter);
 app.use('/hasil_karya', hasilKaryaRouter);
 app.use('/evaluasi-log', evaluasiLogRouter);
 app.use('/presensi', presensiRouter);
+app.use('/murid', muridRouter);
+app.use('/kelas', kelasRouter);
 
 app.listen(port, '0.0.0.0', function() {
     console.log('Listening on port 3000');
