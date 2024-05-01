@@ -1,5 +1,10 @@
 import { Pool, PoolConfig } from 'pg';
 
+// link local db naufal
+var db_local = "postgres://postgres:postgres@localhost:5432/ppl"; 
+const dbConfigLocal: PoolConfig = {
+  connectionString: db_local
+};
 
 var db_dev_url : string = "postgres://default:V1I4PZwRnBQM@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require";
 
@@ -12,7 +17,7 @@ const dbConfigDev: PoolConfig = {
 }
 
 
-const pool = new Pool(dbConfigDev);
+const pool = new Pool(dbConfig);
 
 pool.connect((err) => {
   console.log('Connecting to PostgreSQL...', dbConfig);
