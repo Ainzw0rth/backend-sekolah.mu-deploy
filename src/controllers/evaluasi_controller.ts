@@ -4,6 +4,7 @@ import postgre from '../database';
 interface EvaluasiController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
+    getAllPendingByGuru: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
 }
@@ -41,6 +42,37 @@ const evaluasiController: EvaluasiController = {
 
             res.json({msg: error.msg})
         }
+    },
+
+    /*
+        req.body contain id_guru
+
+        get semua instance jadwal yang evaluasinya ada yang belum diisi
+
+    */
+    getAllPendingByGuru: async (req, res) => {
+        const {id_guru,id_murid} = req.body;
+        
+        try {
+            const { rows } = await postgre.query(`
+            SELECT DISTINCT j.id_jadwal, k.nama_kegiatan, j.tanggal, j.waktu
+            FROM kegiatan k
+            JOIN jadwal j ON j.id_kegiatan = k.id_kegiatan
+            JOIN evaluasi e ON j.id_jadwal = e.id_jadwal
+            WHERE k.id_guru = $1 AND
+            (catatan_kehadiran IS NULL
+            OR penilaian IS NULL
+            OR catatan IS NULL
+            OR feedback IS NULL
+            OR id_karya IS NULL)`, [id_guru]);
+            
+            res.json({msg: "OK", data: rows});
+
+        } catch (error) {
+            console.error('Error fetching evaluasi:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+
     },
 
     create: async (req, res) => {

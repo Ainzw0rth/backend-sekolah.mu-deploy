@@ -1,21 +1,17 @@
 import { Pool, PoolConfig } from 'pg';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 
-var db_dev_url : string = "postgres://default:V1I4PZwRnBQM@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require";
-
+const DB_URL = process.env.POSTGRES_URL;
 const dbConfig: PoolConfig = {
-  connectionString: "postgres://default:V1I4PZwRnBQM@ep-old-frost-a179vfkk.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
+  connectionString: DB_URL,
 };
 
-const dbConfigDev: PoolConfig = {
-  connectionString: db_dev_url,
-}
-
-
-const pool = new Pool(dbConfigDev);
+const pool = new Pool(dbConfig);
 
 pool.connect((err) => {
-  console.log('Connecting to PostgreSQL...', dbConfig);
+  console.log('Connecting to PostgreSQL...');
   if (err) {
     console.error('Error connecting to PostgreSQL:', err);
   } else {

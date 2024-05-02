@@ -142,7 +142,7 @@ const kegiatanController: KegiatanController = {
                     COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
                     COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
                     FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
-                    WHERE kegiatan.id_kegiatan = $1;`;
+                    WHERE kegiatan.id_kegiatan = $1`;
 
             const { rows } = await postgre.query(query, [idKegiatan]);
         
