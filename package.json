@@ -13,7 +13,8 @@
   "scripts": {
     "start": "ts-node ./src/app.ts",
     "dev": "nodemon ./src/app.ts",
-    "startdev": "ts-node src/seeder/seed.ts && nodemon src/app.ts"
+    "startdev": "ts-node src/seeder/seed.ts && nodemon src/app.ts",
+    "seed": "ts-node src/seeder/seed.ts"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
