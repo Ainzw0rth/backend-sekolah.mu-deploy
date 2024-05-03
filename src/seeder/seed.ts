@@ -196,7 +196,7 @@ PDFS_PATHS = PDFS_PATHS.map((path) => {
     return `${BASE_URL}/static/pdf/${path}`;
 });
 
-let EMOJI_PATHS = getAllFilePaths(IMAGES); // stores emojis as placeholder for student and teacher pfp
+let EMOJI_PATHS = getAllFilePaths(IMAGES, 'emojis');
 EMOJI_PATHS = EMOJI_PATHS.map((path) => {
     return `${BASE_URL}/static/image/${path}`;
 });
@@ -299,9 +299,9 @@ const PROGRAMS = [
     {
         id_program: 1,
         nama_program: 'Pendidikan Pancasila Kelas 1 SD',
-        tujuan_pembelajaran: `- Mengenal dan menceritakan simbol dan sila-sila Pancasila
-- Menyebutkan identitas diri, keluaraga, dan teman-temannya
-- Mengidentikasi dan menceritakan bentuk kerjasama dalam keberagaman`,
+        tujuan_pembelajaran: `Mengenal dan menceritakan simbol dan sila-sila Pancasila
+Menyebutkan identitas diri, keluaraga, dan teman-temannya
+Mengidentikasi dan menceritakan bentuk kerjasama dalam keberagaman`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
@@ -314,15 +314,15 @@ const PROGRAMS = [
                         id_kegiatan: 1,
                         nama_kegiatan: '[Tatap Muka] Perkenalan Aku dan Teman-Temanku',
                         deskripsi: 'Memperkenalkan diri dan teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 1',
-                        instruksi_murid: '- Bacalah buku halaman 1\n- Berkenalan dengan teman sebangku',
+                        instruksi_guru: 'Bacakan buku halaman 1',
+                        instruksi_murid: 'Bacalah buku halaman 1\nBerkenalan dengan teman sebangku',
                     },
                     {
                         id_kegiatan: 2,
                         nama_kegiatan: '[Tatap Muka] Menyanyikan Lagu Teman-Temanku',
                         deskripsi: 'Menyanyikan lagu teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 12',
-                        instruksi_murid: '- Baca buku halaman 12\n- Menyanyikan lagu teman-teman',
+                        instruksi_guru: 'Bacakan buku halaman 12',
+                        instruksi_murid: 'Baca buku halaman 12\nMenyanyikan lagu teman-teman',
                     }
                 ]
             },
@@ -334,15 +334,15 @@ const PROGRAMS = [
                         id_kegiatan: 3,
                         nama_kegiatan: '[Tatap Muka] Memahami Aturan Sekolah',
                         deskripsi: 'Memahami aturan sekolah',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Baca buku halaman 20\n- Menyimak aturan sekolah',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Baca buku halaman 20\nMenyimak aturan sekolah',
                     },
                     {
                         id_kegiatan: 4,
                         nama_kegiatan: '[Tatap Muka] Bermain Bersama',
                         deskripsi: 'Bermain bersama dengan teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Baca buku halaman 25\n- Bermain bersama dengan teman-teman',
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Baca buku halaman 25\nBermain bersama dengan teman-teman',
                     }
                 ]
             },
@@ -354,15 +354,15 @@ const PROGRAMS = [
                         id_kegiatan: 5,
                         nama_kegiatan: '[Tatap Muka] Mengenal Bendera Indonesia',
                         deskripsi: 'Mengenal bendera Indonesia',
-                        instruksi_guru: '- Bacakan buku halaman 30',
-                        instruksi_murid: '- Baca buku halaman 30\n- Menggambar bendera Indonesia',
+                        instruksi_guru: 'Bacakan buku halaman 30',
+                        instruksi_murid: 'Baca buku halaman 30\nMenggambar bendera Indonesia',
                     },
                     {
                         id_kegiatan: 6,
                         nama_kegiatan: '[Tatap Muka] Mengenal Lagu Kebangsaan',
                         deskripsi: 'Mengenal lagu kebangsaan Indonesia Raya',
-                        instruksi_guru: '- Bacakan buku halaman 35',
-                        instruksi_murid: '- Baca buku halaman 35\n- Menyanyikan lagu Indonesia Raya',
+                        instruksi_guru: 'Bacakan buku halaman 35',
+                        instruksi_murid: 'Baca buku halaman 35\nMenyanyikan lagu Indonesia Raya',
                     },
                 ]
             },
@@ -374,15 +374,15 @@ const PROGRAMS = [
                         id_kegiatan: 7,
                         nama_kegiatan: '[Tugas] Membuat Poster Gotong Royong',
                         deskripsi: 'Membuat poster gotong royong',
-                        instruksi_guru: '- Bacakan buku halaman 40',
-                        instruksi_murid: '- Baca buku halaman 40\n- Membuat poster gotong royong',
+                        instruksi_guru: 'Bacakan buku halaman 40',
+                        instruksi_murid: 'Baca buku halaman 40\nMembuat poster gotong royong',
                     },
                     {
                         id_kegiatan: 8,
                         nama_kegiatan: '[Tatap Muka] Bermain Bersama',
                         deskripsi: 'Bermain bersama dengan teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 45',
-                        instruksi_murid: '- Baca buku halaman 45\n- Bermain bersama dengan teman-teman',
+                        instruksi_guru: 'Bacakan buku halaman 45',
+                        instruksi_murid: 'Baca buku halaman 45\nBermain bersama dengan teman-teman',
                     },
                 ]
             }
@@ -411,8 +411,8 @@ const PROGRAMS = [
     {
         id_program: 2,
         nama_program: 'Pendidikan Pancasila Kelas 2 SD',
-        tujuan_pembelajaran: `- Memahami dan menjelasakan simbol dan sila-sila Pancasila
-- Menjelaskan identitas diri, keluaraga, dan teman-temannya sesuai budaya dan minat`,
+        tujuan_pembelajaran: `Memahami dan menjelasakan simbol dan sila-sila Pancasila
+Menjelaskan identitas diri, keluaraga, dan teman-temannya sesuai budaya dan minat`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
@@ -425,7 +425,7 @@ const PROGRAMS = [
                         id_kegiatan: 9,
                         nama_kegiatan: '[Tata Muka] Mengenal Pancasila',
                         deskripsi: 'Mengenal Pancasila dan simbolnya',
-                        instruksi_guru: '- Bacakan buku halaman 1',
+                        instruksi_guru: 'Bacakan buku halaman 1',
                         instruksi_murid: '- Bacalah buku halaman 1\n',
                     },
                     {
@@ -501,8 +501,8 @@ const PROGRAMS = [
     {
         id_program: 3,
         nama_program: 'Pendidikan Pancasila Kelas 3 SD',
-        tujuan_pembelajaran: `- Memahami dan menyajikan hubungan antarsila sebagai satu kesatuan
-- Menganalisis, menghormati, menjaga, dan melestari keberagaman budaya`,
+        tujuan_pembelajaran: `Memahami dan menyajikan hubungan antarsila sebagai satu kesatuan
+Menganalisis, menghormati, menjaga, dan melestari keberagaman budaya`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
@@ -515,15 +515,15 @@ const PROGRAMS = [
                         id_kegiatan: 15,
                         nama_kegiatan: '[Tatap Muka] Mengenal Pancasila',
                         deskripsi: 'Mengenal Pancasila dan hubungan antarsila',
-                        instruksi_guru: '- Bacakan buku halaman 1',
-                        instruksi_murid: '- Bacalah buku halaman 1\n- Tes pengetahuan tentang Pancasila dan hubungan antarsila',
+                        instruksi_guru: 'Bacakan buku halaman 1',
+                        instruksi_murid: 'Bacalah buku halaman 1\nTes pengetahuan tentang Pancasila dan hubungan antarsila',
                     },
                     {
                         id_kegiatan: 16,
                         nama_kegiatan: '[Tatap Muka] Studi Kasus Hubungan Antarsila',
                         deskripsi: 'Studi kasus hubungan antarsila',
-                        instruksi_guru: '- Bacakan buku halaman 9',
-                        instruksi_murid: '- Baca buku halaman 9\n- Mengerjakan studi kasus hubungan antarsila',
+                        instruksi_guru: 'Bacakan buku halaman 9',
+                        instruksi_murid: 'Baca buku halaman 9\nMengerjakan studi kasus hubungan antarsila',
                     }
                 ]
             },
@@ -535,15 +535,15 @@ const PROGRAMS = [
                         id_kegiatan: 17,
                         nama_kegiatan: '[Tatap Muka] Memahami Budaya Indonesia',
                         deskripsi: 'Memahami budaya Indonesia',
-                        instruksi_guru: '- Bacakan buku halaman 12',
-                        instruksi_murid: '- Baca buku halaman 12\n- Tanya jawab tentang budaya Indonesia',
+                        instruksi_guru: 'Bacakan buku halaman 12',
+                        instruksi_murid: 'Baca buku halaman 12\nTanya jawab tentang budaya Indonesia',
                     },
                     {
                         id_kegiatan: 18,
                         nama_kegiatan: '[Tatap Muka] Menceritakan Budaya Daerah Sendiri',
                         deskripsi: 'Menceritakan budaya daerah',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Baca buku halaman 15\n- Menceritakan budaya daerah',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Baca buku halaman 15\nMenceritakan budaya daerah',
                     }
                 ]
             },
@@ -555,8 +555,8 @@ const PROGRAMS = [
                         id_kegiatan: 19,
                         nama_kegiatan: '[Tugas] Video Kerjasama dalam Keberagaman',
                         deskripsi: 'Membuat video tentang kerjasama dalam keberagaman',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Baca buku halaman 20\n- Membuat video kerjasama dalam keberagaman',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Baca buku halaman 20\nMembuat video kerjasama dalam keberagaman',
                     }
                 ]
             }
@@ -581,7 +581,7 @@ const PROGRAMS = [
 // bingkai Bhinneka Tunggal Ika, dan mampu menerima keragaman dan perubahan
 // budaya sebagai suatu kenyataan yang ada di dalam kehidupan bermasyarakat,
 // dan menanggapi secara proporsional terhadap kondisi yang ada di lingkungan
-// Capaian Pembelajaran Mata Pelajaran Pendidikan Pancasila Fase A - Fase F untuk SD/MI/Program Paket A,
+// Capaian Pembelajaran Mata Pelajaran Pendidikan Pancasila Fase A Fase F untuk SD/MI/Program Paket A,
 // SMP/MTs/Program Paket B, dan SMA/MA/SMK/MAK/Program Paket C14
 // sesuai dengan peran dan kebutuhan yang ada di masyarakat; memahami urgensi
 // pelestarian nilai tradisi, kearifan lokal dan budaya; menunjukkan contoh pelestarian
@@ -602,9 +602,9 @@ const PROGRAMS = [
     {
         id_program: 4,
         nama_program: 'Pendidikan Pancasila Kelas 4 SD',
-        tujuan_pembelajaran: `- Menganalisis kronologis lahirnya Pancasila
-- Memahami periodisasi pemberlakuan dan perubahan Undang-Undang Dasar 1945
-- Mengidentifikasi keberagaman suku, agama, ras, dan antargolongan dalam bingkai Bhinneka Tunggal Ika`,
+        tujuan_pembelajaran: `Menganalisis kronologis lahirnya Pancasila
+Memahami periodisasi pemberlakuan dan perubahan Undang-Undang Dasar 1945
+Mengidentifikasi keberagaman suku, agama, ras, dan antargolongan dalam bingkai Bhinneka Tunggal Ika`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
@@ -617,15 +617,15 @@ const PROGRAMS = [
                         id_kegiatan: 20,
                         nama_kegiatan: '[Tatap Muka] Mengenal Sejarah Pancasila (Part 1)',
                         deskripsi: 'Mengenal sejarah lahirnya Pancasila',
-                        instruksi_guru: '- Bacakan buku halaman 7',
-                        instruksi_murid: '- Bacalah buku halaman 7',
+                        instruksi_guru: 'Bacakan buku halaman 7',
+                        instruksi_murid: 'Bacalah buku halaman 7',
                     },
                     {
                         id_kegiatan: 21,
                         nama_kegiatan: '[Tatap Muka] Mengenal Sejarah Pancasila (Part 2)',
                         deskripsi: 'Mengenal sejarah lahirnya Pancasila',
-                        instruksi_guru: '- Bacakan buku halaman 9',
-                        instruksi_murid: '- Baca buku halaman 9',
+                        instruksi_guru: 'Bacakan buku halaman 9',
+                        instruksi_murid: 'Baca buku halaman 9',
                     }
                 ]
             },
@@ -637,15 +637,15 @@ const PROGRAMS = [
                         id_kegiatan: 22,
                         nama_kegiatan: '[Tatap Muka] Menceritakan UUD 1945',
                         deskripsi: 'Menceritakan UUD 1945',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Baca buku halaman 10\n- Menceritakan UUD 1945',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Baca buku halaman 10\nMenceritakan UUD 1945',
                     },
                     {
                         id_kegiatan: 23,
                         nama_kegiatan: '[Tatap Muka] Perubahan UUD 1945',
                         deskripsi: 'Perubahan UUD 1945',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Baca buku halaman 15\n- Menceritakan perubahan UUD 1945',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Baca buku halaman 15\nMenceritakan perubahan UUD 1945',
                     }
                 ]
             },
@@ -657,15 +657,15 @@ const PROGRAMS = [
                         id_kegiatan: 24,
                         nama_kegiatan: '[Asesmen] Ujian Bhinneka Tunggal Ika',
                         deskripsi: 'Mengasah pengetahuan tentang Bhinneka Tunggal Ika',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Baca buku halaman 20\n- Mengerjakan soal Bhinneka Tunggal Ika',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Baca buku halaman 20\nMengerjakan soal Bhinneka Tunggal Ika',
                     },
                     {
                         id_kegiatan: 25,
                         nama_kegiatan: '[Tatap Muka] Bermain Bersama',
                         deskripsi: 'Bermain bersama dengan teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Baca buku halaman 25\n- Bermain bersama dengan teman-teman',
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Baca buku halaman 25\nBermain bersama dengan teman-teman',
                     }
                 ]
             }
@@ -684,7 +684,7 @@ const PROGRAMS = [
 // memecahkan kasus pelanggaran hak dan pengingkaran kewajiban.
 // Peserta didik mampu menginisiasi kegiatan bersama atau gotong royong dalam
 // praktik hidup sehari-hari untuk membangun masyarakat sekitar dan masyarakat
-// Capaian Pembelajaran Mata Pelajaran Pendidikan Pancasila Fase A - Fase F untuk SD/MI/Program Paket A,
+// Capaian Pembelajaran Mata Pelajaran Pendidikan Pancasila Fase A Fase F untuk SD/MI/Program Paket A,
 // SMP/MTs/Program Paket B, dan SMA/MA/SMK/MAK/Program Paket C15
 // Indonesia berdasarkan nilai-nilai Pancasila; memberi contoh dan memiliki kesadaran
 // akan hak dan kewajibannya sebagai warga sekolah, warga masyarakat dan warga
@@ -692,8 +692,8 @@ const PROGRAMS = [
     {
         id_program: 5,
         nama_program: 'Pendidikan Pancasila Kelas 5 SD',
-        tujuan_pembelajaran: `- Menganalisis cara pandang perumus Pancasila
-- Mampu menginisiasi kegiatan bersama atau gotong royong`,
+        tujuan_pembelajaran: `Menganalisis cara pandang perumus Pancasila
+Mampu menginisiasi kegiatan bersama atau gotong royong`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
@@ -706,15 +706,15 @@ const PROGRAMS = [
                         id_kegiatan: 26,
                         nama_kegiatan: '[Tatap Muka] Mengenal Perumus Pancasila',
                         deskripsi: 'Mengenal perumus Pancasila',
-                        instruksi_guru: '- Bacakan buku halaman 1',
-                        instruksi_murid: '- Bacalah buku halaman 1'
+                        instruksi_guru: 'Bacakan buku halaman 1',
+                        instruksi_murid: 'Bacalah buku halaman 1'
                     },
                     {
                         id_kegiatan: 27,
                         nama_kegiatan: '[Tatap Muka] Memahami Pandangan Perumus Pancasila',
                         deskripsi: 'Memahami pandangan perumus Pancasila',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Baca buku halaman 5',
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Baca buku halaman 5',
                         
                     }
                 ]
@@ -727,15 +727,15 @@ const PROGRAMS = [
                         id_kegiatan: 28,
                         nama_kegiatan: '[Tatap Muka] Menceritakan Gotong Royong',
                         deskripsi: 'Menceritakan gotong royong',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Baca buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Baca buku halaman 10',
                     },
                     {
                         id_kegiatan: 29,
                         nama_kegiatan: '[Tatap Muka] Bermain Bersama',
                         deskripsi: 'Bermain bersama dengan teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Baca buku halaman 15\n- Bermain bersama dengan teman-teman',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Baca buku halaman 15\nBermain bersama dengan teman-teman',
                     }
                 ]
             }
@@ -756,8 +756,8 @@ const PROGRAMS = [
     {
         id_program: 6,
         nama_program: 'Pendidikan Pancasila Kelas 6 SD',
-        tujuan_pembelajaran: `- Menganalisis kedudukan Pancasila sebagai ideologi terbuka
-- Menganalisis potensi konflik dan solusi di tengah keberagaman`,
+        tujuan_pembelajaran: `Menganalisis kedudukan Pancasila sebagai ideologi terbuka
+Menganalisis potensi konflik dan solusi di tengah keberagaman`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
@@ -770,15 +770,15 @@ const PROGRAMS = [
                         id_kegiatan: 30,
                         nama_kegiatan: '[Tatap Muka] Mengenal Pancasila sebagai Ideologi Terbuka',
                         deskripsi: 'Mengenal Pancasila sebagai ideologi terbuka',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Bacalah buku halaman 25'
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Bacalah buku halaman 25'
                     },
                     {
                         id_kegiatan: 31,
                         nama_kegiatan: '[Tatap Muka] Membahas Potensi Konflik',
                         deskripsi: 'Membahas potensi konflik',
-                        instruksi_guru: '- Bacakan buku halaman 35',
-                        instruksi_murid: '- Baca buku halaman 35'
+                        instruksi_guru: 'Bacakan buku halaman 35',
+                        instruksi_murid: 'Baca buku halaman 35'
                     }
                 ]
             },
@@ -790,15 +790,15 @@ const PROGRAMS = [
                         id_kegiatan: 32,
                         nama_kegiatan: '[Tatap Muka] Mencari Solusi Konflik',
                         deskripsi: 'Mencari solusi konflik',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Baca buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Baca buku halaman 10',
                     },
                     {
                         id_kegiatan: 33,
                         nama_kegiatan: '[Tatap Muka] Bermain Bersama',
                         deskripsi: 'Bermain bersama dengan teman-teman',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Baca buku halaman 15\n- Bermain bersama dengan teman-teman',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Baca buku halaman 15\nBermain bersama dengan teman-teman',
                     }
                 ]
             }
@@ -817,8 +817,8 @@ const PROGRAMS = [
     {
         id_program: 7,
         nama_program: 'Bahasa Indonesia Kelas 1 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi dan bernalar
-- Mampu meningkatkan penguasaan kosakata baru`,
+        tujuan_pembelajaran: `Mampu berkomunikasi dan bernalar
+Mampu meningkatkan penguasaan kosakata baru`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
@@ -831,15 +831,15 @@ const PROGRAMS = [
                         id_kegiatan: 34,
                         nama_kegiatan: '[Tatap Muka] Mengenal Kosakata Dasar (Part 1)',
                         deskripsi: 'Mengenal kosakata dasar (Part 1)',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 35,
                         nama_kegiatan: '[Tatap Muka] Mengenal Kosakata Dasar (Part 2)',
                         deskripsi: 'Mengenal huruf I',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -851,15 +851,15 @@ const PROGRAMS = [
                         id_kegiatan: 36,
                         nama_kegiatan: '[Tatap Muka] Mengenal Buah-buahan',
                         deskripsi: 'Mengenal buah-buahan',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 37,
                         nama_kegiatan: '[Tatap Muka] Mengenal Hewan',
                         deskripsi: 'Mengenal hewan',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -877,8 +877,8 @@ const PROGRAMS = [
     {
         id_program: 8,
         nama_program: 'Bahasa Indonesia Kelas 2 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi dan bernalar
-- Mampu membaca dengan fasih dan lancar`,
+        tujuan_pembelajaran: `Mampu berkomunikasi dan bernalar
+Mampu membaca dengan fasih dan lancar`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
@@ -891,15 +891,15 @@ const PROGRAMS = [
                         id_kegiatan: 38,
                         nama_kegiatan: '[Tatap Muka] Membaca Cepat (Part 1)',
                         deskripsi: 'Membaca cepat (Part 1)',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 39,
                         nama_kegiatan: '[Tatap Muka] Membaca Cepat (Part 2)',
                         deskripsi: 'Membaca cepat (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -911,15 +911,15 @@ const PROGRAMS = [
                         id_kegiatan: 40,
                         nama_kegiatan: '[Tatap Muka] Membaca Buku Cerita',
                         deskripsi: 'Membaca buku cerita',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 41,
                         nama_kegiatan: '[Tatap Muka] Membaca Buku Pelajaran',
                         deskripsi: 'Membaca buku pelajaran',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -938,9 +938,9 @@ const PROGRAMS = [
     {
         id_program: 9,
         nama_program: 'Bahasa Indonesia Kelas 3 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi dan bernalar sesuai dengan tujuan dan konteks sosial
-- Menunjukkan minat terhadap teks, mampu memahami, mengolah, dan menginterpretasi informasi
-- Mampu menanggapi dan mempresentasikan informasi`,
+        tujuan_pembelajaran: `Mampu berkomunikasi dan bernalar sesuai dengan tujuan dan konteks sosial
+Menunjukkan minat terhadap teks, mampu memahami, mengolah, dan menginterpretasi informasi
+Mampu menanggapi dan mempresentasikan informasi`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
@@ -953,15 +953,15 @@ const PROGRAMS = [
                         id_kegiatan: 42,
                         nama_kegiatan: '[Tata Muka] Berkomunikasi Efektif (Part 1)',
                         deskripsi: 'Berkomunikaasi efektif (Part 1)',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 43,
                         nama_kegiatan: '[Tatap Muka] Berkomunikasi Efektif (Part 2)',
                         deskripsi: 'Berkomunikaasi efektif (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -973,15 +973,15 @@ const PROGRAMS = [
                         id_kegiatan: 44,
                         nama_kegiatan: '[Tatap Muka] Memahami dan Mengolah Informasi',
                         deskripsi: 'Memahami dan mengolah informasi',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 45,
                         nama_kegiatan: '[Tatap Muka] Menanggapi Informasi',
                         deskripsi: 'Menanggapi informasi',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             },
@@ -993,8 +993,8 @@ const PROGRAMS = [
                         id_kegiatan: 46,
                         nama_kegiatan: '[Tatap Muka] Menulis Teks',
                         deskripsi: 'Menulis teks',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Bacalah buku halaman 20',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Bacalah buku halaman 20',
                     }
                 ]
             }
@@ -1013,9 +1013,9 @@ const PROGRAMS = [
     {
         id_program: 10,
         nama_program: 'Bahasa Indonesia Kelas 4 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi dan bernalar sesuai dengan tujuan, konteks sosial, dan akademis
-- Mampu memahami, mengolah, dan menginterpretasi informasi
-- Mampu berpartisipasi aktif dalam diskusi`,
+        tujuan_pembelajaran: `Mampu berkomunikasi dan bernalar sesuai dengan tujuan, konteks sosial, dan akademis
+Mampu memahami, mengolah, dan menginterpretasi informasi
+Mampu berpartisipasi aktif dalam diskusi`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
@@ -1028,15 +1028,15 @@ const PROGRAMS = [
                         id_kegiatan: 47,
                         nama_kegiatan: '[Tatap Muka] Mengolah Informasi (Part 1)',
                         deskripsi: 'Mengolah informasi (Part 1)',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 48,
                         nama_kegiatan: '[Tatap Muka] Mengolah Informasi (Part 2)',
                         deskripsi: 'Mengolah informasi (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1048,15 +1048,15 @@ const PROGRAMS = [
                         id_kegiatan: 49,
                         nama_kegiatan: '[Tatap Muka] Menanggapi Informasi',
                         deskripsi: 'Menanggapi informasi',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 50,
                         nama_kegiatan: '[Tatap Muka] Menanggapi Informasi (Part 2)',
                         deskripsi: 'Menanggapi informasi (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             },
@@ -1068,15 +1068,15 @@ const PROGRAMS = [
                         id_kegiatan: 51,
                         nama_kegiatan: '[Tatap Muka] Diskusi dan Partisipasi Aktif',
                         deskripsi: 'Diskusi dan partisipasi aktif',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Bacalah buku halaman 20',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Bacalah buku halaman 20',
                     },
                     {
                         id_kegiatan: 52,
                         nama_kegiatan: '[Tatap Muka] Diskusi dan Partisipasi Aktif (Part 2)',
                         deskripsi: 'Diskusi dan partisipasi aktif (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Bacalah buku halaman 25',
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Bacalah buku halaman 25',
                     }
                 ]
             }
@@ -1094,9 +1094,9 @@ const PROGRAMS = [
     {
         id_program: 11,
         nama_program: 'Bahasa Indonesia Kelas 5 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi dan bernalar sesuai dengan tujuan, konteks sosial, akademis, dan dunia kerja
-- Mampu memahami, mengolah, menginterpretasi, dan mengevaluasi informasi
-- Mampu menyintesis gagasan dan pendapat dari berbagai sumber`,
+        tujuan_pembelajaran: `Mampu berkomunikasi dan bernalar sesuai dengan tujuan, konteks sosial, akademis, dan dunia kerja
+Mampu memahami, mengolah, menginterpretasi, dan mengevaluasi informasi
+Mampu menyintesis gagasan dan pendapat dari berbagai sumber`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
@@ -1109,15 +1109,15 @@ const PROGRAMS = [
                         id_kegiatan: 53,
                         nama_kegiatan: '[Tatap Muka] Mengevaluasi Informasi (Part 1)',
                         deskripsi: 'Mengevaluasi informasi (Part 1)',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 54,
                         nama_kegiatan: '[Tatap Muka] Mengevaluasi Informasi (Part 2)',
                         deskripsi: 'Mengevaluasi informasi (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1129,15 +1129,15 @@ const PROGRAMS = [
                         id_kegiatan: 55,
                         nama_kegiatan: '[Tatap Muka] Menyintesis Gagasan',
                         deskripsi: 'Menyintesis gagasan',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 56,
                         nama_kegiatan: '[Tatap Muka] Menyintesis Gagasan (Part 2)',
                         deskripsi: 'Menyintesis gagasan (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             },
@@ -1149,15 +1149,15 @@ const PROGRAMS = [
                         id_kegiatan: 57,
                         nama_kegiatan: '[Tatap Muka] Diskusi dan Debat',
                         deskripsi: 'Diskusi dan debat',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Bacalah buku halaman 20',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Bacalah buku halaman 20',
                     },
                     {
                         id_kegiatan: 58,
                         nama_kegiatan: '[Tatap Muka] Diskusi dan Debat (Part 2)',
                         deskripsi: 'Diskusi dan debat (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Bacalah buku halaman 25',
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Bacalah buku halaman 25',
                     }
                 ]
             }
@@ -1170,16 +1170,16 @@ const PROGRAMS = [
 // mampu mengkreasi gagasan dan pendapat untuk berbagai tujuan. Peserta
 // didik mampu berpartisipasi aktif dalam kegiatan berbahasa yang melibatkan
 // banyak orang. Peserta didik mampu menulis berbagai teks untuk merefleksi dan
-// Capaian Pembelajaran Mata Pelajaran Bahasa Indonesia Fase A - Fase F Untuk SD/MI/Program Paket A,
+// Capaian Pembelajaran Mata Pelajaran Bahasa Indonesia Fase A Fase F Untuk SD/MI/Program Paket A,
 // SMP/MTs/Program Paket B, dan SMA/MA/SMK/MAK/Program Paket C12
 // mengaktualisasi diri untuk selalu berkarya dengan mengutamakan penggunaan
 // bahasa Indonesia di berbagai media untuk memajukan peradaban bangsa
     {
         id_program: 12,
         nama_program: 'Bahasa Indonesia Kelas 6 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi dan bernalar sesuai dengan tujuan, konteks sosial, akademis, dan dunia kerja
-- Mampu mengkreasi gagasan dan pendapat untuk berbagai tujuan
-- Mampu menulis berbagai teks untuk merefleksi dan mengaktualisasi diri`,
+        tujuan_pembelajaran: `Mampu berkomunikasi dan bernalar sesuai dengan tujuan, konteks sosial, akademis, dan dunia kerja
+Mampu mengkreasi gagasan dan pendapat untuk berbagai tujuan
+Mampu menulis berbagai teks untuk merefleksi dan mengaktualisasi diri`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
@@ -1192,15 +1192,15 @@ const PROGRAMS = [
                         id_kegiatan: 59,
                         nama_kegiatan: '[Tatap Muka] Menginterpretasi Teks (Part 1)',
                         deskripsi: 'Menginterpretasi teks (Part 1)',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 60,
                         nama_kegiatan: '[Tatap Muka] Menginterpretasi Teks (Part 2)',
                         deskripsi: 'Menginterpretasi teks (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1212,15 +1212,15 @@ const PROGRAMS = [
                         id_kegiatan: 61,
                         nama_kegiatan: '[Tatap Muka] Mengevaluasi Teks',
                         deskripsi: 'Mengevaluasi teks',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 62,
                         nama_kegiatan: '[Tatap Muka] Mengevaluasi Teks (Part 2)',
                         deskripsi: 'Mengevaluasi teks (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             },
@@ -1232,15 +1232,15 @@ const PROGRAMS = [
                         id_kegiatan: 63,
                         nama_kegiatan: '[Tatap Muka] Mengkreasi Gagasan',
                         deskripsi: 'Mengkreasi gagasan',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Bacalah buku halaman 20',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Bacalah buku halaman 20',
                     },
                     {
                         id_kegiatan: 64,
                         nama_kegiatan: '[Tata Muka] Mengkreasi Gagasan (Part 2)',
                         deskripsi: 'Mengkreasi gagasan (Part 2)',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Bacalah buku halaman 25',
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Bacalah buku halaman 25',
                     }
                 ]
             }
@@ -1254,7 +1254,7 @@ const PROGRAMS = [
 // seperempat. Mereka dapat mengenali, meniru, dan melanjutkan pola-pola bukan
 // bilangan. Mereka dapat membandingkan panjang, berat, dan durasi waktu, serta
 // mengestimasi panjang menggunakan satuan tidak baku.
-// Capaian Pembelajaran Mata Pelajaran Matematika Fase A - Fase F Untuk SD/MI/Program Paket A,
+// Capaian Pembelajaran Mata Pelajaran Matematika Fase A Fase F Untuk SD/MI/Program Paket A,
 // SMP/MTs/Program Paket B, dan SMA/MA/Program Paket C10
 // Peserta didik dapat mengenal berbagai bangun datar dan bangun ruang, serta
 // dapat menyusun dan mengurai bangun datar. Mereka dapat menentukan posisi
@@ -1264,8 +1264,8 @@ const PROGRAMS = [
     {
         id_program: 13,
         nama_program: 'Matematika Kelas 1 SD',
-        tujuan_pembelajaran: `- Mampu menunjukkan pemahaman dan memiliki intuisi bilangan
-- Mampu mengenal berbagai bangun datar dan bangun ruang`,
+        tujuan_pembelajaran: `Mampu menunjukkan pemahaman dan memiliki intuisi bilangan
+Mampu mengenal berbagai bangun datar dan bangun ruang`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
@@ -1278,15 +1278,15 @@ const PROGRAMS = [
                         id_kegiatan: 65,
                         nama_kegiatan: '[Tata Muka] Mengenal Bilangan Cacah',
                         deskripsi: 'Mengenal bilangan cacah',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 66,
                         nama_kegiatan: '[Tatap Muka] Menyusun dan Mengurai Bilangan Cacah',
                         deskripsi: 'Menyusun dan mengurai bilangan cacah',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1298,15 +1298,15 @@ const PROGRAMS = [
                         id_kegiatan: 67,
                         nama_kegiatan: '[Tatap Muka] Mengenal Bangun Datar',
                         deskripsi: 'Mengenal bangun datar',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 68,
                         nama_kegiatan: '[Tatap Muka] Mengenal Bangun Ruang',
                         deskripsi: 'Mengenal bangun ruang',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1338,8 +1338,8 @@ const PROGRAMS = [
     {
         id_program: 14,
         nama_program: 'Matematika Kelas 2 SD',
-        tujuan_pembelajaran: `- Mampu menunjukkan pemahaman dan intuisi bilangan pada bilangan cacah sampai 10.000
-- Mampu mengukur panjang dan berat benda menggunakan satuan baku`,
+        tujuan_pembelajaran: `Mampu menunjukkan pemahaman dan intuisi bilangan pada bilangan cacah sampai 10.000
+Mampu mengukur panjang dan berat benda menggunakan satuan baku`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
@@ -1352,15 +1352,15 @@ const PROGRAMS = [
                         id_kegiatan: 69,
                         nama_kegiatan: '[Tatap Muka] Operasi dasar bilangan cacah',
                         deskripsi: 'Operasi dasar bilangan cacah',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 70,
                         nama_kegiatan: '[Tatap Muka] Operasi Perkalian dan Pembagian',
                         deskripsi: 'Operasi perkalian dan pembagian',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1372,15 +1372,15 @@ const PROGRAMS = [
                         id_kegiatan: 71,
                         nama_kegiatan: '[Tatap Muka] Pengukuran Panjang',
                         deskripsi: 'Pengukuran panjang',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 72,
                         nama_kegiatan: '[Tatap Muka] Pengukuran Berat',
                         deskripsi: 'Pengukuran berat',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1413,9 +1413,9 @@ const PROGRAMS = [
     {
         id_program: 15,
         nama_program: 'Matematika Kelas 3 SD',
-        tujuan_pembelajaran: `- Mampu menunjukkan pemahaman dan intuisi bilangan pada bilangan cacah dengan 1.000.000
-- Mampu menentukan keliling dan luas beberapa bentuk bangun datar
-- Mampu mengurutkan, membandingkan, menyajikan, dan menganalisis data`,
+        tujuan_pembelajaran: `Mampu menunjukkan pemahaman dan intuisi bilangan pada bilangan cacah dengan 1.000.000
+Mampu menentukan keliling dan luas beberapa bentuk bangun datar
+Mampu mengurutkan, membandingkan, menyajikan, dan menganalisis data`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
@@ -1428,15 +1428,15 @@ const PROGRAMS = [
                         id_kegiatan: 73,
                         nama_kegiatan: '[Tatap Muka] Keliling Bangun Datar',
                         deskripsi: 'Keliling bangun datar',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 74,
                         nama_kegiatan: '[Tatap Muka] Luas Bangun Datar',
                         deskripsi: 'Luas bangun datar',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1448,29 +1448,29 @@ const PROGRAMS = [
                         id_kegiatan: 75,
                         nama_kegiatan: '[Tatap Muka] Mengurutkan Data',
                         deskripsi: 'Mengurutkan data',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 76,
                         nama_kegiatan: '[Tatap Muka] Membandingkan Data',
                         deskripsi: 'Membandingkan data',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     },
                     {
                         id_kegiatan: 77,
                         nama_kegiatan: '[Tatap Muka] Menyajikan Data',
                         deskripsi: 'Menyajikan data',
-                        instruksi_guru: '- Bacakan buku halaman 20',
-                        instruksi_murid: '- Bacalah buku halaman 20',
+                        instruksi_guru: 'Bacakan buku halaman 20',
+                        instruksi_murid: 'Bacalah buku halaman 20',
                     },
                     {
                         id_kegiatan: 78,
                         nama_kegiatan: '[Tatap Muka] Menganalisis Data',
                         deskripsi: 'Menganalisis data',
-                        instruksi_guru: '- Bacakan buku halaman 25',
-                        instruksi_murid: '- Bacalah buku halaman 25',
+                        instruksi_guru: 'Bacakan buku halaman 25',
+                        instruksi_murid: 'Bacalah buku halaman 25',
                     }
                 ]
             }
@@ -1481,7 +1481,7 @@ const PROGRAMS = [
 // dipelajari pada fase ini. Mereka mampu mengoperasikan secara efisien bilangan
 // bulat, bilangan rasional dan irasional, bilangan desimal, bilangan berpangkat bulat
 // dan akar, bilangan dalam notasi ilmiah; melakukan pemfaktoran bilangan prima,
-// Capaian Pembelajaran Mata Pelajaran Matematika Fase A - Fase F Untuk SD/MI/Program Paket A,
+// Capaian Pembelajaran Mata Pelajaran Matematika Fase A Fase F Untuk SD/MI/Program Paket A,
 // SMP/MTs/Program Paket B, dan SMA/MA/Program Paket C12
 // menggunakan faktor skala, proporsi dan laju perubahan. Mereka dapat menyajikan
 // dan menyelesaikan persamaan dan pertidaksamaan linier satu variabel dan
@@ -1505,8 +1505,8 @@ const PROGRAMS = [
     {
         id_program: 16,
         nama_program: 'Matematika Kelas 4 SD',
-        tujuan_pembelajaran: `- Mampu menyelesaikan masalah kontekstual peserta didik dengan menggunakan konsep-konsep dan keterampilan matematika
-- Mampu menentukan luas permukaan dan volume bangun ruang`,
+        tujuan_pembelajaran: `Mampu menyelesaikan masalah kontekstual peserta didik dengan menggunakan konsep-konsep dan keterampilan matematika
+Mampu menentukan luas permukaan dan volume bangun ruang`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
@@ -1519,15 +1519,15 @@ const PROGRAMS = [
                         id_kegiatan: 79,
                         nama_kegiatan: '[Tatap Muka] Operasi Bilangan Bulat',
                         deskripsi: 'Operasi bilangan bulat',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 80,
                         nama_kegiatan: '[Tatap Muka] Operasi Bilangan Pecahan',
                         deskripsi: 'Operasi bilangan pecahan',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1539,15 +1539,15 @@ const PROGRAMS = [
                         id_kegiatan: 81,
                         nama_kegiatan: '[Tatap Muka] Luas Permukaan Bangun Ruang',
                         deskripsi: 'Luas permukaan bangun ruang',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 82,
                         nama_kegiatan: '[Tatap Muka] Volume Bangun Ruang',
                         deskripsi: 'Volume bangun ruang',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1568,8 +1568,8 @@ const PROGRAMS = [
     {
         id_program: 17,
         nama_program: 'Matematika Kelas 5 SD',
-        tujuan_pembelajaran: `- Mampu menggeneralisasi sifat-sifat operasi bilangan berpangkat
-- Mampu menggunakan sistem persamaan linear tiga variabel`,
+        tujuan_pembelajaran: `Mampu menggeneralisasi sifat-sifat operasi bilangan berpangkat
+Mampu menggunakan sistem persamaan linear tiga variabel`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
@@ -1582,15 +1582,15 @@ const PROGRAMS = [
                         id_kegiatan: 83,
                         nama_kegiatan: '[Tatap Muka] Operasi Bilangan Berpangkat',
                         deskripsi: 'Operasi bilangan berpangkat',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 84,
                         nama_kegiatan: '[Tatap Muka] Barisan dan Deret',
                         deskripsi: 'Barisan dan deret',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1602,15 +1602,15 @@ const PROGRAMS = [
                         id_kegiatan: 85,
                         nama_kegiatan: '[Tatap Muka] Sistem Persamaan Linear',
                         deskripsi: 'Sistem persamaan linear',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 86,
                         nama_kegiatan: '[Tatap Muka] Persamaan Kuadrat',
                         deskripsi: 'Persamaan kuadrat',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1626,8 +1626,8 @@ const PROGRAMS = [
     {
         id_program: 18,
         nama_program: 'Matematika Kelas 6 SD',
-        tujuan_pembelajaran: `- Mampu memodelkan pinjaman dan investasi
-- Mampu menyatakan data dalam bentuk matriks`,
+        tujuan_pembelajaran: `Mampu memodelkan pinjaman dan investasi
+Mampu menyatakan data dalam bentuk matriks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
@@ -1640,15 +1640,15 @@ const PROGRAMS = [
                         id_kegiatan: 87,
                         nama_kegiatan: '[Tatap Muka] Pinjaman dan Investasi',
                         deskripsi: 'Pinjaman dan investasi',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 88,
                         nama_kegiatan: '[Tatap Muka] Bunga Majemuk dan Anuitas',
                         deskripsi: 'Bunga majemuk dan anuitas',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1660,15 +1660,15 @@ const PROGRAMS = [
                         id_kegiatan: 89,
                         nama_kegiatan: '[Tatap Muka] Matriks',
                         deskripsi: 'Matriks',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 90,
                         nama_kegiatan: '[Tatap Muka] Fungsi Invers',
                         deskripsi: 'Fungsi invers',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1690,8 +1690,8 @@ const PROGRAMS = [
     {
         id_program: 19,
         nama_program: 'Bahasa Inggris Kelas 1 SD',
-        tujuan_pembelajaran: `- Mampu berinteraksi dengan orang lain dalam situasi sosial sehari-hari
-- Mampu mengikuti instruksi atau pertanyaan sederhana dalam bahasa Inggris`,
+        tujuan_pembelajaran: `Mampu berinteraksi dengan orang lain dalam situasi sosial sehari-hari
+Mampu mengikuti instruksi atau pertanyaan sederhana dalam bahasa Inggris`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
@@ -1704,15 +1704,15 @@ const PROGRAMS = [
                         id_kegiatan: 91,
                         nama_kegiatan: '[Tatap Muka] Berinteraksi dengan Orang Lain',
                         deskripsi: 'Berinteraksi dengan orang lain',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 92,
                         nama_kegiatan: '[Tatap Muka] Mengikuti Instruksi',
                         deskripsi: 'Mengikuti instruksi',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1724,15 +1724,15 @@ const PROGRAMS = [
                         id_kegiatan: 93,
                         nama_kegiatan: '[Tatap Muka] Kosakata Sederhana',
                         deskripsi: 'Kosakata sederhana',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 94,
                         nama_kegiatan: '[Tatap Muka] Berbicara dengan Baik',
                         deskripsi: 'Berbicara dengan baik',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1748,8 +1748,8 @@ const PROGRAMS = [
     {
         id_program: 20,
         nama_program: 'Bahasa Inggris Kelas 2 SD',
-        tujuan_pembelajaran: `- Mampu merespon teks lisan dan visual sederhana dalam bahasa Inggris
-- Mampu membagikan informasi dengan kosakata sederhana`,
+        tujuan_pembelajaran: `Mampu merespon teks lisan dan visual sederhana dalam bahasa Inggris
+Mampu membagikan informasi dengan kosakata sederhana`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
@@ -1762,15 +1762,15 @@ const PROGRAMS = [
                         id_kegiatan: 95,
                         nama_kegiatan: '[Tatap Muka] Merespon Teks Lisan',
                         deskripsi: 'Merespon teks lisan',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 96,
                         nama_kegiatan: '[Tatap Muka] Merespon Teks Visual',
                         deskripsi: 'Merespon teks visual',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1782,15 +1782,15 @@ const PROGRAMS = [
                         id_kegiatan: 97,
                         nama_kegiatan: '[Tatap Muka] Berbagi Informasi',
                         deskripsi: 'Berbagi informasi',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 98,
                         nama_kegiatan: '[Tatap Muka] Berbicara dengan Baik',
                         deskripsi: 'Berbicara dengan baik',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1806,8 +1806,8 @@ const PROGRAMS = [
     {
         id_program: 21,
         nama_program: 'Bahasa Inggris Kelas 3 SD',
-        tujuan_pembelajaran: `- Mampu merespon teks lisan, tulisan, dan visual sederhana dalam bahasa Inggris
-- Mampu berinteraksi dan berkomunikasi dalam situasi yang familiar`,
+        tujuan_pembelajaran: `Mampu merespon teks lisan, tulisan, dan visual sederhana dalam bahasa Inggris
+Mampu berinteraksi dan berkomunikasi dalam situasi yang familiar`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
@@ -1820,15 +1820,15 @@ const PROGRAMS = [
                         id_kegiatan: 99,
                         nama_kegiatan: '[Tatap Muka] Merespon Teks Lisan',
                         deskripsi: 'Merespon teks lisan',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 100,
                         nama_kegiatan: '[Tatap Muka] Merespon Teks Tulisan',
                         deskripsi: 'Merespon teks tulisan',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1840,15 +1840,15 @@ const PROGRAMS = [
                         id_kegiatan: 101,
                         nama_kegiatan: '[Tatap Muka] Berinteraksi dan Berkomunikasi',
                         deskripsi: 'Berinteraksi dan berkomunikasi',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 102,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Sederhana',
                         deskripsi: 'Produksi teks sederhana',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1869,8 +1869,8 @@ const PROGRAMS = [
     {
         id_program: 22,
         nama_program: 'Bahasa Inggris Kelas 4 SD',
-        tujuan_pembelajaran: `- Mampu berinteraksi dan berkomunikasi dalam konteks yang lebih beragam
-- Mampu menggunakan berbagai jenis teks`,
+        tujuan_pembelajaran: `Mampu berinteraksi dan berkomunikasi dalam konteks yang lebih beragam
+Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
@@ -1883,15 +1883,15 @@ const PROGRAMS = [
                         id_kegiatan: 103,
                         nama_kegiatan: '[Tatap Muka] Berinteraksi dan Berkomunikasi',
                         deskripsi: 'Berinteraksi dan berkomunikasi',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 104,
                         nama_kegiatan: '[Tatap Muka] Menggunakan Berbagai Jenis Teks',
                         deskripsi: 'Menggunakan berbagai jenis teks',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1903,15 +1903,15 @@ const PROGRAMS = [
                         id_kegiatan: 105,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Tulisan',
                         deskripsi: 'Produksi teks tulisan',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 106,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Visual',
                         deskripsi: 'Produksi teks visual',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1931,8 +1931,8 @@ const PROGRAMS = [
     {
         id_program: 23,
         nama_program: 'Bahasa Inggris Kelas 5 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi sesuai dengan situasi, tujuan, dan pemirsa
-- Mampu menggunakan berbagai jenis teks`,
+        tujuan_pembelajaran: `Mampu berkomunikasi sesuai dengan situasi, tujuan, dan pemirsa
+Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
@@ -1945,15 +1945,15 @@ const PROGRAMS = [
                         id_kegiatan: 107,
                         nama_kegiatan: '[Tatap Muka] Berkomunikasi Sesuai Situasi',
                         deskripsi: 'Berkomunikasi sesuai situasi',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 108,
                         nama_kegiatan: '[Tatap Muka] Menggunakan Berbagai Jenis Teks',
                         deskripsi: 'Menggunakan berbagai jenis teks',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -1965,15 +1965,15 @@ const PROGRAMS = [
                         id_kegiatan: 109,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Tulisan',
                         deskripsi: 'Produksi teks tulisan',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 110,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Visual',
                         deskripsi: 'Produksi teks visual',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
@@ -1997,8 +1997,8 @@ const PROGRAMS = [
     {
         id_program: 24,
         nama_program: 'Bahasa Inggris Kelas 6 SD',
-        tujuan_pembelajaran: `- Mampu berkomunikasi sesuai dengan situasi, tujuan, dan pemirsa
-- Mampu menggunakan berbagai jenis teks`,
+        tujuan_pembelajaran: `Mampu berkomunikasi sesuai dengan situasi, tujuan, dan pemirsa
+Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
         path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
@@ -2011,15 +2011,15 @@ const PROGRAMS = [
                         id_kegiatan: 111,
                         nama_kegiatan: '[Tatap Muka] Berkomunikasi Sesuai Situasi',
                         deskripsi: 'Berkomunikasi sesuai situasi',
-                        instruksi_guru: '- Bacakan buku halaman 3',
-                        instruksi_murid: '- Bacalah buku halaman 3'
+                        instruksi_guru: 'Bacakan buku halaman 3',
+                        instruksi_murid: 'Bacalah buku halaman 3'
                     },
                     {
                         id_kegiatan: 112,
                         nama_kegiatan: '[Tatap Muka] Menggunakan Berbagai Jenis Teks',
                         deskripsi: 'Menggunakan berbagai jenis teks',
-                        instruksi_guru: '- Bacakan buku halaman 5',
-                        instruksi_murid: '- Bacalah buku halaman 5'
+                        instruksi_guru: 'Bacakan buku halaman 5',
+                        instruksi_murid: 'Bacalah buku halaman 5'
                     }
                 ]
             },
@@ -2031,15 +2031,15 @@ const PROGRAMS = [
                         id_kegiatan: 113,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Tulisan',
                         deskripsi: 'Produksi teks tulisan',
-                        instruksi_guru: '- Bacakan buku halaman 10',
-                        instruksi_murid: '- Bacalah buku halaman 10',
+                        instruksi_guru: 'Bacakan buku halaman 10',
+                        instruksi_murid: 'Bacalah buku halaman 10',
                     },
                     {
                         id_kegiatan: 114,
                         nama_kegiatan: '[Tatap Muka] Produksi Teks Visual',
                         deskripsi: 'Produksi teks visual',
-                        instruksi_guru: '- Bacakan buku halaman 15',
-                        instruksi_murid: '- Bacalah buku halaman 15',
+                        instruksi_guru: 'Bacakan buku halaman 15',
+                        instruksi_murid: 'Bacalah buku halaman 15',
                     }
                 ]
             }
