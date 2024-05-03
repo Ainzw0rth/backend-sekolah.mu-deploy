@@ -32,7 +32,7 @@ CREATE TABLE kompetensi (
 CREATE TABLE kelas (
     id_kelas SERIAL PRIMARY KEY,
     nama_kelas VARCHAR(255) NOT NULL,
-    jenjang VARCHAR(100) NOT NULL,
+    jenjang VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE guru (
@@ -123,7 +123,7 @@ CREATE TABLE karya (
     nama_karya VARCHAR(255) NOT NULL,
     id_murid INTEGER REFERENCES murid(id_murid),
     tipe_file VARCHAR(5) NOT NULL,
-    file_path VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255) NOT NULL
 );
 
 CREATE TYPE kehadiran_enum AS ENUM ('Hadir', 'Izin', 'Sakit', 'Alpa');
@@ -2892,8 +2892,8 @@ const seedDatabase = async () => {
     console.log('Seeding activity...');
     for (let i = 0; i < ACTIVITIES.length; i++) {
         const activity = ACTIVITIES[i];
-        const topic = TOPICS[activity.id_topik - 1];
-        const program = PROGRAMS[topic.id_program - 1];
+        const topic = TOPICS.find(topic => topic.id_topik === activity.id_topik);
+        const program = PROGRAMS.find(program => program.id_program === topic.id_program);
         
         const formattedProgram = predictProgramMapToPdf(program.nama_program);
         const teacher = teachersProgramMap.get(formattedProgram)[getRandomInt(0, 1)];
@@ -3074,6 +3074,8 @@ const initDatabase = async () => {
     try {
         const main_tables = ['program', 'kompetensi', 'kelas', 'guru', 'murid', 'badge']
         let isEmpty :boolean = true;
+
+        await dropDatabase();
 
         for (let i = 0; i < main_tables.length; i++) {
             const result = await postgre.query(`
