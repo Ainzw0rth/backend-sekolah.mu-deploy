@@ -30,9 +30,8 @@ const kegiatanController: KegiatanController = {
                 INNER JOIN jadwal j ON k.id_kegiatan = j.id_kegiatan
                 WHERE k.id_kegiatan = $1;
             `
-
             const { rows } = await postgre.query(query, [req.params.id])
-            res.json({msg: "OK", data: rows})
+            res.json({msg: "OK", data: rows[0]})
         } catch (error) {
             res.json({msg: error.msg})
         }
