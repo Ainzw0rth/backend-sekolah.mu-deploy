@@ -3076,7 +3076,7 @@ const initDatabase = async () => {
         const main_tables = ['program', 'kompetensi', 'kelas', 'guru', 'murid', 'badge']
         let isEmpty :boolean = true;
 
-        await dropDatabase();
+        // await dropDatabase();
 
         for (let i = 0; i < main_tables.length; i++) {
             const result = await postgre.query(`

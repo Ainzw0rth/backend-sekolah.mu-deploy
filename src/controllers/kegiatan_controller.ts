@@ -22,7 +22,16 @@ const kegiatanController: KegiatanController = {
     },
     getById: async (req, res) => {
         try {
-            const { rows } = await postgre.query("SELECT * from kegiatan WHERE id_kegiatan = $1", [req.params.id]);
+            const query = `
+                SELECT k.*, t.nama_topik, p.nama_program, p.path_banner, j.id_kelas, j.tanggal, j.waktu
+                FROM kegiatan k
+                INNER JOIN topik t ON k.id_topik = t.id_topik
+                INNER JOIN program p ON t.id_program = p.id_program
+                INNER JOIN jadwal j ON k.id_kegiatan = j.id_kegiatan
+                WHERE k.id_kegiatan = $1;
+            `
+
+            const { rows } = await postgre.query(query, [req.params.id])
             res.json({msg: "OK", data: rows})
         } catch (error) {
             res.json({msg: error.msg})
