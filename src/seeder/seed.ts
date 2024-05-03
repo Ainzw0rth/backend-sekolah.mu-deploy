@@ -304,7 +304,7 @@ const PROGRAMS = [
 - Mengidentikasi dan menceritakan bentuk kerjasama dalam keberagaman`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
+        path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 1,
@@ -415,7 +415,7 @@ const PROGRAMS = [
 - Menjelaskan identitas diri, keluaraga, dan teman-temannya sesuai budaya dan minat`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
+        path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 5, 
@@ -505,7 +505,7 @@ const PROGRAMS = [
 - Menganalisis, menghormati, menjaga, dan melestari keberagaman budaya`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
+        path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 8,
@@ -607,7 +607,7 @@ const PROGRAMS = [
 - Mengidentifikasi keberagaman suku, agama, ras, dan antargolongan dalam bingkai Bhinneka Tunggal Ika`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
+        path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 11,
@@ -696,7 +696,7 @@ const PROGRAMS = [
 - Mampu menginisiasi kegiatan bersama atau gotong royong`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
+        path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 14,
@@ -760,7 +760,7 @@ const PROGRAMS = [
 - Menganalisis potensi konflik dan solusi di tengah keberagaman`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
+        path_banner: `${BASE_URL}/static/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 16,
@@ -821,7 +821,7 @@ const PROGRAMS = [
 - Mampu meningkatkan penguasaan kosakata baru`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 18,
@@ -881,7 +881,7 @@ const PROGRAMS = [
 - Mampu membaca dengan fasih dan lancar`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 20,
@@ -943,7 +943,7 @@ const PROGRAMS = [
 - Mampu menanggapi dan mempresentasikan informasi`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 22,
@@ -1018,7 +1018,7 @@ const PROGRAMS = [
 - Mampu berpartisipasi aktif dalam diskusi`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 25,
@@ -1099,7 +1099,7 @@ const PROGRAMS = [
 - Mampu menyintesis gagasan dan pendapat dari berbagai sumber`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 28,
@@ -1182,7 +1182,7 @@ const PROGRAMS = [
 - Mampu menulis berbagai teks untuk merefleksi dan mengaktualisasi diri`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 31,
@@ -1268,7 +1268,7 @@ const PROGRAMS = [
 - Mampu mengenal berbagai bangun datar dan bangun ruang`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/matematika.png`,
+        path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 34,
@@ -1342,7 +1342,7 @@ const PROGRAMS = [
 - Mampu mengukur panjang dan berat benda menggunakan satuan baku`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/matematika.png`,
+        path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 36,
@@ -1418,7 +1418,7 @@ const PROGRAMS = [
 - Mampu mengurutkan, membandingkan, menyajikan, dan menganalisis data`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/matematika.png`,
+        path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 38,
@@ -1509,7 +1509,7 @@ const PROGRAMS = [
 - Mampu menentukan luas permukaan dan volume bangun ruang`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/matematika.png`,
+        path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 40,
@@ -1572,7 +1572,7 @@ const PROGRAMS = [
 - Mampu menggunakan sistem persamaan linear tiga variabel`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/matematika.png`,
+        path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 42,
@@ -1630,7 +1630,7 @@ const PROGRAMS = [
 - Mampu menyatakan data dalam bentuk matriks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/matematika.png`,
+        path_banner: `${BASE_URL}/static/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 44,
@@ -1694,7 +1694,7 @@ const PROGRAMS = [
 - Mampu mengikuti instruksi atau pertanyaan sederhana dalam bahasa Inggris`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 46,
@@ -1752,7 +1752,7 @@ const PROGRAMS = [
 - Mampu membagikan informasi dengan kosakata sederhana`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 48,
@@ -1810,7 +1810,7 @@ const PROGRAMS = [
 - Mampu berinteraksi dan berkomunikasi dalam situasi yang familiar`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 50,
@@ -1873,7 +1873,7 @@ const PROGRAMS = [
 - Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 52,
@@ -1935,7 +1935,7 @@ const PROGRAMS = [
 - Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 54,
@@ -2001,7 +2001,7 @@ const PROGRAMS = [
 - Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
+        path_banner: `${BASE_URL}/static/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 56,
