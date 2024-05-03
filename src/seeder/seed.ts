@@ -2635,14 +2635,14 @@ const STUDENTS = [
 ];
 
 const TEACHERS = [
-    { id_guru: 1, nama_guru: 'Tony Stark', email: 'tony@marvel.com', password: 'tonymarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 2, nama_guru: 'Steve Rogers', email: 'steve@marvel.com', password: 'stevemarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 3, nama_guru: 'Natasha Romanoff', email: 'natasha@marvel.com', password: 'natashamarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 4, nama_guru: 'Bruce Banner', email: 'bruce@marvel.com', password: 'brucemarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 5, nama_guru: 'Clint Barton', email: 'clint@marvel.com', password: 'clintmarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 6, nama_guru: 'Wanda Maximoff', email: 'wanda@marvel.com', password: 'wandamarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 7, nama_guru: 'Vision', email: 'vision@marvel.com', password: 'visionmarvel', path_foto_profil: getRandomPfp() },
-    { id_guru: 8, nama_guru: 'Sam Wilson', email: 'sam@marvel.com', password: 'sammarvel', path_foto_profil: getRandomPfp() }
+    { id_guru: 1, nama_guru: 'Tony Stark', email: 'tony@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 2, nama_guru: 'Steve Rogers', email: 'steve@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 3, nama_guru: 'Natasha Romanoff', email: 'natasha@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 4, nama_guru: 'Bruce Banner', email: 'bruce@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 5, nama_guru: 'Clint Barton', email: 'clint@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 6, nama_guru: 'Wanda Maximoff', email: 'wanda@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 7, nama_guru: 'Vision', email: 'vision@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() },
+    { id_guru: 8, nama_guru: 'Sam Wilson', email: 'sam@sekolahmu.com', password: 'sekolahmu', path_foto_profil: getRandomPfp() }
 ]
 
 const teachersProgramMap : Map<string, any[]> = new Map();
