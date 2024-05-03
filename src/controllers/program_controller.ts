@@ -27,12 +27,19 @@ const programController: ProgramController = {
     getByGuru: async (req, res) => {
         try {
             const { rows } = await postgre.query(`
-                SELECT program.id_program, nama_program, periode_belajar, tahun_akademik
+                SELECT 
+                    program.id_program, 
+                    nama_program, 
+                    kegiatan.id_kegiatan,
+                    kegiatan.nama_kegiatan,
+                    periode_belajar, 
+                    tahun_akademik,
+                    kegiatan.id_guru
                 FROM program 
-                LEFT JOIN topik
-                ON program.id_program = topik.id_topik
-                LEFT JOIN kegiatan
-                ON kegiatan.id_topik = topik.id_topik
+                    INNER JOIN topik
+                        ON program.id_program = topik.id_program
+                    INNER JOIN kegiatan
+                        ON kegiatan.id_topik = topik.id_topik
                 WHERE kegiatan.id_guru = $1;`, [req.params.id]);
 
             res.json({msg: "OK", data: rows})
