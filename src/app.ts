@@ -19,6 +19,7 @@ import muridRouter from './routes/murid';
 import kelasRouter from './routes/kelas';
 import tugasTertundaRouter from './routes/tugas_tertunda';
 import jadwalRouter from './routes/jadwal';
+import authRouter from './routes/auth';
 
 const cors = require('cors');
 const corsConfig = {
@@ -53,6 +54,7 @@ app.use('/murid', muridRouter);
 app.use('/kelas', kelasRouter);
 app.use('/tugastertunda', tugasTertundaRouter);
 app.use('/jadwal', jadwalRouter);
+app.use('/auth', authRouter);
 
 app.listen(port, '0.0.0.0', function() {
     console.log('Listening on port 3000');
