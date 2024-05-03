@@ -20,6 +20,7 @@ import kelasRouter from './routes/kelas';
 import tugasTertundaRouter from './routes/tugas_tertunda';
 import jadwalRouter from './routes/jadwal';
 import authRouter from './routes/auth';
+import staticContentRouter from './routes/static_content';
 
 const cors = require('cors');
 const corsConfig = {
@@ -55,6 +56,7 @@ app.use('/kelas', kelasRouter);
 app.use('/tugastertunda', tugasTertundaRouter);
 app.use('/jadwal', jadwalRouter);
 app.use('/auth', authRouter);
+app.use('/static', staticContentRouter);
 
 app.listen(port, '0.0.0.0', function() {
     console.log('Listening on port 3000');

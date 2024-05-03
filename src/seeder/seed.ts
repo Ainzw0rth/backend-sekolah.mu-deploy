@@ -1,6 +1,7 @@
 import postgre from '../database';
 import fs from 'fs';
 import path from 'path';
+import * as dotenv from 'dotenv';
 
 // #region constants
 const TABLES = [
@@ -10,6 +11,9 @@ const TABLES = [
 ];
 
 const ENUM_NAMES = ['kehadiran_enum', 'action_enum'];
+
+dotenv.config();
+const BASE_URL = process.env.DEV_DEPLOY_URL || process.env.PROD_DEPLOY_URL || '';
 // #endregion
 
 // #region databases
@@ -167,38 +171,36 @@ const dropDatabase = async () => {
 
 // #region seeding
 const PDFS_DIR_PATH = path.join(__dirname, '../../contents/pdfs');
-const EMOJI_DIR_PATH = path.join(__dirname, '../../contents/images/emojis'); // placeholder for student and teacher pfp
+const IMAGES = path.join(__dirname, '../../contents/images/');
 const UPLOADS_DIR_PATH = path.join(__dirname, '../../uploads');
 
-const getAllFilePaths = (directory : string) : string[] => {
-    let filePaths: string[] = [];
+function getAllFilePaths(directory : string, folderPath : string = '.', fileList : string[] = []) : string[] {
+    const files = fs.readdirSync(path.join(directory, folderPath));
 
-    const contents = fs.readdirSync(directory);
-
-    contents.forEach(file => {
-        let itemPath = path.join(directory, file);
-        const stat = fs.statSync(itemPath);
+    files.forEach((file) => {
+        const filePath = path.join(directory, folderPath, file);
+        const stat = fs.lstatSync(filePath);
 
         if (stat.isDirectory()){
-            const subDirContents = getAllFilePaths(itemPath);
-            filePaths = filePaths.concat(subDirContents);
+            fileList = getAllFilePaths(directory, path.join(folderPath, file), fileList);
         } else {
-            // replace backslashes with forward slashes
-            itemPath = itemPath.replace(/\\/g, '/');
-
-            // get only path after /contents (includes /contents)
-            itemPath = itemPath.split('contents')[1];
-            itemPath = '/contents' + itemPath;
-        
-            filePaths.push(itemPath);
+            fileList.push(path.join(folderPath, file).replace(/\\/g, '/'));
         }
     });
 
-    return filePaths;
+    return fileList;
 }
 
-const PDFS_PATHS = getAllFilePaths(PDFS_DIR_PATH); // stores pdfs,
-const EMOJI_PATHS = getAllFilePaths(EMOJI_DIR_PATH); // stores emojis as placeholder for student and teacher pfp
+let PDFS_PATHS = getAllFilePaths(PDFS_DIR_PATH); // stores pdfs,
+PDFS_PATHS = PDFS_PATHS.map((path) => {
+    return `${BASE_URL}/static/pdf/${path}`;
+});
+
+let EMOJI_PATHS = getAllFilePaths(IMAGES); // stores emojis as placeholder for student and teacher pfp
+EMOJI_PATHS = EMOJI_PATHS.map((path) => {
+    return `${BASE_URL}/static/image/${path}`;
+});
+
 const UPLOAD_PATHS = getAllFilePaths(UPLOADS_DIR_PATH); // stores hasil karya
 
 const TED_TALKS_LINKS = [
@@ -262,10 +264,9 @@ const getPdfFor = (program : string, jenjang : string | undefined = undefined) =
     const pdfProgram = predictProgramMapToPdf(program);
     const pdfKelas = mapJenjangToKelas[jenjang];
 
-    const pdfPath = `/contents/pdfs/Buku_${pdfProgram}_${pdfKelas}.pdf`;
-
+    const pdfPath = `${BASE_URL}/static/pdf/Buku_${pdfProgram}_${pdfKelas}.pdf`;
     if (!PDFS_PATHS.includes(pdfPath)){
-        return null;
+        return getRandomFromList(PDFS_PATHS);
     }
 
     return pdfPath;
@@ -303,7 +304,7 @@ const PROGRAMS = [
 - Mengidentikasi dan menceritakan bentuk kerjasama dalam keberagaman`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/pancasila.png',
+        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 1,
@@ -414,7 +415,7 @@ const PROGRAMS = [
 - Menjelaskan identitas diri, keluaraga, dan teman-temannya sesuai budaya dan minat`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/pancasila.png',
+        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 5, 
@@ -504,7 +505,7 @@ const PROGRAMS = [
 - Menganalisis, menghormati, menjaga, dan melestari keberagaman budaya`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/pancasila.png',
+        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 8,
@@ -606,7 +607,7 @@ const PROGRAMS = [
 - Mengidentifikasi keberagaman suku, agama, ras, dan antargolongan dalam bingkai Bhinneka Tunggal Ika`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/pancasila.png',
+        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 11,
@@ -695,7 +696,7 @@ const PROGRAMS = [
 - Mampu menginisiasi kegiatan bersama atau gotong royong`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/pancasila.png',
+        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 14,
@@ -759,7 +760,7 @@ const PROGRAMS = [
 - Menganalisis potensi konflik dan solusi di tengah keberagaman`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/pancasila.png',
+        path_banner: `${BASE_URL}/image/banner/pancasila.png`,
         topik : [
             {
                 id_topik: 16,
@@ -820,7 +821,7 @@ const PROGRAMS = [
 - Mampu meningkatkan penguasaan kosakata baru`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-indonesia.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 18,
@@ -880,7 +881,7 @@ const PROGRAMS = [
 - Mampu membaca dengan fasih dan lancar`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-indonesia.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 20,
@@ -942,7 +943,7 @@ const PROGRAMS = [
 - Mampu menanggapi dan mempresentasikan informasi`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-indonesia.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 22,
@@ -1017,7 +1018,7 @@ const PROGRAMS = [
 - Mampu berpartisipasi aktif dalam diskusi`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-indonesia.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 25,
@@ -1098,7 +1099,7 @@ const PROGRAMS = [
 - Mampu menyintesis gagasan dan pendapat dari berbagai sumber`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-indonesia.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 28,
@@ -1181,7 +1182,7 @@ const PROGRAMS = [
 - Mampu menulis berbagai teks untuk merefleksi dan mengaktualisasi diri`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-indonesia.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-indonesia.png`,
         topik : [
             {
                 id_topik: 31,
@@ -1267,7 +1268,7 @@ const PROGRAMS = [
 - Mampu mengenal berbagai bangun datar dan bangun ruang`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/matematika.png',
+        path_banner: `${BASE_URL}/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 34,
@@ -1341,7 +1342,7 @@ const PROGRAMS = [
 - Mampu mengukur panjang dan berat benda menggunakan satuan baku`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/matematika.png',
+        path_banner: `${BASE_URL}/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 36,
@@ -1417,7 +1418,7 @@ const PROGRAMS = [
 - Mampu mengurutkan, membandingkan, menyajikan, dan menganalisis data`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/matematika.png',
+        path_banner: `${BASE_URL}/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 38,
@@ -1508,7 +1509,7 @@ const PROGRAMS = [
 - Mampu menentukan luas permukaan dan volume bangun ruang`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/matematika.png',
+        path_banner: `${BASE_URL}/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 40,
@@ -1571,7 +1572,7 @@ const PROGRAMS = [
 - Mampu menggunakan sistem persamaan linear tiga variabel`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/matematika.png',
+        path_banner: `${BASE_URL}/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 42,
@@ -1629,7 +1630,7 @@ const PROGRAMS = [
 - Mampu menyatakan data dalam bentuk matriks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/matematika.png',
+        path_banner: `${BASE_URL}/image/banner/matematika.png`,
         topik : [
             {
                 id_topik: 44,
@@ -1693,7 +1694,7 @@ const PROGRAMS = [
 - Mampu mengikuti instruksi atau pertanyaan sederhana dalam bahasa Inggris`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-inggris.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 46,
@@ -1751,7 +1752,7 @@ const PROGRAMS = [
 - Mampu membagikan informasi dengan kosakata sederhana`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-inggris.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 48,
@@ -1809,7 +1810,7 @@ const PROGRAMS = [
 - Mampu berinteraksi dan berkomunikasi dalam situasi yang familiar`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-inggris.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 50,
@@ -1872,7 +1873,7 @@ const PROGRAMS = [
 - Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-inggris.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 52,
@@ -1934,7 +1935,7 @@ const PROGRAMS = [
 - Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-inggris.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 54,
@@ -2000,7 +2001,7 @@ const PROGRAMS = [
 - Mampu menggunakan berbagai jenis teks`,
         periode_belajar: 'Semester 1',
         tahun_akademik: '2021/2022',
-        path_banner: '/images/banner/bahasa-inggris.png',
+        path_banner: `${BASE_URL}/image/banner/bahasa-inggris.png`,
         topik : [
             {
                 id_topik: 56,
@@ -3111,4 +3112,9 @@ const initDatabase = async () => {
 };
 
 initDatabase();
+
+// console.log(PDFS_PATHS)
+// console.log(getPdfFor('Bahasa Indonesia 1 SD'))
+// console.log(EMOJI_PATHS)
+
 // #endregion
