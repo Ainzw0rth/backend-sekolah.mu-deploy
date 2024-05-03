@@ -13,7 +13,7 @@ const presensiController: PresensiController = {
                 SELECT m.id_murid, m.nama_murid, m.path_foto_profil, e.catatan_kehadiran
                 FROM evaluasi e
                 JOIN murid m ON e.id_murid = m.id_murid
-                WHERE e.id_kegiatan = $1;
+                WHERE e.id_jadwal = $1;
             `, [req.params.id]);
             
             if (rows.length === 0) {
@@ -24,6 +24,7 @@ const presensiController: PresensiController = {
             res.status(200).json({ data: rows });
             return;
         } catch (error) {
+            console.error('Error fetching presensi:', error);
             res.status(500).json({ msg: error.msg, data: [] });
             return;
         }

@@ -3029,7 +3029,6 @@ const seedDatabase = async () => {
     // ('1', '1'), ('2', '1'), ('3', '1'), ('4', '1'), ('5', '1'), ('6', '1'), ('7', '1'), ('8', '1'), ('9', '1'), ('10', '1'),
     // ('11', '2'), ('12', '2'), ('13', '2'), ('14', '2'), ('15', '2'), ('16', '2'), ('17', '2'), ('18', '2'), ('19', '2'), ('20', '2'),
     // ('21', '3'), ('22', '3'), ('23', '3'), ('24', '3'), ('25', '3'), ('26', '3');
-
     console.log('Seeding student class...');
     for (let i = 0; i < STUDENTS.length; i++) {
         const murid = STUDENTS[i];
@@ -3061,6 +3060,7 @@ const seedDatabase = async () => {
         }
     }
 
+    console.log('Seeding evalutaion...');
     await postgre.query(`
         INSERT INTO evaluasi (id_murid, id_jadwal)
         SELECT m.id_murid, j.id_jadwal
@@ -3076,7 +3076,8 @@ const initDatabase = async () => {
         const main_tables = ['program', 'kompetensi', 'kelas', 'guru', 'murid', 'badge']
         let isEmpty :boolean = true;
 
-        // await dropDatabase();
+        // APPROACH CAREFULY
+        await dropDatabase();
 
         for (let i = 0; i < main_tables.length; i++) {
             const result = await postgre.query(`
