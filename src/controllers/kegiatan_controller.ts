@@ -23,7 +23,7 @@ const kegiatanController: KegiatanController = {
     getById: async (req, res) => {
         try {
             const query = `
-                SELECT k.*, t.nama_topik, p.nama_program, p.path_banner, j.id_kelas, j.tanggal, j.waktu
+                SELECT k.*, t.nama_topik, t.id_program, p.*, j.id_kelas, j.tanggal, j.waktu
                 FROM kegiatan k
                 INNER JOIN topik t ON k.id_topik = t.id_topik
                 INNER JOIN program p ON t.id_program = p.id_program
@@ -45,7 +45,7 @@ const kegiatanController: KegiatanController = {
             } else if (typeof req.query.id !== 'string' || isNaN(parseInt(req.query.id.toString()))) {
                 res.json({msg: "ID must be a number"});
                 return;
-            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "murid")) {
+            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "murid" && req.query.type !== "all")) {
                 res.json({msg: "Type must be either 'guru' or 'murid'"});
                 return;
             }
@@ -53,8 +53,10 @@ const kegiatanController: KegiatanController = {
             let instruksiField;
             if (req.query.type === "guru") {
                 instruksiField = "instruksi_guru";
-            } else {
+            } else if (req.query.type === "murid") {
                 instruksiField = "instruksi_murid";
+            } else {
+                instruksiField = "instruksi_guru, instruksi_murid";
             }
     
             const { rows } = await postgre.query(`SELECT ${instruksiField} FROM kegiatan WHERE id_kegiatan = $1`, [req.query.id.toString()]);
@@ -160,7 +162,7 @@ const kegiatanController: KegiatanController = {
                     COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
                     COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
                     COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
-                    FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
+                    FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_jadwal
                     WHERE kegiatan.id_kegiatan = $1`;
 
             const { rows } = await postgre.query(query, [idKegiatan]);
