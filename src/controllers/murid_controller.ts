@@ -105,9 +105,11 @@ const muridController: MuridController = {
             const idMurid = req.params.id;
             const rawQuery = `
             SELECT 
-                id_kegiatan, 
-                penilaian
+                jadwal.id_kegiatan, 
+                evaluasi.penilaian
             FROM evaluasi
+                LEFT JOIN jadwal
+                    ON evaluasi.id_jadwal = jadwal.id_jadwal
             WHERE 
                 id_murid = $1 
                 AND penilaian IS NOT NULL
@@ -141,12 +143,14 @@ const muridController: MuridController = {
             const idMurid = req.params.id;
             const rawQuery = `
             SELECT 
-                evaluasi.id_kegiatan,
+                jadwal.id_kegiatan,
                 kegiatan.nama_kegiatan,
                 evaluasi.catatan
             FROM evaluasi
+                LEFT JOIN jadwal
+                    ON evaluasi.id_jadwal = jadwal.id_jadwal
                 LEFT JOIN kegiatan
-                    ON evaluasi.id_kegiatan = kegiatan.id_kegiatan
+                    ON jadwal.id_kegiatan = kegiatan.id_kegiatan
             WHERE 
                 evaluasi.id_murid = $1 
                 AND evaluasi.catatan IS NOT NULL
@@ -163,12 +167,14 @@ const muridController: MuridController = {
             const idMurid = req.params.id;
             const rawQuery = `
             SELECT 
-                evaluasi.id_kegiatan,
+                jadwal.id_kegiatan,
                 kegiatan.nama_kegiatan,
                 evaluasi.feedback
             FROM evaluasi
+                LEFT JOIN jadwal
+                    ON evaluasi.id_jadwal = jadwal.id_jadwal
                 LEFT JOIN kegiatan
-                    ON evaluasi.id_kegiatan = kegiatan.id_kegiatan
+                    ON jadwal.id_kegiatan = kegiatan.id_kegiatan
             WHERE 
                 evaluasi.id_murid = $1 
                 AND evaluasi.feedback IS NOT NULL
@@ -185,15 +191,17 @@ const muridController: MuridController = {
             const idMurid = req.params.id;
             const rawQuery = `
             SELECT 
-                evaluasi.id_kegiatan,
+                jadwal.id_kegiatan,
                 kegiatan.nama_kegiatan,
                 evaluasi.id_karya,
                 karya.nama_karya,
                 karya.tipe_file,
                 karya.file_path
             FROM evaluasi
+                LEFT JOIN jadwal
+                    ON evaluasi.id_jadwal = jadwal.id_jadwal
                 LEFT JOIN kegiatan
-                    ON evaluasi.id_kegiatan = kegiatan.id_kegiatan
+                    ON jadwal.id_kegiatan = kegiatan.id_kegiatan
                 LEFT JOIN karya
                     ON evaluasi.id_karya = karya.id_karya
             WHERE 
