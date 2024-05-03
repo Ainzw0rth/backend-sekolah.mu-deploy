@@ -19,8 +19,8 @@ const createDatabaseSchema = async () => {
     id_program SERIAL PRIMARY KEY,
     nama_program VARCHAR(255) NOT NULL,
     tujuan_pembelajaran TEXT,
-    periode_belajar VARCHAR(255),
-    tahun_akademik VARCHAR(50),
+    periode_belajar VARCHAR(255) NOT NULL,
+    tahun_akademik VARCHAR(50) NOT NULL,
     path_banner VARCHAR(255)
 );
 
@@ -32,7 +32,7 @@ CREATE TABLE kompetensi (
 CREATE TABLE kelas (
     id_kelas SERIAL PRIMARY KEY,
     nama_kelas VARCHAR(255) NOT NULL,
-    jenjang VARCHAR(100)
+    jenjang VARCHAR(100) NOT NULL,
 );
 
 CREATE TABLE guru (
@@ -55,7 +55,7 @@ CREATE TABLE murid (
 CREATE TABLE badge (
     id_badge SERIAL PRIMARY KEY,
     nama_badge VARCHAR(255) NOT NULL,
-    deskripsi TEXT,
+    deskripsi TEXT NOT NULL,
     path_badge VARCHAR(255)
 );
 
@@ -69,8 +69,8 @@ CREATE TABLE kegiatan (
     id_kegiatan SERIAL PRIMARY KEY,
     nama_kegiatan VARCHAR(255) NOT NULL,
     deskripsi TEXT,
-    id_topik INTEGER REFERENCES topik(id_topik),
-    id_guru INTEGER REFERENCES guru(id_guru),
+    id_topik INTEGER REFERENCES topik(id_topik) NOT NULL,
+    id_guru INTEGER REFERENCES guru(id_guru) NOT NULL,
     instruksi_guru TEXT,
     instruksi_murid TEXT
 );
@@ -80,31 +80,31 @@ CREATE TABLE jadwal (
     tanggal DATE NOT NULL,
     waktu TIME NOT NULL,
     lokasi VARCHAR(255),
-    id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan),
-    id_kelas INTEGER REFERENCES kelas(id_kelas)
+    id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan) NOT NULL,
+    id_kelas INTEGER REFERENCES kelas(id_kelas) NOT NULL
 );
 
 CREATE TABLE program_kompetensi (
-    id_program INTEGER REFERENCES program(id_program),
-    id_kompetensi INTEGER REFERENCES kompetensi(id_kompetensi),
+    id_program INTEGER REFERENCES program(id_program) NOT NULL,
+    id_kompetensi INTEGER REFERENCES kompetensi(id_kompetensi) NOT NULL,
     PRIMARY KEY (id_program, id_kompetensi)
 );
 
 CREATE TABLE badge_guru (
-    id_badge INTEGER REFERENCES badge(id_badge),
-    id_guru INTEGER REFERENCES guru(id_guru),
+    id_badge INTEGER REFERENCES badge(id_badge) NOT NULL,
+    id_guru INTEGER REFERENCES guru(id_guru) NOT NULL,
     PRIMARY KEY (id_badge, id_guru)
 );
 
 CREATE TABLE murid_kelas(
-    id_murid INTEGER REFERENCES murid(id_murid),
-    id_kelas INTEGER REFERENCES kelas(id_kelas),
+    id_murid INTEGER REFERENCES murid(id_murid) NOT NULL,
+    id_kelas INTEGER REFERENCES kelas(id_kelas) NOT NULL,
     PRIMARY KEY (id_murid, id_kelas)
 );
 
 CREATE TABLE kelas_program (
-    id_kelas INTEGER REFERENCES kelas(id_kelas),
-    id_program INTEGER REFERENCES program(id_program),
+    id_kelas INTEGER REFERENCES kelas(id_kelas) NOT NULL,
+    id_program INTEGER REFERENCES program(id_program) NOT NULL,
     PRIMARY KEY (id_kelas, id_program)
 );
 
@@ -113,8 +113,8 @@ CREATE TABLE konten (
     nama_konten VARCHAR(255) NOT NULL,
     tipe_konten VARCHAR(50) NOT NULL,
     nama_file VARCHAR(255),
-    tipe_file VARCHAR(50),
-    file_path VARCHAR(255),
+    tipe_file VARCHAR(50) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
     id_kegiatan INTEGER REFERENCES kegiatan(id_kegiatan)
 );
 
@@ -123,14 +123,14 @@ CREATE TABLE karya (
     nama_karya VARCHAR(255) NOT NULL,
     id_murid INTEGER REFERENCES murid(id_murid),
     tipe_file VARCHAR(5) NOT NULL,
-    file_path VARCHAR(255)
+    file_path VARCHAR(255) NOT NULL,
 );
 
 CREATE TYPE kehadiran_enum AS ENUM ('Hadir', 'Izin', 'Sakit', 'Alpa');
 
 CREATE TABLE evaluasi (
-    id_jadwal INTEGER REFERENCES jadwal(id_jadwal),
-    id_murid INTEGER REFERENCES murid(id_murid),
+    id_jadwal INTEGER REFERENCES jadwal(id_jadwal) NOT NULL,
+    id_murid INTEGER REFERENCES murid(id_murid) NOT NULL,
     catatan_kehadiran kehadiran_enum,
     penilaian INTEGER,
     catatan TEXT,
@@ -275,7 +275,6 @@ const getRandomPfp = () => {
     return getRandomFromList(EMOJI_PATHS);
 }
 
-// #region long ass programs
 const PROGRAMS = [
 // Mengenal dan menceritakan simbol dan sila-sila Pancasila dalam lambang negara
 // Garuda Pancasila; mengidentifikasi dan menjelaskan hubungan antara simbol dan
@@ -2046,7 +2045,6 @@ const PROGRAMS = [
         ]
     },
 ];
-// #endregion
 
 const ACTIVITIES : any[] = [];
 const TOPICS : any[] = [];
@@ -2111,6 +2109,11 @@ const CLASSES = [
     { id_kelas: 29, nama_kelas: '6D', jenjang: '6 SD'},
     { id_kelas: 30, nama_kelas: '6E', jenjang: '6 SD'}
 ];
+
+const getRandomClassFromJenjang = (jenjang: string) => {
+    const classes = CLASSES.filter(c => c.jenjang === jenjang);
+    return classes[Math.floor(Math.random() * classes.length)];
+}
 
 const STUDENTS = [
     {
@@ -2642,6 +2645,13 @@ const TEACHERS = [
     { id_guru: 8, nama_guru: 'Sam Wilson', email: 'sam@marvel.com', password: 'sammarvel', path_foto_profil: getRandomPfp() }
 ]
 
+const teachersProgramMap : Map<string, any[]> = new Map();
+const programsName = ["Bahasa_Indonesia", "Matematika", "Pendidikan_Pancasila", "Bahasa_Inggris"];
+for (let i = 0; i < TEACHERS.length; i += 2) {
+    const pIdx = Math.floor(i / 2);
+    teachersProgramMap.set(programsName[pIdx], [TEACHERS[i], TEACHERS[i + 1]]);
+}
+
 const BADGES = [
     { id_badge: 1, nama_badge: 'Streak', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam sehari', path_badge: getRandomPfp() },
     { id_badge: 2, nama_badge: 'Streak Master', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam seminggu', path_badge: getRandomPfp() },
@@ -2667,11 +2677,18 @@ function getRandomWorkTime() { // 07:00 - 16:00
     return `${hour}:${minute}:00`;
 }
 
-for (let i = 1; i <= 120; i++) {
-    SCHEDULES.push({ id_jadwal: i, id_kelas: getRandomInt(1, 15), id_program: getRandomInt(1, 4), id_guru: getRandomInt(1, 8), 
-        tanggal: getRandomDateMay2024(), waktu: getRandomWorkTime() });
-}
+for (let i = 0; i < ACTIVITIES.length; i++) {
+    const topic = TOPICS[ACTIVITIES[i].id_topik - 1];
+    const program = PROGRAMS[topic.id_program - 1];
 
+    const jenjang = getJenjangFromProgram(program.nama_program);
+    const classId = getRandomClassFromJenjang(jenjang).id_kelas;
+    const date = getRandomDateMay2024();
+    const time = getRandomWorkTime();
+
+    SCHEDULES.push({ id_jadwal: i + 1, id_kelas: classId, id_kegiatan: ACTIVITIES[i].id_kegiatan,
+        tanggal: date, waktu: time });
+}
 
 const seedDatabase = async () => {
     console.log('Seeding database...');
@@ -2685,9 +2702,10 @@ const seedDatabase = async () => {
     for (let i = 0; i < PROGRAMS.length; i++) {
         const program = PROGRAMS[i];
         await postgre.query(`
-            INSERT INTO program (id_program, nama_program, tujuan_pembelajaran, periode_belajar, tahun_akademik) VALUES
-            ($1, $2, $3, $4, $5);`
-            , [program.id_program, program.nama_program, program.tujuan_pembelajaran, program.periode_belajar, program.tahun_akademik]
+            INSERT INTO program (id_program, nama_program, tujuan_pembelajaran, periode_belajar, tahun_akademik, path_banner) VALUES
+            ($1, $2, $3, $4, $5, $6);`
+            , [program.id_program, program.nama_program, program.tujuan_pembelajaran, 
+                program.periode_belajar, program.tahun_akademik, program.path_banner]
         );
     }
 
@@ -2874,10 +2892,17 @@ const seedDatabase = async () => {
     console.log('Seeding activity...');
     for (let i = 0; i < ACTIVITIES.length; i++) {
         const activity = ACTIVITIES[i];
+        const topic = TOPICS[activity.id_topik - 1];
+        const program = PROGRAMS[topic.id_program - 1];
+        
+        const formattedProgram = predictProgramMapToPdf(program.nama_program);
+        const teacher = teachersProgramMap.get(formattedProgram)[getRandomInt(0, 1)];
+
         await postgre.query(`
-            INSERT INTO kegiatan (id_kegiatan, nama_kegiatan, deskripsi, id_guru, instruksi_guru, instruksi_murid) VALUES
-            ($1, $2, $3, $4, $5, $6);`
-            , [activity.id_kegiatan, activity.nama_kegiatan, activity.deskripsi, activity.id_guru, activity.instruksi_guru, activity.instruksi_murid]
+            INSERT INTO kegiatan (id_kegiatan, nama_kegiatan, deskripsi, id_topik, id_guru, instruksi_guru, instruksi_murid) VALUES
+            ($1, $2, $3, $4, $5, $6, $7);`
+            , [activity.id_kegiatan, activity.nama_kegiatan, activity.deskripsi, activity.id_topik, 
+                teacher.id_guru, activity.instruksi_guru, activity.instruksi_murid]
         );
     }
 
@@ -3084,19 +3109,4 @@ const initDatabase = async () => {
 };
 
 initDatabase();
-
-// console.log(getRandomDateMay2024())
-// console.log(getRandomPfp());
-// console.log(getRandomTedTalkEmbedLink());
-// console.log(getPdfFor('Bahasa Indonesia 2 SD', '2 SD'));
-// console.log(PROGRAMS.length, PROGRAMS[0]);
-// console.log(TOPICS.length, TOPICS[0]);
-// console.log(CLASSES.length, CLASSES[0]);
-// console.log(TEACHERS.length, TEACHERS[0]);
-// console.log(STUDENTS.length, STUDENTS[0]);
-// console.log(BADGES.length, BADGES[0]);
-// console.log(COMPETENCIES.length, COMPETENCIES[0]);
-// console.log(ACTIVITIES.length, ACTIVITIES[0]);
-// console.log(SCHEDULES.length, SCHEDULES[0]);
-
 // #endregion
