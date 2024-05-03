@@ -10,7 +10,7 @@ const kontenController: KontenController = {
         try {
             const { rows } = await postgre.query("SELECT nama_konten, tipe_file, file_path from konten WHERE id_kegiatan = $1", [req.params.kegiatanId]);
             if (rows.length === 0) {
-                res.status(404).json({msg: "Data tidak ditemukan"})
+                res.status(404).json({msg: "Data tidak ditemukan", data: []})
                 return
             }
             res.status(200).json({msg: "OK", data: rows})

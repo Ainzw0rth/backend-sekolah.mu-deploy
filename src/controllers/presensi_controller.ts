@@ -17,14 +17,14 @@ const presensiController: PresensiController = {
             `, [req.params.id]);
             
             if (rows.length === 0) {
-                res.status(404).json({ msg: 'Data tidak ditemukan' });
+                res.status(404).json({ msg: 'Data tidak ditemukan', data: [] });
                 return;
             }
 
             res.status(200).json({ data: rows });
             return;
         } catch (error) {
-            res.status(500).json({ msg: error.msg });
+            res.status(500).json({ msg: error.msg, data: [] });
             return;
         }
     },

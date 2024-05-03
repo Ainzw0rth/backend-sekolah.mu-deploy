@@ -12,7 +12,7 @@ const authController: AuthController = {
             const { rows } = await postgre.query('SELECT * FROM guru WHERE email = $1 AND password = $2', [email, password]);
 
             if (rows.length === 0) {
-                res.status(404).json({msg: 'Data tidak ditemukan'});
+                res.status(404).json({msg: 'Data tidak ditemukan', data: []});
                 return;
             }
             

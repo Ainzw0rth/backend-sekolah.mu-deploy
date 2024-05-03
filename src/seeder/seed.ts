@@ -2947,7 +2947,7 @@ const seedDatabase = async () => {
         }
 
         for (let j = 0; j < videosEmbed.length; j++) {
-            const videoTitle = `[Video] ${activity.deskripsi} - ${j + 1}`;
+            const videoTitle = `[Video] ${activity.deskripsi}${videosEmbed.length > 1 ? ' - Part ' + (j + 1) : ''}`
             await postgre.query(`
                 INSERT INTO konten (id_konten, nama_konten, tipe_konten, nama_file, tipe_file, file_path, id_kegiatan) VALUES
                 ($1, $2, $3, $4, $5, $6, $7);`
