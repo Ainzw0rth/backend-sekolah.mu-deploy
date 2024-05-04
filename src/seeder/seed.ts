@@ -3077,7 +3077,7 @@ const initDatabase = async () => {
         let isEmpty :boolean = true;
 
         // APPROACH CAREFULY
-        await dropDatabase();
+        // await dropDatabase();
 
         for (let i = 0; i < main_tables.length; i++) {
             const result = await postgre.query(`
