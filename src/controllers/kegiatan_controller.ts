@@ -178,11 +178,17 @@ const kegiatanController: KegiatanController = {
             const idKegiatan = req.params.id;
             
             const query = `
-                SELECT kegiatan.id_kegiatan, murid_kelas.id_kelas, murid.id_murid, murid.nama_murid, kegiatan.id_guru
+                SELECT 
+                    kegiatan.id_kegiatan, 
+                    murid_kelas.id_kelas, 
+                    murid.id_murid, 
+                    murid.nama_murid, 
+                    murid.path_foto_profil, 
+                    kegiatan.id_guru
                 FROM kegiatan 
-                LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                LEFT JOIN murid_kelas ON jadwal.id_kelas = murid_kelas.id_kelas
-                LEFT JOIN murid ON murid_kelas.id_murid = murid.id_murid
+                    LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
+                    LEFT JOIN murid_kelas ON jadwal.id_kelas = murid_kelas.id_kelas
+                    LEFT JOIN murid ON murid_kelas.id_murid = murid.id_murid
                 WHERE kegiatan.id_kegiatan = $1`;
 
             const { rows } = await postgre.query(query, [idKegiatan]);
