@@ -35,7 +35,7 @@ const profilController: ProfilController = {
             const idGuru = req.params.id;
 
             const query = `
-                SELECT badge.nama_badge, badge.deskripsi, badge.path_badge
+                SELECT badge.id_badge, badge.nama_badge, badge.deskripsi, badge.path_badge
                 FROM guru
                 LEFT JOIN badge_guru on guru.id_guru = badge_guru.id_guru
                 LEFT JOIN badge on badge_guru.id_badge = badge.id_badge
