@@ -1,95 +1,119 @@
-// import { Request, Response } from 'express';
-// import { v4 as uuidv4 } from 'uuid';
-// import multer, { FileFilterCallback } from 'multer';
-// import path from 'path';
-// import fs from 'fs';
-// import postgre from '../database';
+import { Request, Response } from 'express';
+import postgre from '../database';
 
-// interface HasilKaryaController {
-//     getById: (req: Request, res: Response) => Promise<void>;
-//     uploadFile: (req: Request, res: Response) => Promise<void>; // Define a new method for file upload
-// }
+interface HasilKaryaCOntroller {
+    getAll: (req: Request, res: Response) => Promise<void>;
+    getById: (req: Request, res: Response) => Promise<void>;
+    create: (req: Request, res: Response) => Promise<void>;
+    update: (req: Request, res: Response) => Promise<void>;
+}
 
-// const hasilKaryaController: HasilKaryaController = {
-//     getById: async (req, res) => {
-//         try {
-//             const kegiatanId = req.params.kegiatan_id;
-//             const muridId = req.params.murid_id;
+const hasilKaryaController: HasilKaryaCOntroller = {
+    getAll: async (req, res) => {
+        try {
+            const { rows } = await postgre.query(`SELECT * FROM karya`);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching hasil karya:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
 
-//             const query = `
-//                 SELECT
-//                     m.nama_murid AS name,
-//                     k.nama_karya AS fileName,
-//                     k.file_path AS fileUrl
-//                 FROM
-//                     murid m
-//                 JOIN
-//                     karya k ON m.id_murid = k.id_murid
-//                 JOIN
-//                     evaluasi e ON e.id_karya = k.id_karya
-//                 WHERE
-//                     e.id_kegiatan = $1
-//                     AND e.id_murid = $2
-//             `;
+    getById: async (req, res) => {
+        try {
+            if (!req.query.jadwal && !req.query.murid) {
+                res.json({msg: "ID jadwal or ID murid is required"});
+                return;
+            }
+
+            if (req.query.jadwal && req.query.murid) {
+                const { rows } = await postgre.query(`SELECT k.*
+                FROM karya k
+                INNER JOIN evaluasi e ON k.id_karya = e.id_karya
+                WHERE e.id_jadwal = $1
+                AND e.id_murid = $2`, [req.query.jadwal, req.query.murid]);
+                res.json({msg: "OK", data: rows})
+            } else if (req.query.jadwal) {
+                const { rows } = await postgre.query(`SELECT k.*
+                FROM karya k
+                INNER JOIN evaluasi e ON k.id_karya = e.id_karya
+                WHERE e.id_jadwal = $1`, [req.query.jadwal]);
+                res.json({msg: "OK", data: rows})
+            } else if (req.query.murid) {
+                const { rows } = await postgre.query(`SELECT * FROM karya WHERE id_murid = $1`, [req.query.murid]);
+                res.json({msg: "OK", data: rows})
+            }
+        } catch (error) {
+            console.log(req.query.jadwal, req.query.murid)
+
+            res.json({msg: error.msg})
+        }
+    },
+
+    create: async (req, res) => {
+        try {
+            const {id_jadwal, id_murid, nama_karya, tipe_file, file_path, id_guru} = req.body;
+            if (!id_jadwal || !id_murid || !id_guru) {
+                res.json({msg: "ID jadwal, ID murid, and ID guru are required"});
+                return;
+            }
             
-//             const { rows } = await postgre.query(query, [kegiatanId, muridId]);
-//             res.json({ msg: "OK", data: rows });
-//         } catch (error) {
-//             res.status(500).json({ msg: error.message });
-//         }
-//     },
-//     uploadFile: async (req, res) => {
-//         try {
-//             const multerUpload = multer({
-//                 storage: multer.memoryStorage(),
-//                 fileFilter: (req, file, cb: FileFilterCallback) => {
-//                     const fileTypes = /jpeg|jpg|png|gif/;
-//                     const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-//                     const mimeType = fileTypes.test(file.mimetype);
-//                     if (extname && mimeType) {
-//                         cb(null, true);
-//                     } else {
-//                         cb(new Error("Only images are allowed"));
-//                     }
-//                 }
-//             }).single('file');
+            const result = await postgre.query('SELECT id_karya FROM evaluasi WHERE id_jadwal = $1 AND id_murid = $2', [id_jadwal, id_murid]);
+            const id_karya = result.rows[0].id_karya;
+            if (!id_karya) {
+                res.json({msg: "ID karya not found"});
+                return;
+            }
+            await postgre.query('INSERT INTO karya (id_karya, nama_karya, id_murid, tipe_file, file_path) VALUES ($1, $2, $3, $4)', [id_karya, nama_karya, id_murid, tipe_file, file_path]);
+            
+            await postgre.query('INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)', [id_murid, id_jadwal, id_guru, 'Create', 'All', null]);
 
-//             multerUpload(req, res, async (err: any) => {
-//                 if (err) {
-//                     res.status(400).json({ msg: err.message });
-//                     return;
-//                 }
+            res.status(201).json({ message: 'Hasil karya created successfully' });
+        } catch (error) {
+            console.error('Error creating hasil karya:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    update: async (req, res) => {
+        try {
+            const id_jadwal = req.query.jadwal;
+            const id_murid = req.query.murid;
+            const { nama_karya, tipe_file, file_path, id_guru } = req.body;
+            if (!id_guru) {
+                res.json({ msg: "ID guru is required" });
+                return;
+            }
+    
+            // Get old value
+            const { rows } = await postgre.query(`SELECT k.*
+            FROM karya k
+            INNER JOIN evaluasi e ON k.id_karya = e.id_karya
+            WHERE e.id_jadwal = $1
+            AND e.id_murid = $2`, [id_jadwal, id_murid]);
+            const oldData = rows[0];
 
-//                 const file = req.file;
-//                 if (!file) {
-//                     res.status(400).json({ msg: "No file uploaded" });
-//                     return;
-//                 }
+            let field = [];
+            if (nama_karya) field.push("nama_karya");
+            if (tipe_file) field.push("tipe_file");
+            if (file_path) field.push("file_path");
+            
+            // Update data
+            await postgre.query(
+                'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
+                [nama_karya, tipe_file, file_path, oldData.id_karya]
+            );
+    
+            await postgre.query(
+                'INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
+                [id_murid, id_jadwal, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
+            );
+    
+            res.status(201).json({ message: 'Hasil karya updated successfully' });
+        } catch (error) {
+            console.error('Error updating hasil karya:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }    
+}
 
-//                 const fileName = uuidv4() + path.extname(file.originalname);
-//                 const filePath = path.join(__dirname, '../uploads', fileName);
-
-//                 fs.writeFile(filePath, file.buffer, async (err) => {
-//                     if (err) {
-//                         res.status(500).json({ msg: "Failed to save file" });
-//                         return;
-//                     }
-
-//                     try {
-//                         const query = `
-//                             INSERT INTO karya (nama_karya, id_murid, tipe_file, file_path) VALUES ($1, $2, $3, $4)
-//                         `;
-//                         await postgre.query(query, [file.originalname, req.body.muridId, path.extname(file.originalname), filePath]);
-//                         res.json({ msg: "File uploaded successfully" });
-//                     } catch (error) {
-//                         res.status(500).json({ msg: error.message });
-//                     }
-//                 });
-//             });
-//         } catch (error) {
-//             res.status(500).json({ msg: error.message });
-//         }
-//     }
-// };
-
-// export default hasilKaryaController;
+export default hasilKaryaController;

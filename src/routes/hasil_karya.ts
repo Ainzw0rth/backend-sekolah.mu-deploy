@@ -1,11 +1,10 @@
-// import express from 'express';
-// import multer from 'multer';
-// import hasilKaryaController from '../controllers/hasil_karya_controller';
+import express, { Router } from 'express';
+import evaluasiController from '../controllers/hasil_karya_controller';
+const router: Router = express.Router();
 
-// const router = express.Router();
-// const upload = multer({ dest: 'uploads/' }); // Define multer middleware to handle file upload
+router.get('/all', evaluasiController.getAll);
+router.get('/', evaluasiController.getById);
+router.post('/', evaluasiController.create);
+router.patch('/', evaluasiController.update);
 
-// router.get('/:kegiatan_id/:murid_id', hasilKaryaController.getById);
-// router.post('/upload', upload.single('file'), hasilKaryaController.uploadFile); // Handle file upload
-
-// export default router;
+export default router;
