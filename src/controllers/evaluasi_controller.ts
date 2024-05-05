@@ -51,7 +51,7 @@ const evaluasiController: EvaluasiController = {
 
     */
     getAllPendingByGuru: async (req, res) => {
-        const {id_guru} = req.body;
+        const id_guru = req.params.guruId;
         
         try {
             const { rows } = await postgre.query(`
