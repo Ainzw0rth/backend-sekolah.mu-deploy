@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import postgre from '../database';
-import multer from 'multer'
+import multer from 'multer';
+import path from 'path';
 
 interface HasilKaryaController {
     getAll: (req: Request, res: Response) => Promise<void>;
@@ -9,13 +10,12 @@ interface HasilKaryaController {
     update: (req: Request, res: Response) => Promise<void>;
 }
 
-const BASE_URL = process.env.DEV_DEPLOY_URL || process.env.PROD_DEPLOY_URL || '';
 
 // Multer configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadDir = `${BASE_URL}`;
-       cb(null, uploadDir);
+        const UPLOADS_DIR_PATH = path.join(__dirname, '../../uploads');
+        cb(null, UPLOADS_DIR_PATH);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
