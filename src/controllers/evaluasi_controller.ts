@@ -51,7 +51,12 @@ const evaluasiController: EvaluasiController = {
 
     */
     getAllPendingByGuru: async (req, res) => {
-        const id_guru = req.params.guruId;
+        const id_guru = req.query.id_guru ? req.query.id_guru.toString() : null;
+
+        if(id_guru === null) {
+            res.json({msg: "ID guru is required"});
+            return;
+        }
         
         try {
             const { rows } = await postgre.query(`
