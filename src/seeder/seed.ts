@@ -201,6 +201,11 @@ EMOJI_PATHS = EMOJI_PATHS.map((path) => {
     return `${BASE_URL}/static/image/${path}`;
 });
 
+let BADGES_PATH = getAllFilePaths(IMAGES, 'badges');
+BADGES_PATH = BADGES_PATH.map((path) => {
+    return `${BASE_URL}/static/image/${path}`;
+});
+
 const UPLOAD_PATHS = getAllFilePaths(UPLOADS_DIR_PATH); // stores hasil karya
 
 const TED_TALKS_LINKS = [
@@ -2654,13 +2659,13 @@ for (let i = 0; i < TEACHERS.length; i += 2) {
 }
 
 const BADGES = [
-    { id_badge: 1, nama_badge: 'Streak', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam sehari', path_badge: getRandomPfp() },
-    { id_badge: 2, nama_badge: 'Streak Master', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam seminggu', path_badge: getRandomPfp() },
-    { id_badge: 3, nama_badge: 'Streak King', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam sebulan', path_badge: getRandomPfp() },
-    { id_badge: 4, nama_badge: 'Gocap', deskripsi_badge: 'Mengerjakan 50 task', path_badge: getRandomPfp() },
-    { id_badge: 5, nama_badge: 'Cepek', deskripsi_badge: 'Mengerjakan 100 task', path_badge: getRandomPfp() },
-    { id_badge: 6, nama_badge: 'Konsisten', deskripsi_badge: 'Murid dibawah bimbingan tidak pernah ada yang absen selama seminggu', path_badge: getRandomPfp() },
-    { id_badge: 7, nama_badge: 'Ambis', deskripsi_badge: 'Murid dibawah bimbingan tidak pernah ada yang absen selama sebulan', path_badge: getRandomPfp() }
+    { id_badge: 1, nama_badge: 'Streak', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam sehari', path_badge: BADGES_PATH[6]},
+    { id_badge: 2, nama_badge: 'Streak Master', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam seminggu', path_badge: BADGES_PATH[5]},
+    { id_badge: 3, nama_badge: 'Streak King', deskripsi_badge: 'Tidak pernah ada task yang terlewat dalam sebulan', path_badge: BADGES_PATH[4]},
+    { id_badge: 4, nama_badge: 'Gocap', deskripsi_badge: 'Mengerjakan 50 task', path_badge: BADGES_PATH[2]},
+    { id_badge: 5, nama_badge: 'Cepek', deskripsi_badge: 'Mengerjakan 100 task', path_badge: BADGES_PATH[1]},
+    { id_badge: 6, nama_badge: 'Konsisten', deskripsi_badge: 'Murid dibawah bimbingan tidak pernah ada yang absen selama seminggu', path_badge: BADGES_PATH[3]},
+    { id_badge: 7, nama_badge: 'Ambis', deskripsi_badge: 'Murid dibawah bimbingan tidak pernah ada yang absen selama sebulan', path_badge: BADGES_PATH[0]},
 ];
 
 const getRandomInt = (min: number, max: number) => { // min and max included
