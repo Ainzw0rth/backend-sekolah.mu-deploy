@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import postgre from '../database';
+import multer from 'multer'
 
 interface HasilKaryaCOntroller {
     getAll: (req: Request, res: Response) => Promise<void>;
@@ -7,6 +8,19 @@ interface HasilKaryaCOntroller {
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
 }
+
+// Multer configuration
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Set the destination folder here
+    },
+    filename: function (req, file, cb) {
+        // You can set the filename if needed, or keep the original filename
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 const hasilKaryaController: HasilKaryaCOntroller = {
     getAll: async (req, res) => {
@@ -72,42 +86,50 @@ const hasilKaryaController: HasilKaryaCOntroller = {
         try {
             const id_jadwal = req.query.jadwal;
             const id_murid = req.query.murid;
-            const { nama_karya, tipe_file, file_path, id_guru } = req.body;
+            const { nama_karya, tipe_file, id_guru } = req.body;
             if (!id_guru) {
                 res.json({ msg: "ID guru is required" });
                 return;
             }
-    
-            // Get old value
-            const { rows } = await postgre.query(`SELECT k.*
-            FROM karya k
-            INNER JOIN evaluasi e ON k.id_karya = e.id_karya
-            WHERE e.id_jadwal = $1
-            AND e.id_murid = $2`, [id_jadwal, id_murid]);
-            const oldData = rows[0];
 
-            let field = [];
-            if (nama_karya) field.push("nama_karya");
-            if (tipe_file) field.push("tipe_file");
-            if (file_path) field.push("file_path");
-            
-            // Update data
-            await postgre.query(
-                'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
-                [nama_karya, tipe_file, file_path, oldData.id_karya]
-            );
-    
-            await postgre.query(
-                'INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
-                [id_murid, id_jadwal, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
-            );
-    
-            res.status(201).json({ message: 'Hasil karya updated successfully' });
+            // Handle file upload with Multer
+            upload.single('file')(req, res, async (err: any) => {
+                if (err) {
+                    console.error('Error uploading file:', err);
+                    return res.status(500).json({ error: 'Error uploading file' });
+                }
+
+                // Get old value
+                const { rows } = await postgre.query(`SELECT k.*
+                FROM karya k
+                INNER JOIN evaluasi e ON k.id_karya = e.id_karya
+                WHERE e.id_jadwal = $1
+                AND e.id_murid = $2`, [id_jadwal, id_murid]);
+                const oldData = rows[0];
+
+                let field = [];
+                if (nama_karya) field.push("nama_karya");
+                if (tipe_file) field.push("tipe_file");
+                if (req.file) field.push("file_path");
+
+                // Update data
+                await postgre.query(
+                    'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
+                    [nama_karya, tipe_file, req.file ? req.file.path : oldData.file_path, oldData.id_karya]
+                );
+
+                await postgre.query(
+                    'INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
+                    [id_murid, id_jadwal, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
+                );
+
+                res.status(201).json({ message: 'Hasil karya updated successfully' });
+            });
         } catch (error) {
             console.error('Error updating hasil karya:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
-    }    
+    }
 }
 
 export default hasilKaryaController;
