@@ -14,7 +14,7 @@ const BASE_URL = process.env.DEV_DEPLOY_URL || process.env.PROD_DEPLOY_URL || ''
 // Multer configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadDir = `${BASE_URL}/uploads`;
+        const uploadDir = `${BASE_URL}`;
        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
