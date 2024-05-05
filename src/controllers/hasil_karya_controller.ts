@@ -58,7 +58,7 @@ const hasilKaryaController: HasilKaryaCOntroller = {
                 return;
             }
 
-            const id_karya = await postgre.query('INSERT INTO karya (nama_karya, tipe_file, file_path) VALUES ($1, $2, $3) RETURNING id_karya', [nama_karya, tipe_file, file_path]);   
+            const id_karya = await postgre.query('INSERT INTO karya (nama_karya, id_murid, tipe_file, file_path) VALUES ($1, $2, $3, $4) RETURNING id_karya', [nama_karya, id_murid, tipe_file, file_path]);   
             await postgre.query('UPDATE evaluasi SET id_karya = $1 WHERE id_jadwal = $2 AND id_murid = $3', [id_karya.rows[0].id_karya, id_jadwal, id_murid])       
             await postgre.query('INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)', [id_murid, id_jadwal, id_guru, 'Create', 'All', null]);
 
