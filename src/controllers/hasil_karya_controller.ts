@@ -86,7 +86,9 @@ const hasilKaryaController: HasilKaryaCOntroller = {
         try {
             const id_jadwal = req.query.jadwal;
             const id_murid = req.query.murid;
-            const { nama_karya, tipe_file, id_guru } = req.body;
+            const nama_karya = req.body.get('nama_karya');
+            const tipe_file = req.body.get('tipe_file');
+            const id_guru = req.body.get('id_guru');
             if (!id_guru) {
                 res.json({ msg: "ID guru is required" });
                 return;
