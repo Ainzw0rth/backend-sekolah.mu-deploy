@@ -14,13 +14,13 @@ const BASE_URL = process.env.DEV_DEPLOY_URL || process.env.PROD_DEPLOY_URL || ''
 // Multer configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, `${BASE_URL}/uploads/`); // Set the destination folder here
+        const uploadDir = `${BASE_URL}/uploads`;
+       cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        // You can set the filename if needed, or keep the original filename
         cb(null, file.originalname);
     }
-});
+})
 
 const upload = multer({ storage: storage });
 
@@ -88,9 +88,8 @@ const hasilKaryaController: HasilKaryaController = {
         try {
             const id_jadwal = req.query.jadwal;
             const id_murid = req.query.murid;
-            const nama_karya = req.body.get('nama_karya');
-            const tipe_file = req.body.get('tipe_file');
-            const id_guru = req.body.get('id_guru');
+            const id_guru = req.query.guru;
+
             if (!id_guru) {
                 res.json({ msg: "ID guru is required" });
                 return;
@@ -112,16 +111,14 @@ const hasilKaryaController: HasilKaryaController = {
                 const oldData = rows[0];
 
                 let field = [];
-                if (nama_karya) field.push("nama_karya");
-                if (tipe_file) field.push("tipe_file");
+                if (req.file.filename) field.push("nama_karya");
+                if (req.file.mimetype) field.push("tipe_file");
                 if (req.file) field.push("file_path");
-
-                console.log(req.file)
 
                 // Update data
                 await postgre.query(
                     'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
-                    [nama_karya, tipe_file, req.file ? req.file.path : oldData.file_path, oldData.id_karya]
+                    [req.file.filename, req.file.mimetype, req.file ? req.file.path : oldData.file_path, oldData.id_karya]
                 );
 
                 await postgre.query(
