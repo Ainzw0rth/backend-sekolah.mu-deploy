@@ -9,17 +9,12 @@ interface HasilKaryaController {
     update: (req: Request, res: Response) => Promise<void>;
 }
 
+const BASE_URL = process.env.DEV_DEPLOY_URL || process.env.PROD_DEPLOY_URL || '';
+
 // Multer configuration
-
-const fs = require('fs');
-
-const uploadDir = './uploads';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Set the destination folder here
+        cb(null, `${BASE_URL}/uploads/`); // Set the destination folder here
     },
     filename: function (req, file, cb) {
         // You can set the filename if needed, or keep the original filename
