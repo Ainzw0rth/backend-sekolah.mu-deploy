@@ -4,6 +4,7 @@ import postgre from '../database';
 interface EvaluasiController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
+    getAllPendingByGuru: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
 }
@@ -21,39 +22,75 @@ const evaluasiController: EvaluasiController = {
 
     getById: async (req, res) => {
         try {
-            if (!req.query.kegiatan && !req.query.murid) {
-                res.json({msg: "ID kegiatan or ID murid is required"});
+            if (!req.query.jadwal && !req.query.murid) {
+                res.json({msg: "ID jadwal or ID murid is required"});
                 return;
             }
 
-            if (req.query.kegiatan && req.query.murid) {
-                const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_kegiatan = $1 AND id_murid = $2`, [req.query.kegiatan, req.query.murid]);
+            if (req.query.jadwal && req.query.murid) {
+                const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_jadwal = $1 AND id_murid = $2`, [req.query.jadwal, req.query.murid]);
                 res.json({msg: "OK", data: rows})
-            } else if (req.query.kegiatan) {
-                const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_kegiatan = $1`, [req.query.kegiatan]);
+            } else if (req.query.jadwal) {
+                const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_jadwal = $1`, [req.query.jadwal]);
                 res.json({msg: "OK", data: rows})
             } else if (req.query.murid) {
                 const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_murid = $1`, [req.query.murid]);
                 res.json({msg: "OK", data: rows})
             }
         } catch (error) {
-            console.log(req.query.kegiatan, req.query.murid)
+            console.log(req.query.jadwal, req.query.murid)
 
             res.json({msg: error.msg})
         }
     },
 
+    /*
+        req.body contain id_guru
+
+        get semua instance jadwal yang evaluasinya ada yang belum diisi
+
+    */
+    getAllPendingByGuru: async (req, res) => {
+        const id_guru = req.query.id_guru ? req.query.id_guru.toString() : null;
+
+        if(id_guru === null) {
+            res.json({msg: "ID guru is required"});
+            return;
+        }
+        
+        try {
+            const { rows } = await postgre.query(`
+            SELECT DISTINCT j.id_jadwal, k.nama_kegiatan, j.tanggal, j.waktu
+            FROM kegiatan k
+            JOIN jadwal j ON j.id_kegiatan = k.id_kegiatan
+            JOIN evaluasi e ON j.id_jadwal = e.id_jadwal
+            WHERE k.id_guru = $1 AND
+            (catatan_kehadiran IS NULL
+            OR penilaian IS NULL
+            OR catatan IS NULL
+            OR feedback IS NULL
+            OR id_karya IS NULL)`, [id_guru]);
+            
+            res.json({msg: "OK", data: rows});
+
+        } catch (error) {
+            console.error('Error fetching evaluasi:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+
+    },
+
     create: async (req, res) => {
         try {
-            const {id_kegiatan, id_murid, presensi, nilai, catatan, feedback, id_karya, id_guru} = req.body;
-            if (!id_kegiatan || !id_murid || !id_guru) {
-                res.json({msg: "ID kegiatan, ID murid, and ID guru are required"});
+            const {id_jadwal, id_murid, presensi, nilai, catatan, feedback, id_karya, id_guru} = req.body;
+            if (!id_jadwal || !id_murid || !id_guru) {
+                res.json({msg: "ID jadwal, ID murid, and ID guru are required"});
                 return;
             }
 
-            await postgre.query('INSERT INTO evaluasi (id_kegiatan, id_murid, catatan_kehadiran, penilaian, catatan, feedback, id_karya) VALUES ($1, $2, $3, $4, $5, $6, $7)', [id_kegiatan, id_murid, presensi, nilai, catatan, feedback, id_karya]);
+            await postgre.query('INSERT INTO evaluasi (id_jadwal, id_murid, catatan_kehadiran, penilaian, catatan, feedback, id_karya) VALUES ($1, $2, $3, $4, $5, $6, $7)', [id_jadwal, id_murid, presensi, nilai, catatan, feedback, id_karya]);
 
-            await postgre.query('INSERT INTO evaluasi_log (id_murid, id_kegiatan, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)', [id_murid, id_kegiatan, id_guru, 'Create', "All", null]);
+            await postgre.query('INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)', [id_murid, id_jadwal, id_guru, 'Create', "All", null]);
 
             res.status(201).json({ message: 'Evaluasi created successfully' });
         } catch (error) {
@@ -63,7 +100,7 @@ const evaluasiController: EvaluasiController = {
     },
     update: async (req, res) => {
         try {
-            const id_kegiatan = req.query.kegiatan;
+            const id_jadwal = req.query.jadwal;
             const id_murid = req.query.murid;
             const { presensi, nilai, catatan, feedback, id_karya, id_guru } = req.body;
             if (!id_guru) {
@@ -72,7 +109,7 @@ const evaluasiController: EvaluasiController = {
             }
     
             // Get old value
-            const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_kegiatan = $1 AND id_murid = $2`, [id_kegiatan, id_murid]);
+            const { rows } = await postgre.query(`SELECT * FROM evaluasi WHERE id_jadwal = $1 AND id_murid = $2`, [id_jadwal, id_murid]);
             const oldData = rows[0];
 
             let field = [];
@@ -84,13 +121,13 @@ const evaluasiController: EvaluasiController = {
             
             // Update evaluasi
             await postgre.query(
-                'UPDATE evaluasi SET catatan_kehadiran = $3, penilaian = $4, catatan = $5, feedback = $6, id_karya = $7 WHERE id_kegiatan = $1 AND id_murid = $2',
-                [id_kegiatan, id_murid, presensi, nilai, catatan, feedback, id_karya]
+                'UPDATE evaluasi SET catatan_kehadiran = $3, penilaian = $4, catatan = $5, feedback = $6, id_karya = $7 WHERE id_jadwal = $1 AND id_murid = $2',
+                [id_jadwal, id_murid, presensi, nilai, catatan, feedback, id_karya]
             );
     
             await postgre.query(
-                'INSERT INTO evaluasi_log (id_murid, id_kegiatan, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
-                [id_murid, id_kegiatan, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
+                'INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
+                [id_murid, id_jadwal, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
             );
     
             res.status(201).json({ message: 'Evaluasi updated successfully' });

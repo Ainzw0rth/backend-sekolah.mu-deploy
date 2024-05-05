@@ -18,8 +18,8 @@ const evaluasilogController: EvaluasiLogController = {
     },
     create: async (req, res) => {
         try {
-            const { id_murid, id_kegiatan, editor, action, field, old_value } = req.body;
-            await postgre.query('INSERT INTO evaluasi_log (id_log, id_murid, id_kegiatan, timestamp, editor, action, field, old_value) VALUES (0, $1, $2, NOW(), $3, $4, $5, $6)', [id_murid, id_kegiatan, editor, action, field, old_value]);
+            const { id_murid, id_jadwal, editor, action, field, old_value } = req.body;
+            await postgre.query('INSERT INTO evaluasi_log (id_log, id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES (0, $1, $2, NOW(), $3, $4, $5, $6)', [id_murid, id_jadwal, editor, action, field, old_value]);
             
             res.status(201).json({ message: 'Evaluasi log created successfully' });
         } catch (error) {

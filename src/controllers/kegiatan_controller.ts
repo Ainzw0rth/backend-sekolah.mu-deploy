@@ -22,8 +22,16 @@ const kegiatanController: KegiatanController = {
     },
     getById: async (req, res) => {
         try {
-            const { rows } = await postgre.query("SELECT * from kegiatan WHERE id_kegiatan = $1", [req.params.id]);
-            res.json({msg: "OK", data: rows})
+            const query = `
+                SELECT k.*, t.nama_topik, t.id_program, p.*, j.id_kelas, j.tanggal, j.waktu
+                FROM kegiatan k
+                INNER JOIN topik t ON k.id_topik = t.id_topik
+                INNER JOIN program p ON t.id_program = p.id_program
+                INNER JOIN jadwal j ON k.id_kegiatan = j.id_kegiatan
+                WHERE k.id_kegiatan = $1;
+            `
+            const { rows } = await postgre.query(query, [req.params.id])
+            res.json({msg: "OK", data: rows[0]})
         } catch (error) {
             res.json({msg: error.msg})
         }
@@ -37,7 +45,7 @@ const kegiatanController: KegiatanController = {
             } else if (typeof req.query.id !== 'string' || isNaN(parseInt(req.query.id.toString()))) {
                 res.json({msg: "ID must be a number"});
                 return;
-            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "murid")) {
+            } else if (!req.query.type || (req.query.type !== "guru" && req.query.type !== "murid" && req.query.type !== "all")) {
                 res.json({msg: "Type must be either 'guru' or 'murid'"});
                 return;
             }
@@ -45,8 +53,10 @@ const kegiatanController: KegiatanController = {
             let instruksiField;
             if (req.query.type === "guru") {
                 instruksiField = "instruksi_guru";
-            } else {
+            } else if (req.query.type === "murid") {
                 instruksiField = "instruksi_murid";
+            } else {
+                instruksiField = "instruksi_guru, instruksi_murid";
             }
     
             const { rows } = await postgre.query(`SELECT ${instruksiField} FROM kegiatan WHERE id_kegiatan = $1`, [req.query.id.toString()]);
@@ -58,8 +68,6 @@ const kegiatanController: KegiatanController = {
     getByGuru: async (req, res) => {
         try {
             const idGuru = req.query.id ? parseInt(req.query.id.toString()) : null;
-            // TODO : filter by date
-            // const tanggal = req.query.date ? req.query.date.toString() : null;
 
             if (!idGuru) {
                 res.json({msg: "ID Guru is required"});
@@ -70,12 +78,25 @@ const kegiatanController: KegiatanController = {
             }
 
             const query = `
-                SELECT kegiatan.id_kegiatan, nama_kegiatan, nama_kelas, nama_program, nama_topik, tanggal, waktu
+                SELECT 
+                    kegiatan.id_kegiatan, 
+                    nama_kegiatan, 
+                    nama_kelas, 
+                    program.id_program,
+                    nama_program, 
+                    topik.id_topik,
+                    nama_topik, 
+                    tanggal, 
+                    waktu
                 FROM kegiatan 
-                LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                LEFT JOIN kelas ON jadwal.id_kelas = kelas.id_kelas
-                LEFT JOIN topik ON topik.id_topik = kegiatan.id_topik
-                LEFT JOIN program ON topik.id_program = program.id_program
+                    INNER JOIN topik 
+                        ON topik.id_topik = kegiatan.id_topik
+                    INNER JOIN program 
+                        ON topik.id_program = program.id_program
+                    INNER JOIN jadwal 
+                        ON kegiatan.id_kegiatan = jadwal.id_kegiatan
+                    INNER JOIN kelas 
+                        ON jadwal.id_kelas = kelas.id_kelas
                 WHERE id_guru = $1`;
 
             const { rows } = await postgre.query(query, [idGuru]);
@@ -141,8 +162,8 @@ const kegiatanController: KegiatanController = {
                     COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
                     COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
                     COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
-                    FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
-                    WHERE kegiatan.id_kegiatan = $1;`;
+                    FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_jadwal
+                    WHERE kegiatan.id_kegiatan = $1`;
 
             const { rows } = await postgre.query(query, [idKegiatan]);
         
@@ -157,11 +178,17 @@ const kegiatanController: KegiatanController = {
             const idKegiatan = req.params.id;
             
             const query = `
-                SELECT kegiatan.id_kegiatan, murid_kelas.id_kelas, murid.id_murid, murid.nama_murid, kegiatan.id_guru
+                SELECT 
+                    kegiatan.id_kegiatan, 
+                    murid_kelas.id_kelas, 
+                    murid.id_murid, 
+                    murid.nama_murid, 
+                    murid.path_foto_profil, 
+                    kegiatan.id_guru
                 FROM kegiatan 
-                LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
-                LEFT JOIN murid_kelas ON jadwal.id_kelas = murid_kelas.id_kelas
-                LEFT JOIN murid ON murid_kelas.id_murid = murid.id_murid
+                    LEFT JOIN jadwal ON kegiatan.id_kegiatan = jadwal.id_kegiatan
+                    LEFT JOIN murid_kelas ON jadwal.id_kelas = murid_kelas.id_kelas
+                    LEFT JOIN murid ON murid_kelas.id_murid = murid.id_murid
                 WHERE kegiatan.id_kegiatan = $1`;
 
             const { rows } = await postgre.query(query, [idKegiatan]);
