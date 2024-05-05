@@ -14,7 +14,7 @@ interface HasilKaryaController {
 // Multer configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const UPLOADS_DIR_PATH = path.join(__dirname, '../../uploads');
+        const UPLOADS_DIR_PATH = path.join(__dirname);
         cb(null, UPLOADS_DIR_PATH);
     },
     filename: function (req, file, cb) {
