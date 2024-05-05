@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import postgre from '../database';
 import multer from 'multer'
 
-interface HasilKaryaCOntroller {
+interface HasilKaryaController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
@@ -10,6 +10,13 @@ interface HasilKaryaCOntroller {
 }
 
 // Multer configuration
+
+const fs = require('fs');
+
+const uploadDir = './uploads';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/'); // Set the destination folder here
@@ -22,7 +29,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const hasilKaryaController: HasilKaryaCOntroller = {
+const hasilKaryaController: HasilKaryaController = {
     getAll: async (req, res) => {
         try {
             const { rows } = await postgre.query(`SELECT * FROM karya`);
@@ -113,6 +120,8 @@ const hasilKaryaController: HasilKaryaCOntroller = {
                 if (nama_karya) field.push("nama_karya");
                 if (tipe_file) field.push("tipe_file");
                 if (req.file) field.push("file_path");
+
+                console.log(req.file)
 
                 // Update data
                 await postgre.query(
