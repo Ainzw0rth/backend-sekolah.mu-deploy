@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import postgre from '../database';
 import multer from 'multer';
 import path from 'path';
+import { S3Client } from '@aws-sdk/client-s3';
+import multerS3 from 'multer-s3';
 
 interface HasilKaryaController {
     getAll: (req: Request, res: Response) => Promise<void>;
@@ -12,22 +14,26 @@ interface HasilKaryaController {
 
 
 // Multer configuration
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const UPLOADS_DIR_PATH = path.join(__dirname);
-        cb(null, UPLOADS_DIR_PATH);
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
+// Set up AWS S3
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
-})
-
-const fileSizeLimit = 10 * 1024 * 1024; // 10 MB (adjust as needed)
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: fileSizeLimit } // Set the file size limit
-});
+  });
+  
+  // Multer configuration for S3
+  const upload = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: process.env.AWS_BUCKET_NAME,
+      key: function(_req: any, file: { originalname: string; }, cb: (arg0: null, arg1: string) => void) {
+        cb(null, 'uploads/' + Date.now().toString() + '-' + path.basename(file.originalname));
+      }
+    }),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
+  });
 
 const hasilKaryaController: HasilKaryaController = {
     getAll: async (req, res) => {
