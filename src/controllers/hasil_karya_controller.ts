@@ -16,10 +16,10 @@ interface HasilKaryaController {
 // Multer configuration
 // Set up AWS S3
 const s3 = new S3Client({
-    region: "ap-southeast-1",
+    region: process.env.AWS_REGION,
     credentials: {
-      accessKeyId: "AKIAU6GD2745LUTZ2O4C",
-      secretAccessKey: "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"
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
   });
   
