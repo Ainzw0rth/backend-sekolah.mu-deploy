@@ -19,23 +19,17 @@ interface HasilKaryaController {
 // Multer configuration
 // Set up AWS S3
 console.log("env s3", process.env.AWS_REGION, process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY, process.env.AWS_BUCKET_NAME);
-const s3 = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
-  });
+const s3Client = new S3Client({});
   
   // Multer configuration for S3
-  const upload = multer({
-    
+const upload = multer({
     storage: multerS3({
-      s3: s3,
-      bucket: process.env.AWS_BUCKET_NAME,
-      key: function(_req: any, file: { originalname: string; }, cb: (arg0: null, arg1: string) => void) {
-        cb(null, Date.now().toString() + '-' + path.basename(file.originalname));
-      }
+    s3: s3Client,
+    bucket: process.env.AWS_BUCKET_NAME || '',
+    acl: 'public-read',
+    key: (req, file, cb) => {
+        cb(null, `${Date.now().toString()}${path.extname(file.originalname)}`);
+    },
     }),
 });
 
