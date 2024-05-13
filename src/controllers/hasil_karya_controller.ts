@@ -30,11 +30,10 @@ const s3 = new S3Client({
       s3: s3,
       bucket: process.env.AWS_BUCKET_NAME,
       key: function(_req: any, file: { originalname: string; }, cb: (arg0: null, arg1: string) => void) {
-        cb(null, 'uploads/' + Date.now().toString() + '-' + path.basename(file.originalname));
+        cb(null, Date.now().toString() + '-' + path.basename(file.originalname));
       }
     }),
-    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
-  });
+});
 
 const hasilKaryaController: HasilKaryaController = {
     getAll: async (req, res) => {
