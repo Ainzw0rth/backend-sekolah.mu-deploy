@@ -18,7 +18,7 @@ interface HasilKaryaController {
 
 // Multer configuration
 // Set up AWS S3
-console.log(process.env.AWS_REGION, process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY, process.env.AWS_BUCKET_NAME);
+console.log("env s3", process.env.AWS_REGION, process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY, process.env.AWS_BUCKET_NAME);
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
     credentials: {
