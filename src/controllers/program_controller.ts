@@ -32,11 +32,11 @@ const programController: ProgramController = {
                 SELECT 
                     program.id_program, 
                     nama_program, 
+                    program.path_banner,
                     kegiatan.id_kegiatan,
                     kegiatan.nama_kegiatan,
                     periode_belajar, 
                     tahun_akademik,
-                    program.path_banner,
                     kegiatan.id_guru
                 FROM program 
                     INNER JOIN topik
