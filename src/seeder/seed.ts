@@ -126,7 +126,7 @@ CREATE TABLE karya (
     id_karya SERIAL PRIMARY KEY,
     nama_karya VARCHAR(255) NOT NULL,
     id_murid INTEGER REFERENCES murid(id_murid),
-    tipe_file VARCHAR(5) NOT NULL,
+    tipe_file VARCHAR(50) NOT NULL,
     file_path VARCHAR(255) NOT NULL
 );
 

@@ -133,6 +133,7 @@ const hasilKaryaController: HasilKaryaController = {
                     const oldData = rows[0];
                 
                     let field = [];
+                    console.log(req.file.mimetype);
                     if (req.file && req.file.filename) field.push("nama_karya");
                     if (req.file && req.file.mimetype) field.push("tipe_file");
                     if (req.file) field.push("file_path");
