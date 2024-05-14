@@ -36,6 +36,7 @@ const programController: ProgramController = {
                     kegiatan.nama_kegiatan,
                     periode_belajar, 
                     tahun_akademik,
+                    program.path_banner,
                     kegiatan.id_guru
                 FROM program 
                     INNER JOIN topik
