@@ -134,14 +134,17 @@ const hasilKaryaController: HasilKaryaController = {
                 
                     let field = [];
                     console.log(req.file.mimetype);
-                    if (req.file && req.file.filename) field.push("nama_karya");
+                    console.log(req.file.originalname);
+                    console.log(req.file);
+                    console.log((req.file as any).location);
+                    if (req.file && req.file.originalname) field.push("nama_karya");
                     if (req.file && req.file.mimetype) field.push("tipe_file");
-                    if (req.file) field.push("file_path");
+                    if (req.file && (req.file as any).location) field.push("file_path");
                 
                     // Update data
                     await postgre.query(
                         'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
-                        [req.file ? req.file.filename : oldData.nama_karya, req.file ? req.file.mimetype : oldData.tipe_file, req.file ? req.file.path : oldData.file_path, oldData.id_karya]
+                        [req.file ? req.file.originalname : oldData.nama_karya, req.file ? req.file.mimetype : oldData.tipe_file, req.file ? (req.file as any).location : oldData.file_path, oldData.id_karya]
                     );
                 
                     await postgre.query(
