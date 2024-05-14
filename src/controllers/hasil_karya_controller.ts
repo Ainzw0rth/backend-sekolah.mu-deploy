@@ -18,14 +18,19 @@ interface HasilKaryaController {
 
 // Multer configuration
 // Set up AWS S3
-const s3Client = new S3Client({});
+const s3Client = new S3Client({ 
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY 
+    }
+});
   
 // Multer configuration for S3
 const upload = multer({
     storage: multerS3({
     s3: s3Client,
-    bucket: "pplbuckettt" || '',
-    acl: 'public-read',
+    bucket: process.env.AWS_BUCKET_NAME,
     key: (req, file, cb) => {
         cb(null, `${Date.now().toString()}${path.extname(file.originalname)}`);
     },
@@ -112,34 +117,43 @@ const hasilKaryaController: HasilKaryaController = {
     
                 try {
                     // Get old value
-                    const { rows } = await postgre.query(`SELECT k.*
-                    FROM karya k
-                    INNER JOIN evaluasi e ON k.id_karya = e.id_karya
-                    WHERE e.id_jadwal = $1
-                    AND e.id_murid = $2`, [id_jadwal, id_murid]);
+                    const { rows } = await postgre.query(`
+                        SELECT k.*
+                        FROM karya k
+                        INNER JOIN evaluasi e ON k.id_karya = e.id_karya
+                        WHERE e.id_jadwal = $1
+                        AND e.id_murid = $2
+                    `, [id_jadwal, id_murid]);
+                
+                    // Check if any rows were returned
+                    if (rows.length === 0) {
+                        return res.status(404).json({ error: 'No record found for the provided jadwal and murid' });
+                    }
+                
                     const oldData = rows[0];
-    
+                
                     let field = [];
+                    console.log(req.file.mimetype);
                     if (req.file && req.file.filename) field.push("nama_karya");
                     if (req.file && req.file.mimetype) field.push("tipe_file");
                     if (req.file) field.push("file_path");
-    
+                
                     // Update data
                     await postgre.query(
                         'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
                         [req.file ? req.file.filename : oldData.nama_karya, req.file ? req.file.mimetype : oldData.tipe_file, req.file ? req.file.path : oldData.file_path, oldData.id_karya]
                     );
-    
+                
                     await postgre.query(
                         'INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
                         [id_murid, id_jadwal, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
                     );
-    
+                
                     res.status(201).json({ message: 'Hasil karya updated successfully' });
                 } catch (error) {
                     console.error('Error updating hasil karya:', error);
                     res.status(500).json({ error: 'Internal server error' });
-                }
+                }                
             });
         } catch (error) {
             console.error('Error updating hasil karya:', error);
