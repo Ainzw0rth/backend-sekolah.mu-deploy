@@ -11,6 +11,7 @@ router.get('/badges/streakmaster/:id', kegiatanController.checkBadgeStreakMaster
 router.get('/badges/streakking/:id', kegiatanController.checkBadgeStreakKing);
 router.get('/badges/gocap/:id', kegiatanController.checkBadgeGocap);
 router.get('/badges/cepek/:id', kegiatanController.checkBadgeCepek);
-
+router.get('/badges/konsisten/:id', kegiatanController.checkBadgeKonsisten);
+router.get('/badges/ambis/:id', kegiatanController.checkBadgeAmbis);
 
 export default router;
