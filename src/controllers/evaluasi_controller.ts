@@ -51,34 +51,54 @@ const evaluasiController: EvaluasiController = {
 
     */
     getAllPendingByGuru: async (req, res) => {
-        const id_guru = req.query.id_guru ? req.query.id_guru.toString() : null;
-
-        if(id_guru === null) {
-            res.json({msg: "ID guru is required"});
+        const idGuru = req.query.id_guru ? req.query.id_guru.toString() : null;
+        const count = req.query.count ? parseInt(req.query.count.toString()) : null;
+    
+        if (idGuru === null) {
+            res.json({ msg: "ID guru is required" });
             return;
         }
-        
+    
         try {
-            const { rows } = await postgre.query(`
-            SELECT DISTINCT j.id_jadwal, k.nama_kegiatan, j.tanggal, j.waktu
-            FROM kegiatan k
-            JOIN jadwal j ON j.id_kegiatan = k.id_kegiatan
-            JOIN evaluasi e ON j.id_jadwal = e.id_jadwal
-            WHERE k.id_guru = $1 AND
-            (catatan_kehadiran IS NULL
-            OR penilaian IS NULL
-            OR catatan IS NULL
-            OR feedback IS NULL
-            OR id_karya IS NULL)`, [id_guru]);
-            
-            res.json({msg: "OK", data: rows});
-
+            let query = `
+                SELECT DISTINCT 
+                    j.id_jadwal, 
+                    k.id_kegiatan,
+                    k.nama_kegiatan, 
+                    j.tanggal, 
+                    j.waktu,
+                    c.nama_kelas, 
+                    p.id_program,
+                    p.nama_program, 
+                    t.id_topik,
+                    t.nama_topik
+                FROM kegiatan k
+                JOIN jadwal j ON j.id_kegiatan = k.id_kegiatan
+                JOIN evaluasi e ON j.id_jadwal = e.id_jadwal
+                JOIN topik t ON k.id_topik = t.id_topik
+                JOIN program p ON t.id_program = p.id_program
+                JOIN kelas c ON j.id_kelas = c.id_kelas
+                WHERE k.id_guru = $1 AND
+                (catatan_kehadiran IS NULL
+                OR penilaian IS NULL
+                OR catatan IS NULL
+                OR feedback IS NULL
+                OR id_karya IS NULL)`;
+    
+            // If count is provided, limit the number of rows returned
+            if (count !== null && !isNaN(count)) {
+                query += ` LIMIT $2`;
+                const { rows } = await postgre.query(query, [idGuru, count]);
+                res.json({ msg: "OK", data: rows });
+            } else {
+                const { rows } = await postgre.query(query, [idGuru]);
+                res.json({ msg: "OK", data: rows });
+            }
         } catch (error) {
             console.error('Error fetching evaluasi:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
-
-    },
+    }, 
 
     create: async (req, res) => {
         try {
