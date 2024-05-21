@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import postgre from '../database';
 import multer from 'multer';
 import path from 'path';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import multerS3 from 'multer-s3';
 import * as dotenv from 'dotenv';
 
@@ -13,6 +13,7 @@ interface HasilKaryaController {
     getById: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
+    delete: (req: Request, res: Response) => Promise<void>;
 }
 
 
@@ -73,8 +74,6 @@ const hasilKaryaController: HasilKaryaController = {
                 res.json({msg: "OK", data: rows})
             }
         } catch (error) {
-            console.log(req.query.jadwal, req.query.murid)
-
             res.json({msg: error.msg})
         }
     },
@@ -133,10 +132,6 @@ const hasilKaryaController: HasilKaryaController = {
                     const oldData = rows[0];
                 
                     let field = [];
-                    console.log(req.file.mimetype);
-                    console.log(req.file.originalname);
-                    console.log(req.file);
-                    console.log((req.file as any).location);
                     if (req.file && req.file.originalname) field.push("nama_karya");
                     if (req.file && req.file.mimetype) field.push("tipe_file");
                     if (req.file && (req.file as any).location) field.push("file_path");
@@ -160,6 +155,40 @@ const hasilKaryaController: HasilKaryaController = {
             });
         } catch (error) {
             console.error('Error updating hasil karya:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    delete: async (req, res) => {
+        try {
+            const id_karya = req.query.id;
+            if (!id_karya) {
+                res.json({ msg: "ID karya is required" });
+                return;
+            }
+            const { rows } = await postgre.query('SELECT file_path FROM karya WHERE id_karya = $1', [id_karya]);
+
+            if (rows.length === 0) {
+                res.status(404).json({ error: 'Hasil karya not found' });
+            }
+
+            const filePath = rows[0].file_path;
+
+            // Delete file from S3
+            const deleteParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: filePath,
+            };
+
+            console.log('Hasil karya deleted successfully');
+
+            await s3Client.send(new DeleteObjectCommand(deleteParams));
+
+            await postgre.query('UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $1', ['', '', '', id_karya]);
+
+            res.status(200).json({ message: 'Hasil karya deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting hasil karya:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }    
