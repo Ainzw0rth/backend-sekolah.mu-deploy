@@ -121,7 +121,7 @@ const evaluasiController: EvaluasiController = {
         try {
             const id_jadwal = req.query.jadwal;
             const id_murid = req.query.murid;
-            const { presensi, nilai, catatan, feedback, id_karya, id_guru } = req.body;
+            const { nilai, catatan, feedback, id_guru } = req.body;
             if (!id_guru) {
                 res.json({ msg: "ID guru is required" });
                 return;
@@ -132,16 +132,14 @@ const evaluasiController: EvaluasiController = {
             const oldData = rows[0];
 
             let field = [];
-            if (presensi) field.push("catatan_kehadiran");
             if (nilai) field.push("penilaian");
             if (catatan) field.push("catatan");
             if (feedback) field.push("feedback");
-            if (id_karya) field.push("id_karya");
             
             // Update evaluasi
             await postgre.query(
-                'UPDATE evaluasi SET catatan_kehadiran = $3, penilaian = $4, catatan = $5, feedback = $6, id_karya = $7 WHERE id_jadwal = $1 AND id_murid = $2',
-                [id_jadwal, id_murid, presensi, nilai, catatan, feedback, id_karya]
+                'UPDATE evaluasi SET penilaian = $3, catatan = $4, feedback = $5 WHERE id_jadwal = $1 AND id_murid = $2',
+                [id_jadwal, id_murid, nilai, catatan, feedback]
             );
     
             await postgre.query(
