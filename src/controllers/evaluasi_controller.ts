@@ -82,8 +82,7 @@ const evaluasiController: EvaluasiController = {
                 (catatan_kehadiran IS NULL
                 OR penilaian IS NULL
                 OR catatan IS NULL
-                OR feedback IS NULL
-                OR id_karya IS NULL)`;
+                OR feedback IS NULL)`;
     
             // If count is provided, limit the number of rows returned
             if (count !== null && !isNaN(count)) {
