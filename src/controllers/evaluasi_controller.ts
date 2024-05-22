@@ -7,6 +7,10 @@ interface EvaluasiController {
     getAllPendingByGuru: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
+    getStudentUnpresenced: (req: Request, res: Response) => Promise<void>;
+    getStudentUngraded: (req: Request, res: Response) => Promise<void>;
+    getStudentUncommented: (req: Request, res: Response) => Promise<void>;
+    getStudentUnfeedbacked: (req: Request, res: Response) => Promise<void>;
 }
 
 const evaluasiController: EvaluasiController = {
@@ -154,7 +158,71 @@ const evaluasiController: EvaluasiController = {
             console.error('Error updating evaluasi:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
-    }    
+    },
+    getStudentUnpresenced: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.catatan_kehadiran IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching unprecensed student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    getStudentUngraded: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.penilaian IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching ungraded student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    getStudentUncommented: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.catatan IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching unevaluated student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    getStudentUnfeedbacked: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.feedback IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching unfeedbacked student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
 }
 
 export default evaluasiController;
