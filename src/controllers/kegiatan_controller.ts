@@ -181,8 +181,7 @@ const kegiatanController: KegiatanController = {
                     COUNT(CASE WHEN catatan_kehadiran IS NULL THEN 1 END) AS null_catatan_kehadiran,
                     COUNT(CASE WHEN penilaian IS NULL THEN 1 END) AS null_penilaian,
                     COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
-                    COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
-                    COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
+                    COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback
                     FROM kegiatan LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_jadwal
                     WHERE kegiatan.id_kegiatan = $1`;
 
