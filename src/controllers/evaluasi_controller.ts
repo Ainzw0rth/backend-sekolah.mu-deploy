@@ -42,8 +42,6 @@ const evaluasiController: EvaluasiController = {
                 res.json({msg: "OK", data: rows})
             }
         } catch (error) {
-            console.log(req.query.jadwal, req.query.murid)
-
             res.json({msg: error.msg})
         }
     },

@@ -180,8 +180,6 @@ const hasilKaryaController: HasilKaryaController = {
                 Key: filePath,
             };
 
-            console.log('Hasil karya deleted successfully');
-
             await s3Client.send(new DeleteObjectCommand(deleteParams));
 
             await postgre.query('UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $1', ['', '', '', id_karya]);

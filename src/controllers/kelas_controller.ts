@@ -25,7 +25,6 @@ const kelasController: KelasController = {
                         ON kegiatan.id_guru = guru.id_guru 
                 WHERE guru.id_guru = $1
                 `
-                console.log(idGuru);
                 const { rows } = await postgre.query(rawQuery, [idGuru]);
                 res.json({msg: "OK", data: rows})
             }
