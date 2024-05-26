@@ -2,38 +2,41 @@ import { Request, Response } from 'express';
 import postgre from '../database';
 import multer from 'multer';
 import path from 'path';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import multerS3 from 'multer-s3';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 interface HasilKaryaController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getById: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
+    delete: (req: Request, res: Response) => Promise<void>;
 }
 
 
 // Multer configuration
 // Set up AWS S3
-const s3 = new S3Client({
+const s3Client = new S3Client({ 
     region: process.env.AWS_REGION,
     credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY 
     }
-  });
+});
   
-  // Multer configuration for S3
-  const upload = multer({
+// Multer configuration for S3
+const upload = multer({
     storage: multerS3({
-      s3: s3,
-      bucket: process.env.AWS_BUCKET_NAME,
-      key: function(_req: any, file: { originalname: string; }, cb: (arg0: null, arg1: string) => void) {
-        cb(null, 'uploads/' + Date.now().toString() + '-' + path.basename(file.originalname));
-      }
+    s3: s3Client,
+    bucket: process.env.AWS_BUCKET_NAME,
+    key: (req, file, cb) => {
+        cb(null, `${Date.now().toString()}${path.extname(file.originalname)}`);
+    },
     }),
-    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
-  });
+});
 
 const hasilKaryaController: HasilKaryaController = {
     getAll: async (req, res) => {
@@ -71,8 +74,6 @@ const hasilKaryaController: HasilKaryaController = {
                 res.json({msg: "OK", data: rows})
             }
         } catch (error) {
-            console.log(req.query.jadwal, req.query.murid)
-
             res.json({msg: error.msg})
         }
     },
@@ -115,37 +116,77 @@ const hasilKaryaController: HasilKaryaController = {
     
                 try {
                     // Get old value
-                    const { rows } = await postgre.query(`SELECT k.*
-                    FROM karya k
-                    INNER JOIN evaluasi e ON k.id_karya = e.id_karya
-                    WHERE e.id_jadwal = $1
-                    AND e.id_murid = $2`, [id_jadwal, id_murid]);
+                    const { rows } = await postgre.query(`
+                        SELECT k.*
+                        FROM karya k
+                        INNER JOIN evaluasi e ON k.id_karya = e.id_karya
+                        WHERE e.id_jadwal = $1
+                        AND e.id_murid = $2
+                    `, [id_jadwal, id_murid]);
+                
+                    // Check if any rows were returned
+                    if (rows.length === 0) {
+                        return res.status(404).json({ error: 'No record found for the provided jadwal and murid' });
+                    }
+                
                     const oldData = rows[0];
-    
+                
                     let field = [];
-                    if (req.file && req.file.filename) field.push("nama_karya");
+                    if (req.file && req.file.originalname) field.push("nama_karya");
                     if (req.file && req.file.mimetype) field.push("tipe_file");
-                    if (req.file) field.push("file_path");
-    
+                    if (req.file && (req.file as any).location) field.push("file_path");
+                
                     // Update data
                     await postgre.query(
                         'UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $4',
-                        [req.file ? req.file.filename : oldData.nama_karya, req.file ? req.file.mimetype : oldData.tipe_file, req.file ? req.file.path : oldData.file_path, oldData.id_karya]
+                        [req.file ? req.file.originalname : oldData.nama_karya, req.file ? req.file.mimetype : oldData.tipe_file, req.file ? (req.file as any).location : oldData.file_path, oldData.id_karya]
                     );
-    
+                
                     await postgre.query(
                         'INSERT INTO evaluasi_log (id_murid, id_jadwal, timestamp, editor, action, field, old_value) VALUES ($1, $2, NOW(), $3, $4, $5, $6)',
                         [id_murid, id_jadwal, id_guru, 'Update', field.join(', '), JSON.stringify(oldData)]
                     );
-    
+                
                     res.status(201).json({ message: 'Hasil karya updated successfully' });
                 } catch (error) {
                     console.error('Error updating hasil karya:', error);
                     res.status(500).json({ error: 'Internal server error' });
-                }
+                }                
             });
         } catch (error) {
             console.error('Error updating hasil karya:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    delete: async (req, res) => {
+        try {
+            const id_karya = req.query.id;
+            if (!id_karya) {
+                res.json({ msg: "ID karya is required" });
+                return;
+            }
+            const { rows } = await postgre.query('SELECT file_path FROM karya WHERE id_karya = $1', [id_karya]);
+
+            if (rows.length === 0) {
+                res.status(404).json({ error: 'Hasil karya not found' });
+            }
+
+            const filePath = rows[0].file_path;
+
+            // Delete file from S3
+            const deleteParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: filePath,
+            };
+
+            await s3Client.send(new DeleteObjectCommand(deleteParams));
+
+            await postgre.query('UPDATE karya SET nama_karya = $1, tipe_file = $2, file_path = $3 WHERE id_karya = $1', ['', '', '', id_karya]);
+
+            res.status(200).json({ message: 'Hasil karya deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting hasil karya:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }    

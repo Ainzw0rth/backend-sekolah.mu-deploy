@@ -28,27 +28,37 @@ const programController: ProgramController = {
     },
     getByGuru: async (req, res) => {
         try {
-            const { rows } = await postgre.query(`
-                SELECT 
-                    program.id_program, 
-                    nama_program, 
-                    kegiatan.id_kegiatan,
-                    kegiatan.nama_kegiatan,
-                    periode_belajar, 
-                    tahun_akademik,
-                    kegiatan.id_guru
-                FROM program 
-                    INNER JOIN topik
-                        ON program.id_program = topik.id_program
-                    INNER JOIN kegiatan
-                        ON kegiatan.id_topik = topik.id_topik
-                WHERE kegiatan.id_guru = $1;`, [req.params.id]);
-
-            res.json({msg: "OK", data: rows})
+            let query = `
+            SELECT DISTINCT ON (program.id_program)
+                program.id_program, 
+                program.nama_program, 
+                program.path_banner,
+                kegiatan.id_kegiatan,
+                kegiatan.nama_kegiatan,
+                program.periode_belajar, 
+                program.tahun_akademik,
+                kegiatan.id_guru
+            FROM program 
+                INNER JOIN topik
+                    ON program.id_program = topik.id_program
+                INNER JOIN kegiatan
+                    ON kegiatan.id_topik = topik.id_topik
+            WHERE kegiatan.id_guru = $1`;        
+    
+            const values: (string | number)[] = [req.params.id];
+    
+            if (typeof req.query.count === 'string') {
+                query += ' LIMIT $2';
+                values.push(parseInt(req.query.count, 10));
+            }
+    
+            const { rows } = await postgre.query(query, values);
+    
+            res.json({ msg: "OK", data: rows });
         } catch (error) {
-            res.json({msg: error.msg})
+            res.json({ msg: error.message });
         }
-    },    
+    },        
     getCompetencies: async (req, res) => {
         try {
             const { rows } = await postgre.query(`

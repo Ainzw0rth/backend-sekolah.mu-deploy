@@ -126,7 +126,7 @@ CREATE TABLE karya (
     id_karya SERIAL PRIMARY KEY,
     nama_karya VARCHAR(255) NOT NULL,
     id_murid INTEGER REFERENCES murid(id_murid),
-    tipe_file VARCHAR(5) NOT NULL,
+    tipe_file VARCHAR(50) NOT NULL,
     file_path VARCHAR(255) NOT NULL
 );
 
@@ -3072,6 +3072,34 @@ const seedDatabase = async () => {
         FROM murid m
         INNER JOIN murid_kelas mk ON m.id_murid = mk.id_murid
         INNER JOIN jadwal j ON j.id_kelas = mk.id_kelas;
+    `);
+
+    console.log('Seeding evalutaion for badge testing purposes...');
+    await postgre.query(`
+        WITH FirstStudent AS (
+            SELECT 
+                e.id_jadwal, 
+                e.id_murid,
+                ROW_NUMBER() OVER (PARTITION BY e.id_jadwal ORDER BY e.id_murid) AS rn
+            FROM 
+                evaluasi e
+            INNER JOIN 
+                jadwal j ON e.id_jadwal = j.id_jadwal
+            INNER JOIN 
+                kegiatan k ON j.id_kegiatan = k.id_kegiatan
+            WHERE 
+                k.id_guru = :id_guru  -- Replace with the specific id_guru
+        )
+        UPDATE 
+            evaluasi e
+        SET 
+            catatan_kehadiran = NULL
+        FROM 
+            FirstStudent fs
+        WHERE 
+            e.id_jadwal = fs.id_jadwal 
+            AND e.id_murid = fs.id_murid 
+            AND fs.rn = 1;
     `);
 };
 // #endregion

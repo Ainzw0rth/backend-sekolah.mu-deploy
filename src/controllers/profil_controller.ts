@@ -11,6 +11,8 @@ interface ProfilController {
     checkBadgeStreakKing: (req: Request, res: Response) => Promise<void>;
     checkBadgeGocap: (req: Request, res: Response) => Promise<void>;
     checkBadgeCepek: (req: Request, res: Response) => Promise<void>;
+    checkBadgeKonsisten: (req: Request, res: Response) => Promise<void>;
+    checkBadgeAmbis: (req: Request, res: Response) => Promise<void>;
 }
 
 const profilController: ProfilController = {
@@ -67,7 +69,6 @@ const profilController: ProfilController = {
         try {
             const idGuru = req.params.id;
 
-            // initial check if the guru already has the badge
             const badgeCheckQuery = `
                 SELECT *
                 FROM badge_guru
@@ -79,30 +80,47 @@ const profilController: ProfilController = {
             
             if (initialresult.rows.length > 0) {
                 const query = `
-                    SELECT 
-                        kegiatan.id_kegiatan,
-                        COUNT(*) AS total_rows,
-                        COUNT(CASE WHEN catatan_kehadiran IS NULL THEN 1 END) AS null_catatan_kehadiran,
-                        COUNT(CASE WHEN penilaian IS NULL THEN 1 END) AS null_penilaian,
-                        COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
-                        COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
-                        COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
-                    FROM kegiatan 
-                    LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
-                    WHERE kegiatan.id_guru = $1
-                    GROUP BY kegiatan.id_kegiatan
-                    HAVING 
-                        COUNT(CASE WHEN catatan_kehadiran IS NULL THEN 1 END) = 0 AND
-                        COUNT(CASE WHEN penilaian IS NULL THEN 1 END) = 0 AND
-                        COUNT(CASE WHEN catatan IS NULL THEN 1 END) = 0 AND
-                        COUNT(CASE WHEN feedback IS NULL THEN 1 END) = 0 AND
-                        COUNT(CASE WHEN id_karya IS NULL THEN 1 END) = 0`;
+                SELECT 
+                    j.tanggal,
+                    COUNT(*) = SUM(
+                        CASE 
+                            WHEN e.catatan_kehadiran IS NOT NULL 
+                                AND e.penilaian IS NOT NULL
+                                AND e.catatan IS NOT NULL
+                                AND e.feedback IS NOT NULL
+                                AND e.id_karya IS NOT NULL 
+                            THEN 1 
+                            ELSE 0 
+                        END
+                    ) AS all_complete
+                FROM 
+                    evaluasi e
+                JOIN 
+                    jadwal j ON e.id_jadwal = j.id_jadwal
+                JOIN 
+                    kegiatan k ON j.id_kegiatan = k.id_kegiatan
+                WHERE 
+                    k.id_guru = $1
+                GROUP BY 
+                    j.tanggal
+                ORDER BY 
+                    j.tanggal ASC`;
     
-                const result = await postgre.query(query, [idGuru]);
-                const rowCount = result.rows.length;
-    
-                res.json({msg: "OK", data: rowCount == 0 ?  true : false});
-            
+                const { rows } = await postgre.query(query, [idGuru]);
+                
+                let exists = false;
+
+                for (const row of rows) {
+                    if (row.all_present) {
+                        exists = true;
+                    }
+                }
+
+                if (exists) {
+                    res.json({msg: "OK", data: true});
+                } else {
+                    res.json({msg: "OK", data: false});
+                }
             } else {
                 res.json({msg: "OK", data: false});
             }
@@ -122,28 +140,53 @@ const profilController: ProfilController = {
             `;
 
             const initialresult = await postgre.query(badgeCheckQuery, [idGuru]);
-
+            
             if (initialresult.rows.length > 0) {
                 const query = `
                 SELECT 
-                    COUNT(*) AS total_rows,
-                    COUNT(CASE WHEN catatan_kehadiran IS NULL THEN 1 END) AS null_catatan_kehadiran,
-                    COUNT(CASE WHEN penilaian IS NULL THEN 1 END) AS null_penilaian,
-                    COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
-                    COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
-                    COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
-                FROM kegiatan 
-                LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
-                WHERE kegiatan.id_guru = $1 AND kegiatan.id_kegiatan IN (
-                    SELECT kegiatan.id_kegiatan
-                    FROM jadwal
-                    LEFT JOIN kegiatan on jadwal.id_kegiatan = kegiatan.id_kegiatan
-                    WHERE kegiatan.id_guru = $1 AND jadwal.tanggal BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '7 days'
-                )`;
+                    j.tanggal,
+                    COUNT(*) = SUM(
+                        CASE 
+                            WHEN e.catatan_kehadiran IS NOT NULL 
+                                AND e.penilaian IS NOT NULL
+                                AND e.catatan IS NOT NULL
+                                AND e.feedback IS NOT NULL
+                                AND e.id_karya IS NOT NULL 
+                            THEN 1 
+                            ELSE 0 
+                        END
+                    ) AS all_complete
+                FROM 
+                    evaluasi e
+                JOIN 
+                    jadwal j ON e.id_jadwal = j.id_jadwal
+                JOIN 
+                    kegiatan k ON j.id_kegiatan = k.id_kegiatan
+                WHERE 
+                    k.id_guru = $1
+                GROUP BY 
+                    j.tanggal
+                ORDER BY 
+                    j.tanggal ASC`;
     
                 const { rows } = await postgre.query(query, [idGuru]);
                 
-                if (rows[0].null_catatan_kehadiran == 0 && rows[0].null_penilaian == 0 && rows[0].null_catatan == 0 && rows[0].null_feedback == 0 && rows[0].null_id_karya == 0 && rows[0].total_rows > 0) {
+                let consecutiveDays = 0;
+                let isConsecutive = false;
+
+                for (const row of rows) {
+                    if (row.all_present) {
+                        consecutiveDays++;
+                        if (consecutiveDays === 7) {
+                            isConsecutive = true;
+                            break;
+                        }
+                    } else {
+                        consecutiveDays = 0;
+                    }
+                }
+
+                if (isConsecutive) {
                     res.json({msg: "OK", data: true});
                 } else {
                     res.json({msg: "OK", data: false});
@@ -167,28 +210,53 @@ const profilController: ProfilController = {
             `;
 
             const initialresult = await postgre.query(badgeCheckQuery, [idGuru]);
-
+            
             if (initialresult.rows.length > 0) {
                 const query = `
                 SELECT 
-                    COUNT(*) AS total_rows,
-                    COUNT(CASE WHEN catatan_kehadiran IS NULL THEN 1 END) AS null_catatan_kehadiran,
-                    COUNT(CASE WHEN penilaian IS NULL THEN 1 END) AS null_penilaian,
-                    COUNT(CASE WHEN catatan IS NULL THEN 1 END) AS null_catatan,
-                    COUNT(CASE WHEN feedback IS NULL THEN 1 END) AS null_feedback,
-                    COUNT(CASE WHEN id_karya IS NULL THEN 1 END) AS null_id_karya
-                FROM kegiatan 
-                LEFT JOIN evaluasi on kegiatan.id_kegiatan = evaluasi.id_kegiatan
-                WHERE kegiatan.id_guru = $1 AND kegiatan.id_kegiatan IN (
-                    SELECT kegiatan.id_kegiatan
-                    FROM jadwal
-                    LEFT JOIN kegiatan on jadwal.id_kegiatan = kegiatan.id_kegiatan
-                    WHERE kegiatan.id_guru = $1 AND jadwal.tanggal BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '30 days'
-                )`;
+                    j.tanggal,
+                    COUNT(*) = SUM(
+                        CASE 
+                            WHEN e.catatan_kehadiran IS NOT NULL 
+                                AND e.penilaian IS NOT NULL
+                                AND e.catatan IS NOT NULL
+                                AND e.feedback IS NOT NULL
+                                AND e.id_karya IS NOT NULL 
+                            THEN 1 
+                            ELSE 0 
+                        END
+                    ) AS all_complete
+                FROM 
+                    evaluasi e
+                JOIN 
+                    jadwal j ON e.id_jadwal = j.id_jadwal
+                JOIN 
+                    kegiatan k ON j.id_kegiatan = k.id_kegiatan
+                WHERE 
+                    k.id_guru = $1
+                GROUP BY 
+                    j.tanggal
+                ORDER BY 
+                    j.tanggal ASC`;
     
                 const { rows } = await postgre.query(query, [idGuru]);
                 
-                if (rows[0].null_catatan_kehadiran == 0 && rows[0].null_penilaian == 0 && rows[0].null_catatan == 0 && rows[0].null_feedback == 0 && rows[0].null_id_karya == 0 && rows[0].total_rows > 0) {
+                let consecutiveDays = 0;
+                let isConsecutive = false;
+
+                for (const row of rows) {
+                    if (row.all_present) {
+                        consecutiveDays++;
+                        if (consecutiveDays === 30) {
+                            isConsecutive = true;
+                            break;
+                        }
+                    } else {
+                        consecutiveDays = 0;
+                    }
+                }
+
+                if (isConsecutive) {
                     res.json({msg: "OK", data: true});
                 } else {
                     res.json({msg: "OK", data: false});
@@ -255,6 +323,126 @@ const profilController: ProfilController = {
                 const { rows } = await postgre.query(query, [idGuru]);
     
                 res.json({msg: "OK", data: rows[0].count >= 100 ?  true : false});
+            } else {
+                res.json({msg: "OK", data: false});
+            }
+        } catch (error) {
+            res.json({msg: error.msg});
+        }
+    },
+    checkBadgeKonsisten: async (req, res) => {
+        try {
+            const idGuru = req.params.id;
+
+            const badgeCheckQuery = `
+                SELECT *
+                FROM badge_guru
+                    LEFT JOIN badge on badge.id_badge = badge_guru.id_badge
+                WHERE badge_guru.id_guru = $1 AND nama_badge = 'Konsisten' 
+            `;
+
+            const initialresult = await postgre.query(badgeCheckQuery, [idGuru]);
+            
+            if (initialresult.rows.length > 0) {
+                const query = `
+                SELECT 
+                    j.tanggal,
+                    COUNT(*) = SUM(CASE WHEN e.catatan_kehadiran IS NOT NULL THEN 1 ELSE 0 END) AS all_present
+                FROM 
+                    evaluasi e
+                JOIN 
+                    jadwal j ON e.id_jadwal = j.id_jadwal
+                JOIN 
+                    kegiatan k ON j.id_kegiatan = k.id_kegiatan
+                WHERE 
+                    k.id_guru = $1
+                GROUP BY 
+                    j.tanggal
+                ORDER BY 
+                    j.tanggal ASC`;
+    
+                const { rows } = await postgre.query(query, [idGuru]);
+                
+                let consecutiveDays = 0;
+                let isConsecutive = false;
+
+                for (const row of rows) {
+                    if (row.all_present) {
+                        consecutiveDays++;
+                        if (consecutiveDays === 7) {
+                            isConsecutive = true;
+                            break;
+                        }
+                    } else {
+                        consecutiveDays = 0;
+                    }
+                }
+
+                if (isConsecutive) {
+                    res.json({msg: "OK", data: true});
+                } else {
+                    res.json({msg: "OK", data: false});
+                }
+            } else {
+                res.json({msg: "OK", data: false});
+            }
+        } catch (error) {
+            res.json({msg: error.msg});
+        }
+    },
+    checkBadgeAmbis: async (req, res) => {
+        try {
+            const idGuru = req.params.id;
+
+            const badgeCheckQuery = `
+                SELECT *
+                FROM badge_guru
+                    LEFT JOIN badge on badge.id_badge = badge_guru.id_badge
+                WHERE badge_guru.id_guru = $1 AND nama_badge = 'Ambis' 
+            `;
+
+            const initialresult = await postgre.query(badgeCheckQuery, [idGuru]);
+            
+            if (initialresult.rows.length > 0) {
+                const query = `
+                SELECT 
+                    j.tanggal,
+                    COUNT(*) = SUM(CASE WHEN e.catatan_kehadiran IS NOT NULL THEN 1 ELSE 0 END) AS all_present
+                FROM 
+                    evaluasi e
+                JOIN 
+                    jadwal j ON e.id_jadwal = j.id_jadwal
+                JOIN 
+                    kegiatan k ON j.id_kegiatan = k.id_kegiatan
+                WHERE 
+                    k.id_guru = $1
+                GROUP BY 
+                    j.tanggal
+                ORDER BY 
+                    j.tanggal ASC`;
+    
+                const { rows } = await postgre.query(query, [idGuru]);
+                
+                let consecutiveDays = 0;
+                let isConsecutive = false;
+
+                for (const row of rows) {
+                    if (row.all_present) {
+                        consecutiveDays++;
+                        if (consecutiveDays === 30) {
+                            isConsecutive = true;
+                            break;
+                        }
+                    } else {
+                        consecutiveDays = 0;
+                    }
+                }
+
+                if (isConsecutive) {
+                    res.json({msg: "OK", data: true});
+                } else {
+                    res.json({msg: "OK", data: false});
+                }
             } else {
                 res.json({msg: "OK", data: false});
             }

@@ -7,6 +7,10 @@ interface EvaluasiController {
     getAllPendingByGuru: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     update: (req: Request, res: Response) => Promise<void>;
+    getStudentUnpresenced: (req: Request, res: Response) => Promise<void>;
+    getStudentUngraded: (req: Request, res: Response) => Promise<void>;
+    getStudentUncommented: (req: Request, res: Response) => Promise<void>;
+    getStudentUnfeedbacked: (req: Request, res: Response) => Promise<void>;
 }
 
 const evaluasiController: EvaluasiController = {
@@ -38,8 +42,6 @@ const evaluasiController: EvaluasiController = {
                 res.json({msg: "OK", data: rows})
             }
         } catch (error) {
-            console.log(req.query.jadwal, req.query.murid)
-
             res.json({msg: error.msg})
         }
     },
@@ -51,34 +53,53 @@ const evaluasiController: EvaluasiController = {
 
     */
     getAllPendingByGuru: async (req, res) => {
-        const id_guru = req.query.id_guru ? req.query.id_guru.toString() : null;
-
-        if(id_guru === null) {
-            res.json({msg: "ID guru is required"});
+        const idGuru = req.query.id_guru ? req.query.id_guru.toString() : null;
+        const count = req.query.count ? parseInt(req.query.count.toString()) : null;
+    
+        if (idGuru === null) {
+            res.json({ msg: "ID guru is required" });
             return;
         }
-        
+    
         try {
-            const { rows } = await postgre.query(`
-            SELECT DISTINCT j.id_jadwal, k.nama_kegiatan, j.tanggal, j.waktu
-            FROM kegiatan k
-            JOIN jadwal j ON j.id_kegiatan = k.id_kegiatan
-            JOIN evaluasi e ON j.id_jadwal = e.id_jadwal
-            WHERE k.id_guru = $1 AND
-            (catatan_kehadiran IS NULL
-            OR penilaian IS NULL
-            OR catatan IS NULL
-            OR feedback IS NULL
-            OR id_karya IS NULL)`, [id_guru]);
-            
-            res.json({msg: "OK", data: rows});
-
+            let query = `
+                SELECT DISTINCT 
+                    j.id_jadwal, 
+                    k.id_kegiatan,
+                    k.nama_kegiatan, 
+                    j.tanggal, 
+                    j.waktu,
+                    c.nama_kelas, 
+                    p.id_program,
+                    p.nama_program, 
+                    t.id_topik,
+                    t.nama_topik
+                FROM kegiatan k
+                JOIN jadwal j ON j.id_kegiatan = k.id_kegiatan
+                JOIN evaluasi e ON j.id_jadwal = e.id_jadwal
+                JOIN topik t ON k.id_topik = t.id_topik
+                JOIN program p ON t.id_program = p.id_program
+                JOIN kelas c ON j.id_kelas = c.id_kelas
+                WHERE k.id_guru = $1 AND
+                (catatan_kehadiran IS NULL
+                OR penilaian IS NULL
+                OR catatan IS NULL
+                OR feedback IS NULL)`;
+    
+            // If count is provided, limit the number of rows returned
+            if (count !== null && !isNaN(count)) {
+                query += ` LIMIT $2`;
+                const { rows } = await postgre.query(query, [idGuru, count]);
+                res.json({ msg: "OK", data: rows });
+            } else {
+                const { rows } = await postgre.query(query, [idGuru]);
+                res.json({ msg: "OK", data: rows });
+            }
         } catch (error) {
             console.error('Error fetching evaluasi:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
-
-    },
+    }, 
 
     create: async (req, res) => {
         try {
@@ -102,7 +123,7 @@ const evaluasiController: EvaluasiController = {
         try {
             const id_jadwal = req.query.jadwal;
             const id_murid = req.query.murid;
-            const { presensi, nilai, catatan, feedback, id_karya, id_guru } = req.body;
+            const { nilai, catatan, feedback, id_guru } = req.body;
             if (!id_guru) {
                 res.json({ msg: "ID guru is required" });
                 return;
@@ -113,16 +134,14 @@ const evaluasiController: EvaluasiController = {
             const oldData = rows[0];
 
             let field = [];
-            if (presensi) field.push("catatan_kehadiran");
             if (nilai) field.push("penilaian");
             if (catatan) field.push("catatan");
             if (feedback) field.push("feedback");
-            if (id_karya) field.push("id_karya");
             
             // Update evaluasi
             await postgre.query(
-                'UPDATE evaluasi SET catatan_kehadiran = $3, penilaian = $4, catatan = $5, feedback = $6, id_karya = $7 WHERE id_jadwal = $1 AND id_murid = $2',
-                [id_jadwal, id_murid, presensi, nilai, catatan, feedback, id_karya]
+                'UPDATE evaluasi SET penilaian = $3, catatan = $4, feedback = $5 WHERE id_jadwal = $1 AND id_murid = $2',
+                [id_jadwal, id_murid, nilai, catatan, feedback]
             );
     
             await postgre.query(
@@ -135,7 +154,71 @@ const evaluasiController: EvaluasiController = {
             console.error('Error updating evaluasi:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
-    }    
+    },
+    getStudentUnpresenced: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.catatan_kehadiran IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching unprecensed student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    getStudentUngraded: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.penilaian IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching ungraded student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    getStudentUncommented: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.catatan IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching unevaluated student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    getStudentUnfeedbacked: async (_req, res) => {
+        try {
+            const { rows } = await postgre.query(`
+            SELECT murid.nama_murid, jadwal.id_kegiatan, kegiatan.nama_kegiatan, jadwal.tanggal
+            FROM evaluasi
+            JOIN murid ON evaluasi.id_murid = murid.id_murid
+            JOIN jadwal ON evaluasi.id_jadwal = jadwal.id_jadwal
+            JOIN kegiatan ON jadwal.id_kegiatan = kegiatan.id_kegiatan
+            WHERE evaluasi.feedback IS NULL;
+            `);
+            res.json({msg: "OK", data: rows})
+        } catch (error) {
+            console.error('Error fetching unfeedbacked student:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
 }
 
 export default evaluasiController;

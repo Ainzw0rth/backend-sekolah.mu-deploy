@@ -6,7 +6,7 @@ router.get('/', (req: Request, res: Response) => {
   try {
     res.json({ message: 'landing page' });
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
   }
 });
 
